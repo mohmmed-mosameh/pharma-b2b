@@ -1,9 +1,12 @@
 /* ==========================================================================
    PharmaLink — API Integration Layer
-   يربط الفرونت إند بالـ Laravel Backend على http://localhost:8000
+   يربط الفرونت إند بالـ Laravel Backend — محليًا على localhost:8000،
+   وعلى الإنتاج على الباك اند المنشور على Railway.
    ========================================================================== */
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+    ? 'http://localhost:8000/api'
+    : 'https://backend-production-6679b.up.railway.app/api';
 
 /* ------------------------------------------------------------------ */
 /* دالة apiCall المركزية — تُرسل جميع الطلبات للـ Backend              */
