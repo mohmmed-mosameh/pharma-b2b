@@ -93,7 +93,10 @@ class QuoteController extends Controller
                     'product_id'          => $rfqItem->product_id,
                     'unit_price'          => $item['unit_price'],
                     'discount_percentage' => $item['discount_percentage'] ?? 0,
-                    'available_qty'       => $item['available_qty'] ?? null,
+                    // لو المورد ما حددش الكمية المتوفرة، نفترض قدرته على
+                    // توريد الكمية كاملة كما طلبتها الصيدلية، بدل ترك
+                    // العمود فارغًا (وهو NOT NULL أصلًا في قاعدة البيانات).
+                    'available_qty'       => $item['available_qty'] ?? $rfqItem->quantity,
                     'delivery_days'       => $item['delivery_days'],
                     'notes'               => $item['notes'] ?? null,
                 ]);
