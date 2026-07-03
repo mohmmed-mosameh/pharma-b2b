@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ترسية المناقصة | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="pl-card">
+      <p class="pl-eyebrow">ترسية المناقصة</p>
+      <h1 class="pl-page-title">ترسية المناقصة – توريد مضادات حيوية</h1>
+      <p class="offer-quote">"تم اختيار أفضل عرض بناءً على شروط التقييم المحددة"</p>
+
+      <span class="offer-badge">شركة A — أفضل عرض مقدم</span>
+
+      <div class="dl-grid">
+        <div class="item"><div class="k">سعر العرض</div><div class="v">480$</div></div>
+        <div class="item"><div class="k">رقم السجل التجاري</div><div class="v">123456789</div></div>
+        <div class="item"><div class="k">مدة التوريد</div><div class="v">5 أيام</div></div>
+        <div class="item"><div class="k">رقم التواصل</div><div class="v" style="direction:ltr; display:inline-block;">+970 599 123 456</div></div>
+        <div class="item"><div class="k">الخصم</div><div class="v">5%</div></div>
+        <div class="item"><div class="k">البريد الإلكتروني</div><div class="v">info@pharmasupplier.com</div></div>
+        <div class="item"><div class="k">طريقة التسليم</div><div class="v">تسليم مباشر للمخزن الرئيسي</div></div>
+      </div>
+
+      <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
+        <a href="open-envelopes.html" class="btn btn-pl-ghost">رجوع</a>
+        <button type="button" id="confirmAwardBtn" class="btn btn-pl">تأكيد الترسية</button>
+      </div>
+
+      <div id="awardSuccess" class="result-banner result-success d-none mt-4">
+        <i class="bi bi-check-circle-fill"></i>
+        <div>
+          تم تأكيد الترسية بنجاح
+          <div><a href="tender-report.html" class="btn-link-detail">الانتقال إلى صفحة تقرير المناقصة</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html">لوحة التحكم</a>
+      <a href="create-tender.html">إنشاء مناقصة</a>
+      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html">استلام العروض</a>
+      <a href="open-envelopes.html">فتح المظاريف</a>
+      <a href="award-tender.html" class="active">ترسية المناقصة</a>
+      <a href="tender-report.html">تقرير المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+  document.getElementById('confirmAwardBtn').addEventListener('click', function () {
+    document.getElementById('awardSuccess').classList.remove('d-none');
+    this.disabled = true;
+  });
+</script>
+</body>
+</html>

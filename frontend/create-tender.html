@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إنشاء مناقصة جديدة | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="pl-card">
+
+      <div class="step-track">
+        <div class="step done"><span class="dot">1</span> إنشاء مناقصة</div>
+        <div class="sep"></div>
+        <div class="step"><span class="dot">2</span> تحديد شروط الترسية</div>
+        <div class="sep"></div>
+        <div class="step"><span class="dot">3</span> مراجعة ونشر</div>
+      </div>
+
+      <h1 class="pl-page-title">إنشاء مناقصة جديدة</h1>
+      <p class="pl-page-sub">أدخل تفاصيل المناقصة ليتم عرضها على الموردين المعتمدين</p>
+
+      <form id="createTenderForm" novalidate>
+        <div class="mb-3">
+          <label class="form-label fw-bold" for="title">عنوان المناقصة</label>
+          <input type="text" id="title" class="form-control" placeholder="مثال: توريد مضادات حيوية" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold" for="desc">وصف المناقصة</label>
+          <textarea id="desc" class="form-control" rows="3" placeholder="اكتب وصفًا مختصرًا للمناقصة" required></textarea>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold" for="category">فئة الدواء</label>
+            <select id="category" class="form-select" required>
+              <option value="" selected disabled>اختر فئة الدواء</option>
+              <option>مضادات حيوية</option>
+              <option>أدوية السكري</option>
+              <option>أدوية القلب</option>
+              <option>مسكنات</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold" for="qty">الكمية المطلوبة</label>
+            <input type="number" id="qty" class="form-control" placeholder="مثال: 500" min="1" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold" for="deliveryDate">موعد التسليم</label>
+            <input type="date" id="deliveryDate" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold" for="closeDate">تاريخ إغلاق المناقصة</label>
+            <input type="date" id="closeDate" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-pl-ghost" onclick="window.location.href='dashboard.html'">إلغاء</button>
+          <button type="submit" class="btn btn-pl">تحديد شروط الترسية</button>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html">لوحة التحكم</a>
+      <a href="create-tender.html" class="active">إنشاء مناقصة</a>
+      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html">استلام العروض</a>
+      <a href="open-envelopes.html">فتح المظاريف</a>
+      <a href="award-tender.html">ترسية المناقصة</a>
+      <a href="tender-report.html">تقرير المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+  document.getElementById('createTenderForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    window.location.href = 'tender-criteria.html';
+  });
+</script>
+</body>
+</html>

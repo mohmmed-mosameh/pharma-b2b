@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المناقصات | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="pl-card">
+      <p class="pl-eyebrow">إدارة المناقصات</p>
+      <h1 class="pl-page-title">إدارة المناقصات</h1>
+      <p class="pl-page-sub">"متابعة المناقصات المنشورة وإدارة حالتها والاطلاع على تفاصيل العروض المقدمة."</p>
+
+      <h2 class="h6 fw-bold mb-3">أحدث المناقصات:</h2>
+      <div class="table-responsive">
+        <table class="pl-table">
+          <thead>
+            <tr>
+              <th>عنوان المناقصة</th>
+              <th>الفئة</th>
+              <th>الكمية</th>
+              <th>تاريخ الإغلاق</th>
+              <th>الحالة</th>
+              <th>الإجراء</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>توريد مضادات حيوية</td>
+              <td>مضادات حيوية</td>
+              <td>500</td>
+              <td>30/5</td>
+              <td><span class="badge-status badge-open">مفتوحة</span></td>
+              <td><a href="offers-received.html" class="btn-link-detail">عرض</a></td>
+            </tr>
+            <tr>
+              <td>توريد مسكنات</td>
+              <td>مسكنات ألم</td>
+              <td>300</td>
+              <td>5/6</td>
+              <td><span class="badge-status badge-closed">مغلقة</span></td>
+              <td><a href="tender-report.html" class="btn-link-detail">عرض</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
+        <a href="dashboard.html" class="btn btn-pl-ghost">رجوع</a>
+        <a href="offers-received.html" class="btn btn-pl">الانتقال لاستلام العروض</a>
+      </div>
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html">لوحة التحكم</a>
+      <a href="create-tender.html">إنشاء مناقصة</a>
+      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html">استلام العروض</a>
+      <a href="open-envelopes.html">فتح المظاريف</a>
+      <a href="award-tender.html">ترسية المناقصة</a>
+      <a href="tender-report.html">تقرير المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

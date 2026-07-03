@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحديد شروط ترسية المناقصة | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="pl-card">
+
+      <div class="step-track">
+        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> إنشاء مناقصة</div>
+        <div class="sep"></div>
+        <div class="step done"><span class="dot">2</span> تحديد شروط الترسية</div>
+        <div class="sep"></div>
+        <div class="step"><span class="dot">3</span> مراجعة ونشر</div>
+      </div>
+
+      <h1 class="pl-page-title">تحديد شروط ترسية المناقصة</h1>
+      <p class="pl-page-sub">معايير التقييم: حدّد الوزن النسبي لكل معيار سيتم اختيار الفائز على أساسه</p>
+
+      <form id="criteriaForm">
+        <div class="criteria-item">
+          <div class="row-top">
+            <span class="label">أقل سعر</span>
+            <span class="pct"><span id="out1">50</span>%</span>
+          </div>
+          <input type="range" min="0" max="100" value="50" id="range1" oninput="out1.textContent=this.value">
+        </div>
+
+        <div class="criteria-item">
+          <div class="row-top">
+            <span class="label">أسرع مدة توريد</span>
+            <span class="pct"><span id="out2">30</span>%</span>
+          </div>
+          <input type="range" min="0" max="100" value="30" id="range2" oninput="out2.textContent=this.value">
+        </div>
+
+        <div class="criteria-item">
+          <div class="row-top">
+            <span class="label">أعلى نسبة خصم</span>
+            <span class="pct"><span id="out3">15</span>%</span>
+          </div>
+          <input type="range" min="0" max="100" value="15" id="range3" oninput="out3.textContent=this.value">
+        </div>
+
+        <div class="criteria-item">
+          <div class="row-top">
+            <span class="criteria-check"><i class="bi bi-check-circle-fill"></i> <span class="label">شركة معتمدة</span></span>
+            <span class="pct"><span id="out4">10</span>%</span>
+          </div>
+          <input type="range" min="0" max="100" value="10" id="range4" oninput="out4.textContent=this.value">
+        </div>
+
+        <p class="text-muted small mt-3">* سيتم اختيار العرض الفائز بناءً على المعايير المحددة أعلاه</p>
+
+        <div class="d-flex justify-content-between mt-4">
+          <a href="create-tender.html" class="btn btn-pl-ghost">رجوع</a>
+          <button type="submit" class="btn btn-pl">نشر المناقصة</button>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html">لوحة التحكم</a>
+      <a href="create-tender.html">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" class="active">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html">استلام العروض</a>
+      <a href="open-envelopes.html">فتح المظاريف</a>
+      <a href="award-tender.html">ترسية المناقصة</a>
+      <a href="tender-report.html">تقرير المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+  document.getElementById('criteriaForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    window.location.href = 'review-publish.html';
+  });
+</script>
+</body>
+</html>

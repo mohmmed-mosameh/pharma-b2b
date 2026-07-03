@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="auth-wrap">
+  <div class="auth-card">
+
+    <a href="index.html" class="sb-logo">
+      <img src="img/logo.svg" alt="شعار PharmaLink">
+    </a>
+
+    <!-- ===== خطوة 1: اختيار نوع الحساب ===== -->
+    <div id="step-role">
+      <h1 class="auth-title">اختر نوع الحساب</h1>
+      <button type="button" class="role-btn" data-role="مدير مخزن الأدوية">مدير مخزن الأدوية</button>
+      <button type="button" class="role-btn" data-role="مورد شركة الأدوية">مورد شركة الأدوية</button>
+    </div>
+
+    <!-- ===== خطوة 2: تسجيل الدخول / إنشاء حساب ===== -->
+    <div id="step-form" class="d-none">
+
+      <button type="button" id="back-to-role" class="btn btn-sm btn-pl-ghost mb-3">
+        <i class="bi bi-arrow-right"></i> رجوع
+      </button>
+
+      <p class="text-center text-muted fw-semibold mb-3">
+        الدخول بصفة: <span id="selected-role-label" class="text-success"></span>
+      </p>
+
+      <div class="auth-tabs" role="tablist">
+        <button type="button" id="tab-login" class="active" role="tab" aria-selected="true">تسجيل الدخول</button>
+        <button type="button" id="tab-register" role="tab" aria-selected="false">إنشاء حساب</button>
+      </div>
+
+      <!-- ---- نموذج تسجيل الدخول ---- -->
+      <form id="pane-login" novalidate>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+          <label for="loginEmail">البريد الالكتروني</label>
+        </div>
+        <div class="form-floating mb-2 position-relative">
+          <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+          <label for="loginPassword">كلمة المرور</label>
+          <i class="bi bi-eye toggle-password position-absolute" data-target="#loginPassword"
+             style="left:1rem; top:1rem; cursor:pointer; color:#706E6E;"></i>
+        </div>
+
+        <div class="auth-links">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">تذكرني</label>
+          </div>
+          <a href="forgot-password.html">هل نسيت كلمة السر؟</a>
+        </div>
+
+        <button type="submit" class="btn btn-pl w-100">تسجيل الدخول</button>
+
+        <div class="auth-divider">أو</div>
+
+        <button type="button" class="social-btn">
+          <img src="img/google-icon.png" alt=""> تسجيل الدخول باستخدام جوجل
+        </button>
+        <button type="button" class="social-btn">
+          <img src="img/facebook-icon.png" alt=""> تسجيل الدخول باستخدام الفيسبوك
+        </button>
+
+        <p class="auth-switch">ليس لديك حساب؟ <a href="#" id="go-register">إنشاء حساب جديد</a></p>
+      </form>
+
+      <!-- ---- نموذج إنشاء حساب ---- -->
+      <form id="pane-register" class="d-none" novalidate>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="regName" placeholder="الاسم الكامل" required>
+          <label for="regName">الاسم الكامل / اسم الشركة</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="regEmail" placeholder="name@example.com" required>
+          <label for="regEmail">البريد الالكتروني</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="tel" class="form-control" id="regPhone" placeholder="رقم الهاتف" required>
+          <label for="regPhone">رقم الهاتف</label>
+        </div>
+        <div class="form-floating mb-3 position-relative">
+          <input type="password" class="form-control" id="regPassword" placeholder="••••••••" required>
+          <label for="regPassword">كلمة المرور</label>
+          <i class="bi bi-eye toggle-password position-absolute" data-target="#regPassword"
+             style="left:1rem; top:1rem; cursor:pointer; color:#706E6E;"></i>
+        </div>
+        <div class="form-floating mb-4">
+          <input type="password" class="form-control" id="regPasswordConfirm" placeholder="••••••••" required>
+          <label for="regPasswordConfirm">تأكيد كلمة المرور</label>
+        </div>
+
+        <button type="submit" class="btn btn-pl w-100">إنشاء الحساب</button>
+
+        <p class="auth-switch">لديك حساب مسبقاً؟ <a href="#" id="go-login">تسجيل الدخول</a></p>
+      </form>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/script.js"></script>
+<script>
+  /* ── ربط روابط التبويب ── */
+  document.getElementById('go-register').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('tab-register').click();
+  });
+  document.getElementById('go-login').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('tab-login').click();
+  });
+
+  /* ── تسجيل الدخول → POST /api/auth/login ── */
+  document.getElementById('pane-login').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = this.querySelector('button[type="submit"]');
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    btn.disabled = true;
+    btn.textContent = 'جارٍ الدخول...';
+
+    try {
+      const res = await apiCall('POST', '/auth/login', { login: email, password });
+      localStorage.setItem('pharma_token', res.token);
+      localStorage.setItem('pharma_user',  JSON.stringify(res.user));
+
+      // وجّه حسب الدور
+      if (res.user.role === 'pharmacy') {
+        window.location.href = 'dashboard.html';
+      } else if (res.user.role === 'supplier') {
+        window.location.href = 'tenders.html';
+      } else {
+        window.location.href = 'dashboard.html';
+      }
+    } catch(err) {
+      showApiError(err.message || 'بيانات الدخول غير صحيحة');
+      btn.disabled = false;
+      btn.textContent = 'تسجيل الدخول';
+    }
+  });
+
+  /* ── إنشاء حساب → POST /api/auth/register ── */
+  document.getElementById('pane-register').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = this.querySelector('button[type="submit"]');
+    const role = localStorage.getItem('selected_role') || 'pharmacy';
+    const name     = document.getElementById('regName').value.trim();
+    const email    = document.getElementById('regEmail').value.trim();
+    const phone    = document.getElementById('regPhone').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const password_confirmation = document.getElementById('regPasswordConfirm').value;
+
+    if (password !== password_confirmation) {
+      showApiError('كلمتا المرور غير متطابقتين');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'جارٍ إنشاء الحساب...';
+
+    try {
+      const res = await apiCall('POST', '/auth/register', {
+        organization_name: name,
+        name,
+        email,
+        phone,
+        password,
+        password_confirmation,
+        role
+      });
+      localStorage.setItem('pharma_token', res.token);
+      localStorage.setItem('pharma_user',  JSON.stringify(res.user));
+      showApiSuccess('تم إنشاء الحساب بنجاح!');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+    } catch(err) {
+      showApiError(err.message || 'فشل إنشاء الحساب، تحقق من البيانات');
+      btn.disabled = false;
+      btn.textContent = 'إنشاء الحساب';
+    }
+  });
+
+  /* ── حفظ الدور المختار ── */
+  document.querySelectorAll('.role-btn').forEach(btn => {
+    btn.addEventListener('click', function(){
+      const roleMap = {
+        'مدير مخزن الأدوية': 'pharmacy',
+        'مورد شركة الأدوية': 'supplier'
+      };
+      localStorage.setItem('selected_role', roleMap[this.dataset.role] || 'pharmacy');
+    });
+  });
+</script>
+</body>
+</html>

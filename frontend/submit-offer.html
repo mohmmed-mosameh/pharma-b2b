@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقديم العرض | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="pl-card">
+      <p class="pl-eyebrow">تقديم العرض</p>
+      <h1 class="pl-page-title">تقديم عرض – توريد مضادات حيوية</h1>
+      <p class="pl-page-sub">قم بإدخال تفاصيل عرضك للمشاركة في هذه المناقصة</p>
+
+      <form id="submitOfferForm" novalidate>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-bold" for="offerPrice">سعر العرض</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number" id="offerPrice" class="form-control" placeholder="500" min="0" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold" for="offerDuration">مدة التوريد (أيام)</label>
+            <input type="number" id="offerDuration" class="form-control" placeholder="5" min="1" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold" for="offerDiscount">نسبة الخصم (اختياري)</label>
+            <div class="input-group">
+              <input type="number" id="offerDiscount" class="form-control" placeholder="5" min="0" max="100">
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label class="form-label fw-bold" for="offerNotes">ملاحظات إضافية</label>
+          <textarea id="offerNotes" class="form-control" rows="4" placeholder="اكتب أي تفاصيل إضافية عن العرض ...."></textarea>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <a href="tender-detail.html" class="btn btn-pl-ghost">رجوع</a>
+          <button type="submit" class="btn btn-pl">إرسال العرض</button>
+        </div>
+      </form>
+
+      <div id="offerSuccess" class="result-banner result-success d-none mt-4">
+        <i class="bi bi-check-circle-fill"></i>
+        <div>
+          تم إرسال عرضك بنجاح
+          <div><a href="track-status.html" class="btn-link-detail">متابعة حالة العرض</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="tenders.html">المناقصات المتاحة</a>
+      <a href="tender-detail.html">تفاصيل المناقصة</a>
+      <a href="submit-offer.html" class="active">تقديم العرض</a>
+      <a href="track-status.html">متابعة حالة المناقصات</a>
+      <a href="tender-result.html">نتيجة المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+  document.getElementById('submitOfferForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    document.getElementById('offerSuccess').classList.remove('d-none');
+    this.querySelector('button[type="submit"]').disabled = true;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="welcome-banner">
+      <h1>أهلًا بك في فارما لينك <span aria-hidden="true">👋</span></h1>
+      <p class="text-muted mb-0">إليك ملخص سريع عن نشاط مناقصاتك اليوم</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="num">5</div>
+          <div class="lbl">عدد المناقصات النشطة</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="num">1</div>
+          <div class="lbl">مناقصة قيد الترسية</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="num">23</div>
+          <div class="lbl">إجمالي العروض المستلمة</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="num">8</div>
+          <div class="lbl">المناقصات المغلقة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <p class="fw-bold w-100 mb-1">الإجراءات السريعة:</p>
+      <a href="create-tender.html" class="btn btn-pl"><i class="bi bi-plus-lg"></i> إنشاء مناقصة جديدة</a>
+      <a href="manage-tenders.html" class="btn btn-pl-outline">عرض جميع المناقصات</a>
+    </div>
+
+    <div class="pl-card">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h2 class="h6 fw-bold mb-0">أحدث المناقصات:</h2>
+        <input type="search" class="form-control" style="max-width:220px" placeholder="البحث باسم المناقصة">
+      </div>
+      <div class="table-responsive">
+        <table class="pl-table">
+          <thead>
+            <tr>
+              <th>اسم المناقصة</th>
+              <th>آخر موعد</th>
+              <th>الحالة</th>
+              <th>النتيجة</th>
+              <th>الإجراء</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>توريد مضادات حيوية</td>
+              <td>20 / 5 / 2026</td>
+              <td><span class="badge-status badge-open">مفتوحة</span></td>
+              <td class="text-muted">—</td>
+              <td><a href="offers-received.html" class="btn-link-detail">عرض</a></td>
+            </tr>
+            <tr>
+              <td>توريد مسكنات</td>
+              <td>5 / 5 / 2026</td>
+              <td><span class="badge-status badge-closed">مغلقة</span></td>
+              <td><a href="tender-report.html" class="btn-link-detail">تقرير النتيجة</a></td>
+              <td><a href="tender-report.html" class="btn-link-detail">عرض</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html" class="active">لوحة التحكم</a>
+      <a href="create-tender.html">إنشاء مناقصة</a>
+      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html">استلام العروض</a>
+      <a href="open-envelopes.html">فتح المظاريف</a>
+      <a href="award-tender.html">ترسية المناقصة</a>
+      <a href="tender-report.html">تقرير المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

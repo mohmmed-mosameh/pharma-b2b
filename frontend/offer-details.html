@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تفاصيل العرض – شركة A | PharmaLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+
+<main id="main" class="pl-shell">
+
+  <section class="pl-content">
+    <div class="pl-card">
+      <p class="pl-eyebrow">استلام العروض</p>
+      <h1 class="pl-page-title" id="offer-title">تفاصيل العرض – شركة A</h1>
+      <p class="offer-quote">"عرض مقدم ضمن مناقصة توريد مضادات حيوية"</p>
+
+      <span class="offer-badge" id="offer-badge">شركة A</span>
+
+      <div class="kv-row"><span class="k">اسم الشركة:</span><span class="v" id="v-company">شركة A</span></div>
+      <div class="kv-row"><span class="k">سعر العرض:</span><span class="v" id="v-price">480$</span></div>
+      <div class="kv-row"><span class="k">مدة التوريد:</span><span class="v" id="v-duration">5 أيام</span></div>
+      <div class="kv-row"><span class="k">نسبة الخصم:</span><span class="v" id="v-discount">5%</span></div>
+      <div class="kv-row"><span class="k">حالة الشركة:</span><span class="v" id="v-status"><span class="badge-status badge-approved"><i class="bi bi-check-circle-fill"></i> معتمدة</span></span></div>
+      <div class="kv-row"><span class="k">تاريخ تقديم العرض:</span><span class="v" id="v-date">15 / 5 / 2026</span></div>
+      <div class="kv-row d-none" id="row-notes"><span class="k">ملاحظات إضافية:</span><span class="v" id="v-notes"></span></div>
+
+      <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
+        <a href="open-envelopes.html" class="btn btn-pl-ghost">رجوع</a>
+        <a href="open-envelopes.html" class="btn btn-pl">الانتقال لصفحة فتح المظاريف</a>
+      </div>
+    </div>
+
+    <!-- جدول أحدث المناقصات المرتبطة (سياق إضافي مطابق للتصميم) -->
+    <div class="pl-card mt-4">
+      <h2 class="h6 fw-bold mb-3">أحدث المناقصات:</h2>
+      <div class="table-responsive">
+        <table class="pl-table">
+          <thead>
+            <tr>
+              <th>اسم الشركة</th>
+              <th>سعر العرض</th>
+              <th>مدة التوريد</th>
+              <th>الخصم</th>
+              <th>الملاحظات</th>
+              <th>الإجراء</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>شركة A</td>
+              <td>480$</td>
+              <td>4 أيام</td>
+              <td>5%</td>
+              <td><span class="badge-status badge-approved">معتمد</span></td>
+              <td><a href="offer-details.html?company=A" class="btn-link-detail">عرض التفاصيل</a></td>
+            </tr>
+            <tr>
+              <td>شركة B</td>
+              <td>500$</td>
+              <td>7 أيام</td>
+              <td>3%</td>
+              <td><span class="badge-status badge-new">جديد</span></td>
+              <td><a href="offer-details.html?company=B" class="btn-link-detail">عرض التفاصيل</a></td>
+            </tr>
+            <tr>
+              <td>شركة C</td>
+              <td>470$</td>
+              <td>7 أيام</td>
+              <td>2%</td>
+              <td><span class="badge-status badge-new">جديد</span></td>
+              <td><a href="offer-details.html?company=C" class="btn-link-detail">عرض التفاصيل</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <aside class="pl-sidebar">
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="dashboard.html">لوحة التحكم</a>
+      <a href="create-tender.html">إنشاء مناقصة</a>
+      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" class="active">استلام العروض</a>
+      <a href="open-envelopes.html">فتح المظاريف</a>
+      <a href="award-tender.html">ترسية المناقصة</a>
+      <a href="tender-report.html">تقرير المناقصة</a>
+      <a href="#" class="logout-link">تسجيل الخروج</a>
+    </nav>
+  </aside>
+
+</main>
+
+<footer class="pl-footer">
+  <div class="pl-footer-inner">
+    <div class="pl-brand"><img src="img/logo.svg" alt="شعار فارما لينك" style="height:28px;"></div>
+    <small>© 2026 PharmaLink — جميع الحقوق محفوظة</small>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+  var OFFERS = {
+    A: { company:'شركة A', price:'480$', duration:'5 أيام', discount:'5%',
+         status:'approved', statusLabel:'معتمدة', date:'15 / 5 / 2026', notes:null },
+    B: { company:'شركة B', price:'500$', duration:'7 أيام', discount:'3%',
+         status:'new', statusLabel:'جديدة', date:'16 / 5 / 2026',
+         notes:'نلتزم بتوريد الكمية كاملة خلال المدة المحددة مع ضمان جودة التخزين والنقل.' },
+    C: { company:'شركة C', price:'470$', duration:'7 أيام', discount:'2%',
+         status:'approved', statusLabel:'معتمدة', date:'17 / 5 / 2026',
+         notes:'نلتزم بتوريد الكمية كاملة خلال المدة المحددة مع ضمان جودة التخزين والنقل.' }
+  };
+  var key = new URLSearchParams(window.location.search).get('company') || 'A';
+  var offer = OFFERS[key] || OFFERS.A;
+
+  document.getElementById('offer-title').textContent = 'تفاصيل العرض – ' + offer.company;
+  document.getElementById('offer-badge').textContent = offer.company;
+  document.getElementById('v-company').textContent = offer.company;
+  document.getElementById('v-price').textContent = offer.price;
+  document.getElementById('v-duration').textContent = offer.duration;
+  document.getElementById('v-discount').textContent = offer.discount;
+  document.getElementById('v-date').textContent = offer.date;
+
+  var statusEl = document.getElementById('v-status');
+  var badgeClass = offer.status === 'approved' ? 'badge-approved' : 'badge-new';
+  var icon = offer.status === 'approved' ? 'bi-check-circle-fill' : 'bi-stars';
+  statusEl.innerHTML = '<span class="badge-status ' + badgeClass + '"><i class="bi ' + icon + '"></i> ' + offer.statusLabel + '</span>';
+
+  if (offer.notes) {
+    document.getElementById('row-notes').classList.remove('d-none');
+    document.getElementById('v-notes').textContent = '"' + offer.notes + '"';
+  }
+</script>
+</body>
+</html>
