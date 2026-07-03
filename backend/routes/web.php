@@ -1,3 +1,5 @@
+<?php
+
 use Illuminate\Support\Facades\Route;
 
 // 1. المسار الرئيسي: رسالة ترحيبية بسيطة تتأكد منها أن السيرفر يعمل

@@ -36,7 +36,7 @@
             <span class="label">أقل سعر</span>
             <span class="pct"><span id="out1">50</span>%</span>
           </div>
-          <input type="range" min="0" max="100" value="50" id="range1" oninput="out1.textContent=this.value">
+          <input type="range" min="0" max="100" value="50" id="range1" oninput="out1.textContent=this.value; updateSum();">
         </div>
 
         <div class="criteria-item">
@@ -44,30 +44,31 @@
             <span class="label">أسرع مدة توريد</span>
             <span class="pct"><span id="out2">30</span>%</span>
           </div>
-          <input type="range" min="0" max="100" value="30" id="range2" oninput="out2.textContent=this.value">
+          <input type="range" min="0" max="100" value="30" id="range2" oninput="out2.textContent=this.value; updateSum();">
         </div>
 
         <div class="criteria-item">
           <div class="row-top">
-            <span class="label">أعلى نسبة خصم</span>
+            <span class="label">أعلى تقييم سابق للمورد</span>
             <span class="pct"><span id="out3">15</span>%</span>
           </div>
-          <input type="range" min="0" max="100" value="15" id="range3" oninput="out3.textContent=this.value">
+          <input type="range" min="0" max="100" value="15" id="range3" oninput="out3.textContent=this.value; updateSum();">
         </div>
 
         <div class="criteria-item">
           <div class="row-top">
             <span class="criteria-check"><i class="bi bi-check-circle-fill"></i> <span class="label">شركة معتمدة</span></span>
-            <span class="pct"><span id="out4">10</span>%</span>
+            <span class="pct"><span id="out4">5</span>%</span>
           </div>
-          <input type="range" min="0" max="100" value="10" id="range4" oninput="out4.textContent=this.value">
+          <input type="range" min="0" max="100" value="5" id="range4" oninput="out4.textContent=this.value; updateSum();">
         </div>
 
-        <p class="text-muted small mt-3">* سيتم اختيار العرض الفائز بناءً على المعايير المحددة أعلاه</p>
+        <p class="small mt-3">مجموع الأوزان الحالي: <strong id="weightSum">100</strong>% (يجب أن يساوي 100% بالضبط)</p>
+        <p class="text-muted small">* سيتم اختيار العرض الفائز بناءً على المعايير المحددة أعلاه</p>
 
         <div class="d-flex justify-content-between mt-4">
           <a href="create-tender.html" class="btn btn-pl-ghost">رجوع</a>
-          <button type="submit" class="btn btn-pl">نشر المناقصة</button>
+          <button type="submit" class="btn btn-pl" id="publishCriteriaBtn">نشر المناقصة</button>
         </div>
       </form>
 
@@ -93,10 +94,33 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
-  document.getElementById('criteriaForm').addEventListener('submit', function(e){
+  requireRole('pharmacy');
+
+  if (!sessionStorage.getItem('rfq_draft')) {
+    window.location.href = 'create-tender.html';
+  }
+
+  function updateSum() {
+    const sum = ['range1', 'range2', 'range3', 'range4']
+      .reduce((acc, id) => acc + Number(document.getElementById(id).value), 0);
+    document.getElementById('weightSum').textContent = sum;
+    document.getElementById('publishCriteriaBtn').disabled = sum !== 100;
+  }
+  updateSum();
+
+  document.getElementById('criteriaForm').addEventListener('submit', function (e) {
     e.preventDefault();
+
+    const draft = JSON.parse(sessionStorage.getItem('rfq_draft') || '{}');
+    draft.score_weight_price = Number(document.getElementById('range1').value);
+    draft.score_weight_delivery = Number(document.getElementById('range2').value);
+    draft.score_weight_rating = Number(document.getElementById('range3').value);
+    draft.score_weight_verified = Number(document.getElementById('range4').value);
+
+    sessionStorage.setItem('rfq_draft', JSON.stringify(draft));
     window.location.href = 'review-publish.html';
   });
 </script>

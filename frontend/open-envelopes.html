@@ -19,54 +19,30 @@
   <section class="pl-content">
     <div class="pl-card">
       <p class="pl-eyebrow">فتح المظاريف</p>
-      <h1 class="pl-page-title">فتح المظاريف – توريد مضادات حيوية</h1>
-      <p class="pl-page-sub">يمكن الآن فتح العروض المقدمة والاطلاع على الأسعار الرسمية</p>
+      <h1 class="pl-page-title" id="v-title">فتح المظاريف</h1>
+      <p class="pl-page-sub">افتح كل مظروف على حدة للاطلاع على السعر الرسمي — لا يمكن الانتقال للترسية إلا بعد فتح كل المظاريف</p>
 
-      <h2 class="h6 fw-bold mb-3">أحدث المناقصات:</h2>
+      <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
       <div class="table-responsive">
         <table class="pl-table">
           <thead>
             <tr>
               <th>اسم الشركة</th>
-              <th>سعر العرض</th>
+              <th>متوسط سعر الوحدة</th>
               <th>مدة التوريد</th>
-              <th>الخصم</th>
-              <th>الملاحظات</th>
+              <th>الحالة</th>
               <th>الإجراء</th>
             </tr>
           </thead>
-          <tbody>
-            <tr data-real-price="480$">
-              <td>شركة A</td>
-              <td class="masked">****</td>
-              <td>5 أيام</td>
-              <td>5%</td>
-              <td><span class="badge-status badge-approved">معتمد</span></td>
-              <td><button type="button" class="btn-open-envelope">فتح المظروف</button></td>
-            </tr>
-            <tr data-real-price="500$">
-              <td>شركة B</td>
-              <td class="masked">****</td>
-              <td>4 أيام</td>
-              <td>3%</td>
-              <td><span class="badge-status badge-new">جديد</span></td>
-              <td><button type="button" class="btn-open-envelope">فتح المظروف</button></td>
-            </tr>
-            <tr data-real-price="470$">
-              <td>شركة C</td>
-              <td class="masked">****</td>
-              <td>7 أيام</td>
-              <td>2%</td>
-              <td><span class="badge-status badge-new">جديد</span></td>
-              <td><button type="button" class="btn-open-envelope">فتح المظروف</button></td>
-            </tr>
+          <tbody id="quotes-tbody">
+            <tr><td colspan="5" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="offers-received.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="award-tender.html" class="btn btn-pl">الانتقال لإرساء المناقصة</a>
+        <a href="#" id="back-link" class="btn btn-pl-ghost">رجوع</a>
+        <a href="#" id="goto-award" class="btn btn-pl disabled">الانتقال لإرساء المناقصة</a>
       </div>
     </div>
   </section>
@@ -90,6 +66,88 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  requireRole('pharmacy');
+
+  const rfqId = getRfqIdFromUrl();
+  if (!rfqId) window.location.href = 'manage-tenders.html';
+  document.getElementById('back-link').href = 'offers-received.html?id=' + rfqId;
+
+  function avg(items, field) {
+    const vals = items.map(i => Number(i[field])).filter(v => !isNaN(v));
+    if (!vals.length) return null;
+    return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2);
+  }
+
+  function renderQuotes(quotes, allOpened) {
+    document.getElementById('quotes-tbody').innerHTML = quotes.map(quote => {
+      const opened = !!quote.opened_at;
+      const priceCell = opened
+        ? (avg(quote.quote_items || [], 'net_unit_price') ?? avg(quote.quote_items || [], 'unit_price') ?? '—') + '$'
+        : '****';
+      const daysCell = avg(quote.quote_items || [], 'delivery_days') ?? '—';
+      const action = opened
+        ? `<a href="offer-details.html?rfq=${rfqId}&quote=${quote.id}" class="btn-link-detail">عرض التفاصيل</a>`
+        : `<button type="button" class="btn-open-envelope" data-quote-id="${quote.id}">فتح المظروف</button>`;
+
+      return `
+        <tr>
+          <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
+          <td class="${opened ? '' : 'masked'}">${priceCell}</td>
+          <td>${daysCell}</td>
+          <td>${quoteStatusBadge(quote.status)}</td>
+          <td>${action}</td>
+        </tr>
+      `;
+    }).join('');
+
+    document.querySelectorAll('.btn-open-envelope').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        this.disabled = true;
+        this.textContent = 'جارٍ الفتح...';
+        try {
+          await apiCall('POST', '/rfqs/' + rfqId + '/quotes/' + this.dataset.quoteId + '/open');
+          await load();
+        } catch (err) {
+          showApiError(err.message || 'تعذّر فتح المظروف');
+          this.disabled = false;
+          this.textContent = 'فتح المظروف';
+        }
+      });
+    });
+
+    const gotoAward = document.getElementById('goto-award');
+    if (allOpened && quotes.length) {
+      gotoAward.classList.remove('disabled');
+      gotoAward.href = 'award-tender.html?id=' + rfqId;
+    } else {
+      gotoAward.classList.add('disabled');
+      gotoAward.removeAttribute('href');
+    }
+  }
+
+  async function load() {
+    try {
+      const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
+      document.getElementById('v-title').textContent = 'فتح المظاريف – ' + rfqRes.data.title;
+
+      const res = await apiCall('GET', '/rfqs/' + rfqId + '/quotes');
+      const quotes = res.data.quotes || [];
+
+      if (!quotes.length) {
+        document.getElementById('quotes-tbody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">لا توجد عروض مقدَّمة</td></tr>';
+        return;
+      }
+
+      renderQuotes(quotes, res.all_opened);
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل المظاريف');
+    }
+  }
+
+  load();
+</script>
 </body>
 </html>

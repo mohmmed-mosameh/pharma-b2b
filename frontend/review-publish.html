@@ -32,20 +32,22 @@
 
       <div class="section-block">
         <h2>قسم بيانات المناقصة:</h2>
-        <div class="kv-row"><span class="k">عنوان المناقصة:</span><span class="v">توريد مضادات حيوية</span></div>
-        <div class="kv-row"><span class="k">الوصف:</span><span class="v">توريد مضادات حيوية أساسية للصيدليات</span></div>
-        <div class="kv-row"><span class="k">فئة الدواء:</span><span class="v">مضادات حيوية</span></div>
-        <div class="kv-row"><span class="k">الكمية المطلوبة:</span><span class="v">500 وحدة</span></div>
-        <div class="kv-row"><span class="k">موعد التسليم:</span><span class="v">20/5</span></div>
-        <div class="kv-row"><span class="k">تاريخ إغلاق المناقصة:</span><span class="v">30/5</span></div>
+        <div class="kv-row"><span class="k">عنوان المناقصة:</span><span class="v" id="v-title">—</span></div>
+        <div class="kv-row"><span class="k">آخر موعد لتقديم العروض:</span><span class="v" id="v-deadline">—</span></div>
+        <div class="kv-row"><span class="k">موعد فتح المظاريف:</span><span class="v" id="v-opening">—</span></div>
+      </div>
+
+      <div class="section-block">
+        <h2>الأصناف المطلوبة:</h2>
+        <div id="items-summary"></div>
       </div>
 
       <div class="section-block">
         <h2>قسم شروط إرساء المناقصة:</h2>
-        <div class="kv-row"><span class="k">أقل سعر</span><span class="v">50%</span></div>
-        <div class="kv-row"><span class="k">أسرع مدة توريد</span><span class="v">30%</span></div>
-        <div class="kv-row"><span class="k">أعلى نسبة خصم</span><span class="v">15%</span></div>
-        <div class="kv-row"><span class="k">شركة معتمدة</span><span class="v">10%</span></div>
+        <div class="kv-row"><span class="k">أقل سعر</span><span class="v" id="v-w1">—</span></div>
+        <div class="kv-row"><span class="k">أسرع مدة توريد</span><span class="v" id="v-w2">—</span></div>
+        <div class="kv-row"><span class="k">أعلى تقييم سابق للمورد</span><span class="v" id="v-w3">—</span></div>
+        <div class="kv-row"><span class="k">شركة معتمدة</span><span class="v" id="v-w4">—</span></div>
       </div>
 
       <p class="text-muted small">* يرجى مراجعة جميع تفاصيل المناقصة قبل تأكيد نشرها</p>
@@ -85,11 +87,49 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
-  document.getElementById('publishBtn').addEventListener('click', function(){
-    document.getElementById('publishSuccess').classList.remove('d-none');
+  requireRole('pharmacy');
+
+  const draft = JSON.parse(sessionStorage.getItem('rfq_draft') || 'null');
+  if (!draft) {
+    window.location.href = 'create-tender.html';
+  }
+
+  (async function render() {
+    document.getElementById('v-title').textContent = draft.title;
+    document.getElementById('v-deadline').textContent = new Date(draft.quotes_deadline_at).toLocaleString('ar-EG');
+    document.getElementById('v-opening').textContent = new Date(draft.opening_at).toLocaleString('ar-EG');
+    document.getElementById('v-w1').textContent = draft.score_weight_price + '%';
+    document.getElementById('v-w2').textContent = draft.score_weight_delivery + '%';
+    document.getElementById('v-w3').textContent = draft.score_weight_rating + '%';
+    document.getElementById('v-w4').textContent = draft.score_weight_verified + '%';
+
+    let products = [];
+    try {
+      const res = await apiCall('GET', '/products?per_page=100');
+      products = res.data || [];
+    } catch (err) { /* تجاهل، سيظهر رقم الصنف فقط */ }
+
+    document.getElementById('items-summary').innerHTML = draft.items.map(it => {
+      const product = products.find(p => p.id === it.product_id);
+      return `<div class="kv-row"><span class="k">${product ? escapeHtml(product.name) : 'صنف #' + it.product_id}</span><span class="v">${it.quantity} وحدة${it.notes ? ' — ' + escapeHtml(it.notes) : ''}</span></div>`;
+    }).join('');
+  })();
+
+  document.getElementById('publishBtn').addEventListener('click', async function () {
     this.disabled = true;
+    try {
+      const res = await apiCall('POST', '/rfqs', draft);
+      sessionStorage.removeItem('rfq_draft');
+      const rfqId = res.data.id;
+      document.getElementById('publishSuccess').classList.remove('d-none');
+      document.getElementById('publishSuccess').querySelector('a').href = 'offers-received.html?id=' + rfqId;
+    } catch (err) {
+      showApiError(err.message || 'تعذّر نشر المناقصة');
+      this.disabled = false;
+    }
   });
 </script>
 </body>

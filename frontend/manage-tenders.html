@@ -22,36 +22,20 @@
       <h1 class="pl-page-title">إدارة المناقصات</h1>
       <p class="pl-page-sub">"متابعة المناقصات المنشورة وإدارة حالتها والاطلاع على تفاصيل العروض المقدمة."</p>
 
-      <h2 class="h6 fw-bold mb-3">أحدث المناقصات:</h2>
+      <h2 class="h6 fw-bold mb-3">جميع المناقصات:</h2>
       <div class="table-responsive">
         <table class="pl-table">
           <thead>
             <tr>
               <th>عنوان المناقصة</th>
-              <th>الفئة</th>
-              <th>الكمية</th>
+              <th>عدد الأصناف</th>
               <th>تاريخ الإغلاق</th>
               <th>الحالة</th>
               <th>الإجراء</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>توريد مضادات حيوية</td>
-              <td>مضادات حيوية</td>
-              <td>500</td>
-              <td>30/5</td>
-              <td><span class="badge-status badge-open">مفتوحة</span></td>
-              <td><a href="offers-received.html" class="btn-link-detail">عرض</a></td>
-            </tr>
-            <tr>
-              <td>توريد مسكنات</td>
-              <td>مسكنات ألم</td>
-              <td>300</td>
-              <td>5/6</td>
-              <td><span class="badge-status badge-closed">مغلقة</span></td>
-              <td><a href="tender-report.html" class="btn-link-detail">عرض</a></td>
-            </tr>
+          <tbody id="rfq-tbody">
+            <tr><td colspan="5" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
@@ -82,6 +66,35 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  requireRole('pharmacy');
+
+  (async function load() {
+    try {
+      const res = await apiCall('GET', '/rfqs?per_page=100');
+      const rfqs = res.data.data || [];
+      const tbody = document.getElementById('rfq-tbody');
+
+      if (!rfqs.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">لا توجد مناقصات بعد</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rfqs.map(rfq => `
+        <tr>
+          <td>${escapeHtml(rfq.title)}</td>
+          <td>${(rfq.rfq_items || []).length}</td>
+          <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
+          <td>${rfqStatusBadge(rfq.status)}</td>
+          <td><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
+        </tr>
+      `).join('');
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل المناقصات');
+    }
+  })();
+</script>
 </body>
 </html>

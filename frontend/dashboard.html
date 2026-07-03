@@ -25,26 +25,26 @@
     <div class="row g-3 mb-4">
       <div class="col-6 col-md-3">
         <div class="stat-card">
-          <div class="num">5</div>
+          <div class="num" id="stat-open">—</div>
           <div class="lbl">عدد المناقصات النشطة</div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
-          <div class="num">1</div>
+          <div class="num" id="stat-pending">—</div>
           <div class="lbl">مناقصة قيد الترسية</div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
-          <div class="num">23</div>
-          <div class="lbl">إجمالي العروض المستلمة</div>
+          <div class="num" id="stat-awarded">—</div>
+          <div class="lbl">مناقصات مُرسّاة</div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
-          <div class="num">8</div>
-          <div class="lbl">المناقصات المغلقة</div>
+          <div class="num" id="stat-total">—</div>
+          <div class="lbl">إجمالي المناقصات</div>
         </div>
       </div>
     </div>
@@ -58,7 +58,6 @@
     <div class="pl-card">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h2 class="h6 fw-bold mb-0">أحدث المناقصات:</h2>
-        <input type="search" class="form-control" style="max-width:220px" placeholder="البحث باسم المناقصة">
       </div>
       <div class="table-responsive">
         <table class="pl-table">
@@ -67,25 +66,11 @@
               <th>اسم المناقصة</th>
               <th>آخر موعد</th>
               <th>الحالة</th>
-              <th>النتيجة</th>
               <th>الإجراء</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>توريد مضادات حيوية</td>
-              <td>20 / 5 / 2026</td>
-              <td><span class="badge-status badge-open">مفتوحة</span></td>
-              <td class="text-muted">—</td>
-              <td><a href="offers-received.html" class="btn-link-detail">عرض</a></td>
-            </tr>
-            <tr>
-              <td>توريد مسكنات</td>
-              <td>5 / 5 / 2026</td>
-              <td><span class="badge-status badge-closed">مغلقة</span></td>
-              <td><a href="tender-report.html" class="btn-link-detail">تقرير النتيجة</a></td>
-              <td><a href="tender-report.html" class="btn-link-detail">عرض</a></td>
-            </tr>
+          <tbody id="rfq-tbody">
+            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
@@ -111,6 +96,39 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  requireRole('pharmacy');
+
+  (async function load() {
+    try {
+      const res = await apiCall('GET', '/rfqs?per_page=100');
+      const rfqs = res.data.data || [];
+
+      document.getElementById('stat-total').textContent = res.data.total ?? rfqs.length;
+      document.getElementById('stat-open').textContent = rfqs.filter(r => r.status === 'open').length;
+      document.getElementById('stat-pending').textContent = rfqs.filter(r => ['closed', 'pending_opening', 'opened'].includes(r.status)).length;
+      document.getElementById('stat-awarded').textContent = rfqs.filter(r => r.status === 'awarded').length;
+
+      const tbody = document.getElementById('rfq-tbody');
+      if (!rfqs.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">لا توجد مناقصات بعد</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rfqs.slice(0, 10).map(rfq => `
+        <tr>
+          <td>${escapeHtml(rfq.title)}</td>
+          <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
+          <td>${rfqStatusBadge(rfq.status)}</td>
+          <td><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
+        </tr>
+      `).join('');
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل المناقصات');
+    }
+  })();
+</script>
 </body>
 </html>

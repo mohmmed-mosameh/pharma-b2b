@@ -19,19 +19,12 @@
   <section class="pl-content">
     <div class="pl-card">
       <p class="pl-eyebrow">نتيجة المناقصة</p>
-      <h1 class="pl-page-title">نتيجة المناقصة</h1>
+      <h1 class="pl-page-title" id="v-title">نتيجة المناقصة</h1>
       <p class="pl-page-sub">"يعرض ملخصًا لنتيجة عرضك بعد اعتماد قرار الترسية من إدارة المخزن."</p>
 
-      <div class="result-banner result-success mb-4">
-        <i class="bi bi-trophy-fill"></i>
-        <div>مبروك! تم ترسية المناقصة على عرضك المقدَّم</div>
-      </div>
+      <div id="result-banner" class="result-banner mb-4"></div>
 
-      <div class="kv-row"><span class="k">اسم المناقصة:</span><span class="v">توريد مضادات حيوية</span></div>
-      <div class="kv-row"><span class="k">سعر عرضك:</span><span class="v">480$</span></div>
-      <div class="kv-row"><span class="k">مدة التوريد:</span><span class="v">5 أيام</span></div>
-      <div class="kv-row"><span class="k">نسبة الخصم:</span><span class="v">5%</span></div>
-      <div class="kv-row"><span class="k">تاريخ اعتماد الترسية:</span><span class="v">20 / 6 / 2026</span></div>
+      <div id="items-summary"></div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
         <a href="track-status.html" class="btn btn-pl-ghost">رجوع</a>
@@ -56,6 +49,45 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  requireRole('supplier');
+
+  const rfqId = getRfqIdFromUrl();
+  if (!rfqId) window.location.href = 'track-status.html';
+
+  const BANNERS = {
+    awarded: { cls: 'result-success', icon: 'bi-trophy-fill', text: 'مبروك! تم ترسية المناقصة على عرضك المقدَّم' },
+    rejected: { cls: 'result-danger', icon: 'bi-x-circle-fill', text: 'لم يقع الاختيار على عرضك هذه المرة' },
+    submitted: { cls: 'result-pending', icon: 'bi-hourglass-split', text: 'عرضك لا يزال قيد المراجعة من الصيدلية' },
+    cancelled: { cls: 'result-danger', icon: 'bi-x-circle-fill', text: 'تم إلغاء هذا العرض' }
+  };
+
+  (async function load() {
+    try {
+      const res = await apiCall('GET', '/quotes?per_page=100');
+      const quote = (res.data.data || []).find(q => String(q.rfq_id) === String(rfqId));
+
+      if (!quote) {
+        showApiError('لم يتم العثور على عرض مقدَّم من طرفك على هذه المناقصة.');
+        return;
+      }
+
+      document.getElementById('v-title').textContent = 'نتيجة المناقصة: ' + quote.rfq.title;
+
+      const banner = BANNERS[quote.status] || BANNERS.submitted;
+      document.getElementById('result-banner').className = 'result-banner mb-4 ' + banner.cls;
+      document.getElementById('result-banner').innerHTML = `<i class="bi ${banner.icon}"></i><div>${banner.text}</div>`;
+
+      document.getElementById('items-summary').innerHTML = (quote.quote_items || []).map(item => `
+        <div class="kv-row"><span class="k">${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}</span>
+        <span class="v">${item.unit_price}$ — خصم ${item.discount_percentage || 0}% — توريد خلال ${item.delivery_days} يوم</span></div>
+      `).join('');
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل نتيجة المناقصة');
+    }
+  })();
+</script>
 </body>
 </html>

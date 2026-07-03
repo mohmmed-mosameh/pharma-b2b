@@ -19,31 +19,21 @@
   <section class="pl-content">
     <div class="pl-card">
       <p class="pl-eyebrow">ترسية المناقصة</p>
-      <h1 class="pl-page-title">ترسية المناقصة – توريد مضادات حيوية</h1>
-      <p class="offer-quote">"تم اختيار أفضل عرض بناءً على شروط التقييم المحددة"</p>
+      <h1 class="pl-page-title" id="v-title">ترسية المناقصة</h1>
+      <p class="offer-quote">"اختر العرض الفائز بناءً على شروط التقييم المحددة — العرض الأعلى نقاطًا مُقترَح تلقائيًا"</p>
 
-      <span class="offer-badge">شركة A — أفضل عرض مقدم</span>
-
-      <div class="dl-grid">
-        <div class="item"><div class="k">سعر العرض</div><div class="v">480$</div></div>
-        <div class="item"><div class="k">رقم السجل التجاري</div><div class="v">123456789</div></div>
-        <div class="item"><div class="k">مدة التوريد</div><div class="v">5 أيام</div></div>
-        <div class="item"><div class="k">رقم التواصل</div><div class="v" style="direction:ltr; display:inline-block;">+970 599 123 456</div></div>
-        <div class="item"><div class="k">الخصم</div><div class="v">5%</div></div>
-        <div class="item"><div class="k">البريد الإلكتروني</div><div class="v">info@pharmasupplier.com</div></div>
-        <div class="item"><div class="k">طريقة التسليم</div><div class="v">تسليم مباشر للمخزن الرئيسي</div></div>
-      </div>
+      <div id="quotes-list"></div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="open-envelopes.html" class="btn btn-pl-ghost">رجوع</a>
-        <button type="button" id="confirmAwardBtn" class="btn btn-pl">تأكيد الترسية</button>
+        <a href="#" id="back-link" class="btn btn-pl-ghost">رجوع</a>
+        <button type="button" id="confirmAwardBtn" class="btn btn-pl" disabled>تأكيد الترسية</button>
       </div>
 
       <div id="awardSuccess" class="result-banner result-success d-none mt-4">
         <i class="bi bi-check-circle-fill"></i>
         <div>
           تم تأكيد الترسية بنجاح
-          <div><a href="tender-report.html" class="btn-link-detail">الانتقال إلى صفحة تقرير المناقصة</a></div>
+          <div><a href="#" id="goto-report" class="btn-link-detail">الانتقال إلى صفحة تقرير المناقصة</a></div>
         </div>
       </div>
     </div>
@@ -68,11 +58,85 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
-  document.getElementById('confirmAwardBtn').addEventListener('click', function () {
-    document.getElementById('awardSuccess').classList.remove('d-none');
+  requireRole('pharmacy');
+
+  const rfqId = getRfqIdFromUrl();
+  if (!rfqId) window.location.href = 'manage-tenders.html';
+  document.getElementById('back-link').href = 'open-envelopes.html?id=' + rfqId;
+  document.getElementById('goto-report').href = 'tender-report.html?id=' + rfqId;
+
+  function avg(items, field) {
+    const vals = (items || []).map(i => Number(i[field])).filter(v => !isNaN(v));
+    if (!vals.length) return null;
+    return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2);
+  }
+
+  (async function load() {
+    try {
+      const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
+      document.getElementById('v-title').textContent = 'ترسية المناقصة – ' + rfqRes.data.title;
+
+      const res = await apiCall('GET', '/rfqs/' + rfqId + '/quotes');
+      const quotes = (res.data.quotes || []).filter(q => q.status === 'submitted');
+
+      if (!res.all_opened) {
+        showApiError('يجب فتح كل المظاريف أولًا قبل الترسية.');
+        window.location.href = 'open-envelopes.html?id=' + rfqId;
+        return;
+      }
+
+      if (!quotes.length) {
+        document.getElementById('quotes-list').innerHTML = '<p class="text-muted">لا توجد عروض صالحة للترسية عليها.</p>';
+        return;
+      }
+
+      const bestId = quotes.reduce((best, q) => (q.score > (best?.score ?? -1) ? q : best), null)?.id;
+
+      document.getElementById('quotes-list').innerHTML = quotes.map(quote => `
+        <label class="pl-card mb-3 d-block" style="cursor:pointer;">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+              <input type="radio" name="winnerQuote" value="${quote.id}" ${quote.id === bestId ? 'checked' : ''} class="form-check-input me-2">
+              <span class="offer-badge">${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</span>
+              ${quote.id === bestId ? '<span class="badge-status badge-approved ms-2">الأعلى تقييمًا</span>' : ''}
+            </div>
+            <div class="fw-bold">النقاط: ${quote.score ?? '—'}</div>
+          </div>
+          <div class="dl-grid mt-2">
+            <div class="item"><div class="k">متوسط سعر الوحدة</div><div class="v">${avg(quote.quote_items, 'net_unit_price') ?? avg(quote.quote_items, 'unit_price') ?? '—'}$</div></div>
+            <div class="item"><div class="k">متوسط مدة التوريد</div><div class="v">${avg(quote.quote_items, 'delivery_days') ?? '—'} يوم</div></div>
+            <div class="item"><div class="k">شركة معتمدة</div><div class="v">${quote.supplier && quote.supplier.is_verified ? 'نعم' : 'لا'}</div></div>
+            <div class="item"><div class="k">متوسط تقييم المورد</div><div class="v">${quote.supplier_avg_rating ?? '—'} / 5</div></div>
+          </div>
+        </label>
+      `).join('');
+
+      document.querySelectorAll('input[name="winnerQuote"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          document.getElementById('confirmAwardBtn').disabled = false;
+        });
+      });
+      if (bestId) document.getElementById('confirmAwardBtn').disabled = false;
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل العروض');
+    }
+  })();
+
+  document.getElementById('confirmAwardBtn').addEventListener('click', async function () {
+    const selected = document.querySelector('input[name="winnerQuote"]:checked');
+    if (!selected) return;
+
     this.disabled = true;
+    try {
+      await apiCall('POST', '/rfqs/' + rfqId + '/award', { quote_id: Number(selected.value) });
+      document.getElementById('awardSuccess').classList.remove('d-none');
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تأكيد الترسية');
+      this.disabled = false;
+    }
   });
 </script>
 </body>

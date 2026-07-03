@@ -19,54 +19,34 @@
   <section class="pl-content">
     <div class="pl-card">
       <p class="pl-eyebrow">استلام العروض</p>
-      <h1 class="pl-page-title">استلام المناقصة: توريد مضادات حيوية</h1>
-      <p class="pl-page-sub">هذه العروض المقدَّمة من الموردين حتى الآن — راجع كل عرض قبل الانتقال لفتح المظاريف</p>
+      <h1 class="pl-page-title" id="v-title">استلام المناقصة</h1>
+      <p class="pl-page-sub">هذه العروض المقدَّمة من الموردين حتى الآن — الأسعار تبقى مخفية حتى إغلاق باب التقديم وفتح المظاريف</p>
 
-      <h2 class="h6 fw-bold mb-3">أحدث المناقصات:</h2>
+      <div id="still-open-note" class="result-banner result-pending d-none">
+        <i class="bi bi-hourglass-split"></i>
+        <div>المناقصة لا تزال مفتوحة لاستقبال العروض. راجع هذه الصفحة بعد آخر موعد لتقديم العروض لمشاهدة العروض المقدَّمة.</div>
+      </div>
+
+      <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
       <div class="table-responsive">
         <table class="pl-table">
           <thead>
             <tr>
               <th>اسم الشركة</th>
-              <th>سعر العرض</th>
-              <th>مدة التوريد</th>
-              <th>الخصم</th>
-              <th>الملاحظات</th>
-              <th>الإجراء</th>
+              <th>عدد الأصناف المسعّرة</th>
+              <th>الحالة</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>شركة A</td>
-              <td>480$</td>
-              <td>5 أيام</td>
-              <td>5%</td>
-              <td><span class="badge-status badge-approved">معتمدة</span></td>
-              <td><a href="offer-details.html?company=A" class="btn-link-detail">عرض التفاصيل</a></td>
-            </tr>
-            <tr>
-              <td>شركة B</td>
-              <td>500$</td>
-              <td>4 أيام</td>
-              <td>3%</td>
-              <td><span class="badge-status badge-new">جديدة</span></td>
-              <td><a href="offer-details.html?company=B" class="btn-link-detail">عرض التفاصيل</a></td>
-            </tr>
-            <tr>
-              <td>شركة C</td>
-              <td>470$</td>
-              <td>7 أيام</td>
-              <td>2%</td>
-              <td><span class="badge-status badge-new">جديدة</span></td>
-              <td><a href="offer-details.html?company=C" class="btn-link-detail">عرض التفاصيل</a></td>
-            </tr>
+          <tbody id="quotes-tbody">
+            <tr><td colspan="3" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
+      <p class="text-muted small">الأسعار تبقى مخفية إلى أن يتم فتح المظاريف رسميًا من شاشة "فتح المظاريف"</p>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="review-publish.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="open-envelopes.html" class="btn btn-pl">الانتقال لفتح المظاريف</a>
+        <a href="manage-tenders.html" class="btn btn-pl-ghost">رجوع</a>
+        <a href="#" id="goto-open-envelopes" class="btn btn-pl">الانتقال لفتح المظاريف</a>
       </div>
     </div>
   </section>
@@ -90,6 +70,50 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  requireRole('pharmacy');
+
+  const rfqId = getRfqIdFromUrl();
+  if (!rfqId) window.location.href = 'manage-tenders.html';
+  document.getElementById('goto-open-envelopes').href = 'open-envelopes.html?id=' + rfqId;
+
+  (async function load() {
+    try {
+      const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
+      document.getElementById('v-title').textContent = 'استلام المناقصة: ' + rfqRes.data.title;
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل بيانات المناقصة');
+    }
+
+    try {
+      const res = await apiCall('GET', '/rfqs/' + rfqId + '/quotes');
+      const quotes = res.data.quotes || [];
+      const tbody = document.getElementById('quotes-tbody');
+
+      if (!quotes.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">لا توجد عروض مقدَّمة بعد</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = quotes.map(quote => `
+        <tr>
+          <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
+          <td>${(quote.quote_items || []).length}</td>
+          <td>${quoteStatusBadge(quote.status)}</td>
+        </tr>
+      `).join('');
+    } catch (err) {
+      if (err.message && err.message.includes('لا يمكن عرض المظاريف')) {
+        document.getElementById('still-open-note').classList.remove('d-none');
+        document.getElementById('quotes-tbody').innerHTML = '';
+        document.getElementById('goto-open-envelopes').classList.add('disabled');
+      } else {
+        showApiError(err.message || 'تعذّر تحميل العروض');
+      }
+    }
+  })();
+</script>
 </body>
 </html>

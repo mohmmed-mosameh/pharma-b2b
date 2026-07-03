@@ -19,18 +19,24 @@
   <section class="pl-content">
     <div class="pl-card">
       <p class="pl-eyebrow">تفاصيل المناقصة</p>
-      <h1 class="pl-page-title">توريد مضادات حيوية</h1>
-      <p class="pl-page-sub">توريد مضادات حيوية أساسية للصيدليات المعتمدة ضمن الشبكة</p>
+      <h1 class="pl-page-title" id="v-title">جارٍ التحميل...</h1>
+      <p class="pl-page-sub">راجع الأصناف المطلوبة وموعد الإغلاق قبل تقديم عرضك</p>
 
-      <div class="kv-row"><span class="k">فئة الدواء:</span><span class="v">مضادات حيوية</span></div>
-      <div class="kv-row"><span class="k">الكمية المطلوبة:</span><span class="v">500 وحدة</span></div>
-      <div class="kv-row"><span class="k">موعد التسليم المطلوب:</span><span class="v">20 / 5 / 2026</span></div>
-      <div class="kv-row"><span class="k">تاريخ إغلاق المناقصة:</span><span class="v">30 / 5 / 2026</span></div>
-      <div class="kv-row"><span class="k">أهم معايير الترسية:</span><span class="v">أقل سعر (50%) — أسرع توريد (30%)</span></div>
+      <div class="kv-row"><span class="k">تاريخ إغلاق المناقصة:</span><span class="v" id="v-deadline">—</span></div>
+      <div class="kv-row"><span class="k">موعد فتح المظاريف:</span><span class="v" id="v-opening">—</span></div>
+      <div class="kv-row"><span class="k">أهم معايير الترسية:</span><span class="v" id="v-weights">—</span></div>
+
+      <h2 class="h6 fw-bold mt-4 mb-2">الأصناف المطلوبة:</h2>
+      <div class="table-responsive">
+        <table class="pl-table">
+          <thead><tr><th>الصنف</th><th>الكمية</th><th>ملاحظات</th></tr></thead>
+          <tbody id="items-tbody"></tbody>
+        </table>
+      </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
         <a href="tenders.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="submit-offer.html" class="btn btn-pl">تقديم العرض</a>
+        <a href="submit-offer.html" id="submit-offer-link" class="btn btn-pl">تقديم العرض</a>
       </div>
     </div>
   </section>
@@ -58,6 +64,44 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  requireRole('supplier');
+
+  const rfqId = getRfqIdFromUrl();
+  if (!rfqId) window.location.href = 'tenders.html';
+
+  (async function load() {
+    try {
+      const res = await apiCall('GET', '/rfqs/' + rfqId);
+      const rfq = res.data;
+
+      localStorage.setItem('current_rfq_id', rfq.id);
+      document.getElementById('v-title').textContent = rfq.title;
+      document.getElementById('v-deadline').textContent = new Date(rfq.quotes_deadline_at).toLocaleString('ar-EG');
+      document.getElementById('v-opening').textContent = new Date(rfq.opening_at).toLocaleString('ar-EG');
+      document.getElementById('v-weights').textContent =
+        `أقل سعر (${rfq.score_weight_price}%) — أسرع توريد (${rfq.score_weight_delivery}%) — تقييم سابق (${rfq.score_weight_rating}%) — شركة معتمدة (${rfq.score_weight_verified}%)`;
+
+      document.getElementById('items-tbody').innerHTML = (rfq.rfq_items || []).map(item => `
+        <tr>
+          <td>${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}</td>
+          <td>${item.quantity}</td>
+          <td>${item.notes ? escapeHtml(item.notes) : '—'}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('submit-offer-link').href = 'submit-offer.html?id=' + rfq.id;
+
+      if (rfq.status !== 'open') {
+        document.getElementById('submit-offer-link').classList.add('disabled');
+        document.getElementById('submit-offer-link').textContent = 'انتهى وقت تقديم العروض';
+      }
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل تفاصيل المناقصة');
+    }
+  })();
+</script>
 </body>
 </html>

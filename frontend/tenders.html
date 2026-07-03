@@ -23,12 +23,6 @@
 
       <div class="filter-row">
         <input id="tender-search" type="search" class="form-control" style="max-width:260px" placeholder="ابحث باسم المناقصة...">
-        <select id="category-filter" class="form-select" style="max-width:220px">
-          <option value="all" selected>جميع الفئات</option>
-          <option value="مضادات-حيوية">مضادات حيوية</option>
-          <option value="مسكنات">مسكنات ألم</option>
-          <option value="فيتامينات">فيتامينات</option>
-        </select>
       </div>
 
       <h2 class="h6 fw-bold mb-3">جدول المناقصات:</h2>
@@ -37,34 +31,13 @@
           <thead>
             <tr>
               <th>اسم المناقصة</th>
-              <th>الفئة</th>
-              <th>الكمية</th>
+              <th>عدد الأصناف</th>
               <th>تاريخ الإغلاق</th>
               <th>الإجراء</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="tender-row" data-category="مضادات-حيوية" data-name="توريد مضادات حيوية">
-              <td>توريد مضادات حيوية</td>
-              <td>مضادات حيوية</td>
-              <td>500 وحدة</td>
-              <td>30 / 5 / 2026</td>
-              <td><a href="tender-detail.html" class="btn-link-detail">عرض التفاصيل <i class="bi bi-arrow-left"></i></a></td>
-            </tr>
-            <tr class="tender-row" data-category="مسكنات" data-name="توريد مسكنات ألم">
-              <td>توريد مسكنات ألم</td>
-              <td>مسكنات ألم</td>
-              <td>300 وحدة</td>
-              <td>5 / 6 / 2026</td>
-              <td><a href="tender-detail.html" class="btn-link-detail">عرض التفاصيل <i class="bi bi-arrow-left"></i></a></td>
-            </tr>
-            <tr class="tender-row" data-category="فيتامينات" data-name="توريد فيتامينات">
-              <td>توريد فيتامينات</td>
-              <td>فيتامينات</td>
-              <td>200 وحدة</td>
-              <td>10 / 6 / 2026</td>
-              <td><a href="tender-detail.html" class="btn-link-detail">عرض التفاصيل <i class="bi bi-arrow-left"></i></a></td>
-            </tr>
+          <tbody id="rfq-tbody">
+            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
         <p id="no-results" class="text-muted text-center py-4 d-none">لا توجد مناقصات مطابقة لبحثك.</p>
@@ -94,16 +67,45 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
-  // إظهار رسالة "لا توجد نتائج" عند التصفية
-  var observerRows = document.querySelectorAll('.tender-row');
-  function checkEmpty(){
-    var visible = Array.prototype.some.call(observerRows, function(r){ return r.style.display !== 'none'; });
-    document.getElementById('no-results').classList.toggle('d-none', visible);
+  requireRole('supplier');
+
+  let RFQS = [];
+
+  function renderRows(list) {
+    const tbody = document.getElementById('rfq-tbody');
+    if (!list.length) {
+      tbody.innerHTML = '';
+      document.getElementById('no-results').classList.remove('d-none');
+      return;
+    }
+    document.getElementById('no-results').classList.add('d-none');
+    tbody.innerHTML = list.map(rfq => `
+      <tr>
+        <td>${escapeHtml(rfq.title)}</td>
+        <td>${(rfq.rfq_items || []).length}</td>
+        <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
+        <td><a href="tender-detail.html?id=${rfq.id}" class="btn-link-detail">عرض التفاصيل <i class="bi bi-arrow-left"></i></a></td>
+      </tr>
+    `).join('');
   }
-  document.getElementById('category-filter').addEventListener('change', checkEmpty);
-  document.getElementById('tender-search').addEventListener('input', checkEmpty);
+
+  document.getElementById('tender-search').addEventListener('input', function () {
+    const q = this.value.trim().toLowerCase();
+    renderRows(RFQS.filter(r => r.title.toLowerCase().includes(q)));
+  });
+
+  (async function load() {
+    try {
+      const res = await apiCall('GET', '/rfqs?per_page=100');
+      RFQS = res.data.data || [];
+      renderRows(RFQS);
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل المناقصات');
+    }
+  })();
 </script>
 </body>
 </html>

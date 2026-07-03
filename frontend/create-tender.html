@@ -36,35 +36,26 @@
           <input type="text" id="title" class="form-control" placeholder="مثال: توريد مضادات حيوية" required>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fw-bold" for="desc">وصف المناقصة</label>
-          <textarea id="desc" class="form-control" rows="3" placeholder="اكتب وصفًا مختصرًا للمناقصة" required></textarea>
-        </div>
-
         <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label fw-bold" for="category">فئة الدواء</label>
-            <select id="category" class="form-select" required>
-              <option value="" selected disabled>اختر فئة الدواء</option>
-              <option>مضادات حيوية</option>
-              <option>أدوية السكري</option>
-              <option>أدوية القلب</option>
-              <option>مسكنات</option>
-            </select>
+            <label class="form-label fw-bold" for="closeDate">آخر موعد لتقديم العروض</label>
+            <input type="datetime-local" id="closeDate" class="form-control" required>
           </div>
           <div class="col-md-6">
-            <label class="form-label fw-bold" for="qty">الكمية المطلوبة</label>
-            <input type="number" id="qty" class="form-control" placeholder="مثال: 500" min="1" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label fw-bold" for="deliveryDate">موعد التسليم</label>
-            <input type="date" id="deliveryDate" class="form-control" required>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label fw-bold" for="closeDate">تاريخ إغلاق المناقصة</label>
-            <input type="date" id="closeDate" class="form-control" required>
+            <label class="form-label fw-bold" for="openDate">موعد فتح المظاريف</label>
+            <input type="datetime-local" id="openDate" class="form-control" required>
           </div>
         </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <label class="form-label fw-bold mb-0">أصناف المناقصة</label>
+          <button type="button" id="addItemBtn" class="btn btn-sm btn-pl-outline"><i class="bi bi-plus-lg"></i> إضافة صنف</button>
+        </div>
+        <p class="text-muted small">اختر الأصناف المطلوب توريدها وكمية كل صنف (لا يمكن تكرار نفس الصنف مرتين)</p>
+
+        <div id="itemsWrap"></div>
 
         <div class="d-flex justify-content-between mt-4">
           <button type="button" class="btn btn-pl-ghost" onclick="window.location.href='dashboard.html'">إلغاء</button>
@@ -94,10 +85,95 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
-  document.getElementById('createTenderForm').addEventListener('submit', function(e){
+  requireRole('pharmacy');
+
+  let PRODUCTS = [];
+  const itemsWrap = document.getElementById('itemsWrap');
+
+  function productOptions(selectedId) {
+    return PRODUCTS.map(p =>
+      `<option value="${p.id}" ${String(p.id) === String(selectedId) ? 'selected' : ''}>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}</option>`
+    ).join('');
+  }
+
+  function addItemRow() {
+    const row = document.createElement('div');
+    row.className = 'row g-2 align-items-end mb-2 rfq-item-row';
+    row.innerHTML = `
+      <div class="col-md-5">
+        <label class="form-label small">الصنف</label>
+        <select class="form-select item-product" required>
+          <option value="" selected disabled>اختر صنفًا</option>
+          ${productOptions()}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label small">الكمية</label>
+        <input type="number" class="form-control item-qty" min="1" placeholder="500" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small">ملاحظات (اختياري)</label>
+        <input type="text" class="form-control item-notes" placeholder="مثال: تعبئة 10 علب">
+      </div>
+      <div class="col-md-1">
+        <button type="button" class="btn btn-pl-ghost btn-remove-item" aria-label="حذف الصنف"><i class="bi bi-trash"></i></button>
+      </div>
+    `;
+    row.querySelector('.btn-remove-item').addEventListener('click', () => row.remove());
+    itemsWrap.appendChild(row);
+  }
+
+  document.getElementById('addItemBtn').addEventListener('click', addItemRow);
+
+  (async function init() {
+    try {
+      const res = await apiCall('GET', '/products?per_page=100');
+      PRODUCTS = res.data || [];
+    } catch (err) {
+      showApiError('تعذّر تحميل قائمة الأصناف: ' + err.message);
+    }
+    addItemRow();
+  })();
+
+  document.getElementById('createTenderForm').addEventListener('submit', function (e) {
     e.preventDefault();
+
+    const title = document.getElementById('title').value.trim();
+    const quotesDeadlineAt = document.getElementById('closeDate').value;
+    const openingAt = document.getElementById('openDate').value;
+
+    const items = Array.from(document.querySelectorAll('.rfq-item-row')).map(row => ({
+      product_id: Number(row.querySelector('.item-product').value),
+      quantity: Number(row.querySelector('.item-qty').value),
+      notes: row.querySelector('.item-notes').value.trim() || null
+    }));
+
+    if (!items.length || items.some(it => !it.product_id || !it.quantity)) {
+      showApiError('أضف صنفًا واحدًا على الأقل مع تحديد الكمية.');
+      return;
+    }
+
+    const productIds = items.map(it => it.product_id);
+    if (new Set(productIds).size !== productIds.length) {
+      showApiError('لا يمكن تكرار نفس الصنف أكثر من مرة في المناقصة.');
+      return;
+    }
+
+    if (new Date(openingAt) <= new Date(quotesDeadlineAt)) {
+      showApiError('يجب أن يكون موعد فتح المظاريف بعد آخر موعد لتقديم العروض.');
+      return;
+    }
+
+    sessionStorage.setItem('rfq_draft', JSON.stringify({
+      title,
+      quotes_deadline_at: quotesDeadlineAt,
+      opening_at: openingAt,
+      items
+    }));
+
     window.location.href = 'tender-criteria.html';
   });
 </script>

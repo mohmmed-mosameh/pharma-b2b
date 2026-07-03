@@ -101,12 +101,20 @@ document.addEventListener('DOMContentLoaded', function () {
             '</div>' +
             '<div class="modal-footer">' +
               '<button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal">الغاء</button>' +
-              '<a href="login.html" class="btn btn-pl">تسجيل الخروج</a>' +
+              '<a href="#" id="confirmLogoutBtn" class="btn btn-pl">تسجيل الخروج</a>' +
             '</div>' +
           '</div>' +
         '</div>' +
       '</div>';
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+    document.getElementById('confirmLogoutBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (typeof logout === 'function') {
+        logout();
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
   }
 
   document.querySelectorAll('.logout-link').forEach(function (link) {

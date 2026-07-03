@@ -19,28 +19,21 @@
   <section class="pl-content">
     <div class="pl-card">
       <p class="pl-eyebrow">تقرير المناقصة</p>
-      <h1 class="pl-page-title">تقرير المناقصة</h1>
+      <h1 class="pl-page-title" id="v-title">تقرير المناقصة</h1>
       <p class="pl-page-sub">"يعرض هذا التقرير ملخصًا رسميًا لنتيجة المناقصة بعد اعتماد قرار الترسية."</p>
 
       <span class="offer-badge">التقرير النهائي</span>
 
-      <div class="kv-row"><span class="k">اسم المناقصة:</span><span class="v">توريد مضادات حيوية</span></div>
-      <div class="kv-row"><span class="k">الشركة الفائزة:</span><span class="v">شركة A</span></div>
-      <div class="kv-row"><span class="k">السعر النهائي:</span><span class="v">480$</span></div>
-      <div class="kv-row"><span class="k">مدة التوريد:</span><span class="v">5 أيام</span></div>
-      <div class="kv-row"><span class="k">نسبة الخصم:</span><span class="v">5%</span></div>
-
-      <ul class="report-check-list">
-        <li><i class="bi bi-check-circle-fill"></i> تم اعتماد الترسية بتاريخ: 20 / 6 / 2026</li>
-        <li><i class="bi bi-check-circle-fill"></i> تم إشعار الشركة الفائزة بنجاح العملية</li>
-      </ul>
+      <div id="report-body">
+        <p class="text-muted">جارٍ التحميل...</p>
+      </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
         <a href="dashboard.html" class="btn btn-pl-ghost">الرجوع للوحة التحكم</a>
-        <a href="#" id="downloadPdfBtn" class="btn btn-pl">
+        <button type="button" id="downloadPdfBtn" class="btn btn-pl" disabled>
           <img src="img/download-icon.png" alt="" style="height:16px; filter:brightness(0) invert(1); margin-left:.4rem;">
           تحميل التقرير PDF
-        </a>
+        </button>
       </div>
     </div>
   </section>
@@ -64,11 +57,60 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
-  document.getElementById('downloadPdfBtn').addEventListener('click', function (e) {
-    e.preventDefault();
-    alert('سيتم تحميل التقرير كملف PDF (نموذج تجريبي)');
+  requireRole('pharmacy');
+
+  const rfqId = getRfqIdFromUrl();
+  if (!rfqId) window.location.href = 'manage-tenders.html';
+
+  function avg(items, field) {
+    const vals = (items || []).map(i => Number(i[field])).filter(v => !isNaN(v));
+    if (!vals.length) return null;
+    return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2);
+  }
+
+  (async function load() {
+    try {
+      const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
+      const rfq = rfqRes.data;
+      document.getElementById('v-title').textContent = 'تقرير المناقصة: ' + rfq.title;
+
+      if (rfq.status !== 'awarded') {
+        document.getElementById('report-body').innerHTML = '<p class="text-muted">التقرير متاح فقط بعد ترسية المناقصة.</p>';
+        return;
+      }
+
+      const quotesRes = await apiCall('GET', '/rfqs/' + rfqId + '/quotes');
+      const winner = (quotesRes.data.quotes || []).find(q => q.status === 'awarded');
+
+      document.getElementById('report-body').innerHTML = `
+        <div class="kv-row"><span class="k">اسم المناقصة:</span><span class="v">${escapeHtml(rfq.title)}</span></div>
+        <div class="kv-row"><span class="k">الشركة الفائزة:</span><span class="v">${winner ? escapeHtml(winner.supplier.name) : '—'}</span></div>
+        <div class="kv-row"><span class="k">متوسط سعر الوحدة النهائي:</span><span class="v">${winner ? (avg(winner.quote_items, 'net_unit_price') ?? avg(winner.quote_items, 'unit_price')) : '—'}$</span></div>
+        <div class="kv-row"><span class="k">متوسط مدة التوريد:</span><span class="v">${winner ? avg(winner.quote_items, 'delivery_days') : '—'} يوم</span></div>
+        <ul class="report-check-list">
+          <li><i class="bi bi-check-circle-fill"></i> تم اعتماد الترسية بتاريخ: ${new Date(rfq.updated_at).toLocaleDateString('ar-EG')}</li>
+          <li><i class="bi bi-check-circle-fill"></i> تم إشعار الشركة الفائزة بنجاح العملية</li>
+        </ul>
+      `;
+
+      document.getElementById('downloadPdfBtn').disabled = false;
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل بيانات التقرير');
+    }
+  })();
+
+  document.getElementById('downloadPdfBtn').addEventListener('click', async function () {
+    this.disabled = true;
+    try {
+      await apiDownloadFile('/rfqs/' + rfqId + '/report', 'rfq-' + rfqId + '-report.pdf');
+    } catch (err) {
+      showApiError(err.message || 'تعذّر تحميل التقرير');
+    } finally {
+      this.disabled = false;
+    }
   });
 </script>
 </body>

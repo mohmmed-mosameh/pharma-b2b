@@ -57,6 +57,17 @@ function requireAuth() {
     return true;
 }
 
+/* يتحقق أن المستخدم الحالي له الدور المطلوب لهذه الصفحة، وإلا يعيده لصفحة مناسبة لدوره */
+function requireRole(role) {
+    if (!requireAuth()) return false;
+    const user = getUser();
+    if (!user || user.role !== role) {
+        window.location.href = user && user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
+        return false;
+    }
+    return true;
+}
+
 function logout() {
     apiCall('POST', '/auth/logout').catch(() => {}).finally(() => {
         localStorage.clear();
@@ -115,4 +126,82 @@ function getRfqIdFromUrl() {
 
 function getQuoteIdFromUrl() {
     return new URLSearchParams(window.location.search).get('id');
+}
+
+/* ------------------------------------------------------------------ */
+/* تحميل ملف (تقرير PDF) بتوثيق Bearer، بما إنه مش رابط عادي           */
+/* ------------------------------------------------------------------ */
+async function apiDownloadFile(endpoint, filename) {
+    const token = localStorage.getItem('pharma_token');
+    const res = await fetch(API_URL + endpoint, {
+        headers: { 'Accept': 'application/pdf', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) }
+    });
+
+    if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.message || `تعذّر تحميل الملف (خطأ ${res.status})`);
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+}
+
+/* ------------------------------------------------------------------ */
+/* مساعدات حالة المناقصة (Rfq.status) — مشتركة بين شاشات الصيدلية      */
+/* ------------------------------------------------------------------ */
+const RFQ_STATUS_LABELS = {
+    open: { label: 'مفتوحة', cls: 'badge-open' },
+    closed: { label: 'مغلقة', cls: 'badge-closed' },
+    pending_opening: { label: 'بانتظار فتح المظاريف', cls: 'badge-new' },
+    opened: { label: 'المظاريف مفتوحة', cls: 'badge-approved' },
+    awarded: { label: 'مُرسّاة', cls: 'badge-approved' }
+};
+
+function rfqStatusBadge(status) {
+    const s = RFQ_STATUS_LABELS[status] || { label: status, cls: 'badge-new' };
+    return `<span class="badge-status ${s.cls}">${s.label}</span>`;
+}
+
+/* الصفحة المناسبة لمتابعة المناقصة من لوحة الصيدلية حسب حالتها الحالية */
+function rfqPharmacyActionUrl(rfq) {
+    switch (rfq.status) {
+        case 'open': return 'offers-received.html?id=' + rfq.id;
+        case 'closed':
+        case 'pending_opening':
+        case 'opened': return 'open-envelopes.html?id=' + rfq.id;
+        case 'awarded': return 'tender-report.html?id=' + rfq.id;
+        default: return 'manage-tenders.html';
+    }
+}
+
+const QUOTE_STATUS_LABELS = {
+    submitted: { label: 'قيد التقييم', cls: 'badge-new' },
+    awarded: { label: 'فزت بالمناقصة 🏆', cls: 'badge-approved' },
+    rejected: { label: 'لم يتم الاختيار', cls: 'badge-closed' },
+    cancelled: { label: 'ملغى', cls: 'badge-closed' }
+};
+
+function quoteStatusBadge(status) {
+    const s = QUOTE_STATUS_LABELS[status] || { label: status, cls: 'badge-new' };
+    return `<span class="badge-status ${s.cls}">${s.label}</span>`;
+}
+
+/* ------------------------------------------------------------------ */
+/* مساعد: تفادي حقن HTML عند عرض بيانات قادمة من المستخدم/الـ API      */
+/* ------------------------------------------------------------------ */
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
