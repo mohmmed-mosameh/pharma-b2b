@@ -39,13 +39,25 @@ class QuoteController extends Controller
 
     /**
      * GET /api/quotes/{quote}
+     *
+     * الصيدلية لا يجوز أن ترى الأسعار الحقيقية لعرض لم يُفتح مظروفه
+     * بعد، وإلا التفّت على آلية المظاريف المغلقة عبر هذا المسار
+     * مباشرة. المورد صاحب العرض يرى سعره الحقيقي دائمًا (هي بياناته).
      */
     public function show(Request $request, Quote $quote): JsonResponse
     {
         $this->authorize('view', $quote);
 
+        $quote->load(['rfq', 'supplier', 'creator', 'quoteItems.product']);
+
+        if ($request->user()->role === 'pharmacy' && $quote->opened_at === null) {
+            $quote->quoteItems->each(function ($item) {
+                $item->makeHidden(['unit_price', 'discount_percentage', 'net_unit_price']);
+            });
+        }
+
         return response()->json([
-            'data' => $quote->load(['rfq', 'supplier', 'creator', 'quoteItems.product']),
+            'data' => $quote,
         ]);
     }
 
