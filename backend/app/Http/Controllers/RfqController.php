@@ -121,7 +121,7 @@ class RfqController extends Controller
         );
 
         abort_unless(
-            in_array($rfq->status, ['closed', 'pending_opening', 'opened'], true),
+            in_array($rfq->status, ['closed', 'pending_opening', 'opened', 'awarded'], true),
             422,
             'لا يمكن عرض المظاريف إلا بعد إغلاق باب تقديم العروض.'
         );

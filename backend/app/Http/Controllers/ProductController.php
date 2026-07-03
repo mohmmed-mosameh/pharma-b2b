@@ -56,10 +56,11 @@ class ProductController extends Controller
     /**
      * POST /api/products
      *
-     * Only suppliers may create products. supplier_id is always set
-     * from the authenticated user's own organization — never trusted
-     * from request input, to prevent a supplier listing products
-     * under someone else's organization.
+     * الموردون يضيفون منتجاتهم بسعرها الفعلي، فتُنسب لمنظمتهم (supplier_id
+     * من المستخدم المصادَق، وليس من المدخلات، حتى لا يدّعي موردٌ منتجًا
+     * لمورد آخر). الصيدليات قد تضيف صنفًا عامًا للكتالوج المشترك أثناء
+     * إنشاء مناقصة إذا لم يجدوه؛ في هذه الحالة يبقى supplier_id فارغًا
+     * والسعر صفرًا لأنه غير معروف بعد (يُحدَّد لاحقًا من عروض الموردين).
      */
     public function store(StoreProductRequest $request): JsonResponse
     {
@@ -69,7 +70,11 @@ class ProductController extends Controller
             $data['image'] = $request->file('image')->store('products', 'public');
         }
 
-        $data['supplier_id'] = $request->user()->organization_id;
+        if ($request->user()->role === 'supplier') {
+            $data['supplier_id'] = $request->user()->organization_id;
+        }
+
+        $data['price'] = $data['price'] ?? 0;
 
         $product = Product::create($data);
 

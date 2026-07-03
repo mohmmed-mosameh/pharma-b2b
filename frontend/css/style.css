@@ -450,14 +450,14 @@ button{ font-family:inherit; }
 @media (max-width:900px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
 
 .quick-actions{ display:flex; gap:1rem; margin-bottom:1.8rem; flex-wrap:wrap; }
-.quick-actions a{
+.quick-actions a:not(.btn){
   flex:1; min-width:200px;
   background:#fff; border:1px solid var(--line); border-radius:var(--radius);
   padding:1.1rem 1.3rem; font-weight:700; display:flex; align-items:center; justify-content:space-between;
   transition:.2s;
 }
-.quick-actions a:hover{ border-color:var(--green); background:var(--green-soft); }
-.quick-actions a i{ color:var(--green); font-size:1.2rem; }
+.quick-actions a:not(.btn):hover{ border-color:var(--green); background:var(--green-soft); }
+.quick-actions a:not(.btn) i{ color:var(--green); font-size:1.2rem; }
 
 .badge-open{ background:rgba(100,152,97,.15); color:var(--green-dark); }
 .badge-closed{ background:rgba(112,112,112,.15); color:#575555; }

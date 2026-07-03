@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Organization;
 use App\Models\PasswordResetOtp; // تأكد أن الموديل موجود لديك
+use App\Mail\PasswordResetOtpMail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -139,9 +141,19 @@ class AuthController extends Controller
             'expires_at' => now()->addMinutes(10),
         ]);
 
+        // لو الحقل بريد إلكتروني نبعت الكود فعليًا عبر الإيميل. رقم الهاتف
+        // بدون تكامل SMS حاليًا، فبيظهر الكود في الرد لتسهيل الاختبار مؤقتًا.
+        if ($field === 'email') {
+            Mail::to($identifier)->send(new PasswordResetOtpMail($otp));
+
+            return response()->json([
+                'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.',
+            ]);
+        }
+
         return response()->json([
             'message' => 'تم إرسال رمز التحقق.',
-            'otp'     => $otp, // يظهر في الرد لتسهيل الاختبار حالياً
+            'otp'     => $otp, // يظهر في الرد لتسهيل الاختبار حالياً (لا يوجد تكامل SMS بعد)
         ]);
     }
 

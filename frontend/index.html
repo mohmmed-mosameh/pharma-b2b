@@ -31,21 +31,15 @@
       </a>
 
       <div class="collapse navbar-collapse order-3 order-lg-2" id="navMenu">
-        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0" id="navMenuList">
           <li class="nav-item"><a class="nav-link js-nav-link active" href="index.html">الرئيسية</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="dashboard.html">لوحة التحكم</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="create-tender.html">إنشاء مناقصة</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="offers-received.html">استلام العروض</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="open-envelopes.html">فتح المظاريف</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="tender-report.html">تقرير المناقصة</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="review-publish.html">مراجعة ونشر المناقصة</a></li>
         </ul>
       </div>
 
       <div class="pl-navbar-actions order-4">
-        <button class="pl-icon-btn" aria-label="بحث" title="بحث"><i class="bi bi-search"></i></button>
-        <a href="login.html" class="pl-icon-btn" aria-label="الحساب" title="حسابي"><i class="bi bi-person"></i></a>
-        <a href="login.html" class="logout-link d-none d-md-inline">تسجيل الخروج</a>
+        <button class="pl-icon-btn" id="searchBtn" aria-label="بحث" title="بحث"><i class="bi bi-search"></i></button>
+        <a href="login.html" class="pl-icon-btn" id="accountLink" aria-label="الحساب" title="حسابي"><i class="bi bi-person"></i></a>
+        <a href="#" class="logout-link d-none" id="navLogoutLink">تسجيل الخروج</a>
       </div>
     </div>
   </nav>
@@ -88,6 +82,45 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
 <script src="js/script.js"></script>
+<script>
+  const NAV_ITEMS = {
+    pharmacy: [
+      { label: 'لوحة التحكم', href: 'dashboard.html' },
+      { label: 'إنشاء مناقصة', href: 'create-tender.html' },
+      { label: 'إدارة المناقصات', href: 'manage-tenders.html' }
+    ],
+    supplier: [
+      { label: 'المناقصات المتاحة', href: 'tenders.html' },
+      { label: 'متابعة حالة المناقصات', href: 'track-status.html' },
+      { label: 'نتيجة المناقصة', href: 'tender-result.html' }
+    ]
+  };
+
+  const user = getUser();
+  const navList = document.getElementById('navMenuList');
+  const accountLink = document.getElementById('accountLink');
+  const logoutLink = document.getElementById('navLogoutLink');
+
+  if (user && NAV_ITEMS[user.role]) {
+    navList.innerHTML += NAV_ITEMS[user.role].map(item =>
+      `<li class="nav-item"><a class="nav-link js-nav-link" href="${item.href}">${escapeHtml(item.label)}</a></li>`
+    ).join('');
+    accountLink.href = user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
+    logoutLink.classList.remove('d-none');
+  }
+
+  /* زر البحث: مسجّل دخول يوديك لقائمة المناقصات مباشرة، غير مسجّل يفتحلك قائمة الخيارات الموجودة في الشريط */
+  document.getElementById('searchBtn').addEventListener('click', function () {
+    if (user && user.role === 'supplier') {
+      window.location.href = 'tenders.html';
+    } else if (user) {
+      window.location.href = 'manage-tenders.html';
+    } else {
+      new bootstrap.Collapse(document.getElementById('navMenu')).toggle();
+    }
+  });
+</script>
 </body>
 </html>

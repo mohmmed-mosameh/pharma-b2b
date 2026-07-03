@@ -10,13 +10,13 @@ class StoreProductRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * Role check happens here; ownership doesn't apply yet since the
-     * product doesn't exist. The controller assigns supplier_id from
-     * the authenticated user's organization, it is never trusted from input.
+     * الموردون يضيفون منتجاتهم بسعرها (يُنسب المنتج لمنظمتهم). الصيدليات
+     * أيضًا يمكنها إضافة صنف غير موجود بالكتالوج أثناء إنشاء مناقصة (بدون
+     * سعر ولا نسبة لأي مورد بعينه)، لأن الكتالوج عام ومشترك بين الطرفين.
      */
     public function authorize(): bool
     {
-        return $this->user()?->role === 'supplier';
+        return in_array($this->user()?->role, ['supplier', 'pharmacy'], true);
     }
 
     /**
@@ -34,7 +34,7 @@ class StoreProductRequest extends FormRequest
             'form' => ['nullable', 'string', 'max:100'],
             'strength' => ['nullable', 'string', 'max:100'],
             'image' => ['nullable', 'image', 'max:2048'],
-            'price' => ['required', 'numeric', 'min:0', 'max:99999999.99'],
+            'price' => ['nullable', 'numeric', 'min:0', 'max:99999999.99'],
         ];
     }
 }

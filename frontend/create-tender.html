@@ -49,9 +49,12 @@
 
         <hr class="my-4">
 
-        <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
           <label class="form-label fw-bold mb-0">أصناف المناقصة</label>
-          <button type="button" id="addItemBtn" class="btn btn-sm btn-pl-outline"><i class="bi bi-plus-lg"></i> إضافة صنف</button>
+          <div class="d-flex gap-2">
+            <button type="button" id="addNewProductBtn" class="btn btn-sm btn-pl-ghost"><i class="bi bi-capsule"></i> الدواء مش موجود؟ أضِفه</button>
+            <button type="button" id="addItemBtn" class="btn btn-sm btn-pl-outline"><i class="bi bi-plus-lg"></i> إضافة صنف</button>
+          </div>
         </div>
         <p class="text-muted small">اختر الأصناف المطلوب توريدها وكمية كل صنف (لا يمكن تكرار نفس الصنف مرتين)</p>
 
@@ -66,8 +69,54 @@
     </div>
   </section>
 
+  <!-- مودال إضافة دواء جديد للكتالوج -->
+  <div class="modal fade" id="newProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h6 fw-bold">إضافة دواء جديد للكتالوج</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+        <form id="newProductForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="npName">اسم الدواء التجاري</label>
+              <input type="text" id="npName" class="form-control" required>
+            </div>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold" for="npCategory">الفئة</label>
+                <input type="text" id="npCategory" class="form-control" placeholder="مثال: مضادات حيوية" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold" for="npGeneric">الاسم العلمي (اختياري)</label>
+                <input type="text" id="npGeneric" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold" for="npCompany">الشركة المصنّعة (اختياري)</label>
+                <input type="text" id="npCompany" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small fw-bold" for="npForm">الشكل (اختياري)</label>
+                <input type="text" id="npForm" class="form-control" placeholder="قرص/كبسول">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small fw-bold" for="npStrength">التركيز (اختياري)</label>
+                <input type="text" id="npStrength" class="form-control" placeholder="500mg">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal">إلغاء</button>
+            <button type="submit" class="btn btn-pl">إضافة الدواء</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> فارما لينك</div>
+    <div class="sb-logo"><img src="img/logo.svg" alt="شعار PharmaLink"> PharmaLink</div>
     <nav>
       <a href="index.html">الرئيسية</a>
       <a href="dashboard.html">لوحة التحكم</a>
@@ -127,6 +176,45 @@
   }
 
   document.getElementById('addItemBtn').addEventListener('click', addItemRow);
+
+  function refreshProductSelects() {
+    document.querySelectorAll('.item-product').forEach(select => {
+      const current = select.value;
+      select.innerHTML = `<option value="" ${current ? '' : 'selected'} disabled>اختر صنفًا</option>${productOptions(current)}`;
+    });
+  }
+
+  const newProductModalEl = document.getElementById('newProductModal');
+  const newProductModal = new bootstrap.Modal(newProductModalEl);
+
+  document.getElementById('addNewProductBtn').addEventListener('click', () => newProductModal.show());
+
+  document.getElementById('newProductForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    try {
+      const res = await apiCall('POST', '/products', {
+        name: document.getElementById('npName').value.trim(),
+        category: document.getElementById('npCategory').value.trim(),
+        generic_name: document.getElementById('npGeneric').value.trim() || null,
+        company: document.getElementById('npCompany').value.trim() || null,
+        form: document.getElementById('npForm').value.trim() || null,
+        strength: document.getElementById('npStrength').value.trim() || null
+      });
+
+      PRODUCTS.push(res);
+      refreshProductSelects();
+      showApiSuccess('تمت إضافة الدواء، اختره الآن من قائمة الأصناف.');
+      this.reset();
+      newProductModal.hide();
+    } catch (err) {
+      showApiError(err.message || 'تعذّر إضافة الدواء');
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
   (async function init() {
     try {

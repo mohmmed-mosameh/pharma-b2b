@@ -139,6 +139,17 @@
 
     try {
       const res = await apiCall('POST', '/auth/login', { login: email, password });
+
+      // امنع الدخول لو الدور الفعلي لهذا الحساب لا يطابق الدور المختار في الخطوة السابقة
+      const selectedRole = localStorage.getItem('selected_role');
+      if (selectedRole && res.user.role !== selectedRole) {
+        const actualRoleLabel = res.user.role === 'supplier' ? 'مورد شركة الأدوية' : 'مدير مخزن الأدوية';
+        showApiError(`هذا الحساب مسجَّل كـ "${actualRoleLabel}". ارجع واختر نوع الحساب الصحيح.`);
+        btn.disabled = false;
+        btn.textContent = 'تسجيل الدخول';
+        return;
+      }
+
       localStorage.setItem('pharma_token', res.token);
       localStorage.setItem('pharma_user',  JSON.stringify(res.user));
 
