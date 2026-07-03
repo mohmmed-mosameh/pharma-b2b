@@ -189,7 +189,8 @@
       localStorage.setItem('pharma_token', res.token);
       localStorage.setItem('pharma_user',  JSON.stringify(res.user));
       showApiSuccess('تم إنشاء الحساب بنجاح!');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+      const nextPage = res.user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
+      setTimeout(() => { window.location.href = nextPage; }, 1500);
     } catch(err) {
       showApiError(err.message || 'فشل إنشاء الحساب، تحقق من البيانات');
       btn.disabled = false;
