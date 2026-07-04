@@ -157,22 +157,22 @@
     row.className = 'row g-2 align-items-end mb-2 rfq-item-row';
     row.innerHTML = `
       <div class="col-md-5">
-        <label class="form-label fw-bold">الصنف</label>
-        <select class="form-select item-product" required>
+        <label class="form-label small fw-bold mb-1">الصنف</label>
+        <select class="form-select form-select-sm item-product" required>
           <option value="" ${item && item.product_id ? '' : 'selected'} disabled>اختر صنفًا</option>
           ${productOptions(item ? item.product_id : '')}
         </select>
       </div>
       <div class="col-md-2">
-        <label class="form-label fw-bold">الكمية</label>
-        <input type="number" class="form-control item-qty" min="1" placeholder="500" required value="${item && item.quantity ? item.quantity : ''}">
+        <label class="form-label small fw-bold mb-1">الكمية</label>
+        <input type="number" class="form-control form-control-sm item-qty" min="1" placeholder="500" required value="${item && item.quantity ? item.quantity : ''}">
       </div>
       <div class="col-md-4">
-        <label class="form-label fw-bold">ملاحظات (اختياري)</label>
-        <input type="text" class="form-control item-notes" placeholder="مثال: تعبئة 10 علب" value="${item && item.notes ? escapeHtml(item.notes) : ''}">
+        <label class="form-label small fw-bold mb-1">ملاحظات (اختياري)</label>
+        <input type="text" class="form-control form-control-sm item-notes" placeholder="مثال: تعبئة 10 علب" value="${item && item.notes ? escapeHtml(item.notes) : ''}">
       </div>
       <div class="col-md-1">
-        <button type="button" class="btn btn-pl-ghost btn-remove-item" aria-label="حذف الصنف"><i class="bi bi-trash"></i></button>
+        <button type="button" class="btn btn-sm btn-pl-ghost btn-remove-item" aria-label="حذف الصنف"><i class="bi bi-trash"></i></button>
       </div>
     `;
     row.querySelector('.btn-remove-item').addEventListener('click', () => row.remove());
