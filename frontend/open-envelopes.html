@@ -28,14 +28,15 @@
           <thead>
             <tr>
               <th>اسم الشركة</th>
-              <th>متوسط سعر الوحدة</th>
+              <th>سعر العرض</th>
               <th>مدة التوريد</th>
-              <th>الحالة</th>
+              <th>الخصم</th>
+              <th>الملاحظات</th>
               <th>الإجراء</th>
             </tr>
           </thead>
           <tbody id="quotes-tbody">
-            <tr><td colspan="5" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="6" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
@@ -87,7 +88,14 @@
       const priceCell = opened
         ? (avg(quote.quote_items || [], 'net_unit_price') ?? avg(quote.quote_items || [], 'unit_price') ?? '—') + '$'
         : '****';
-      const daysCell = avg(quote.quote_items || [], 'delivery_days') ?? '—';
+      const days = avg(quote.quote_items || [], 'delivery_days');
+      const daysCell = days === null ? '—' : Math.round(days) + ' أيام';
+      const discount = avg(quote.quote_items || [], 'discount_percentage');
+      const discountCell = opened ? (discount === null ? '—' : discount + '%') : '****';
+      const approved = quote.supplier && quote.supplier.wins_count >= 3;
+      const noteCell = approved
+        ? '<span class="badge-status badge-approved">معتمد</span>'
+        : '<span class="badge-status badge-new">جديد</span>';
       const action = opened
         ? `<a href="offer-details.html?rfq=${rfqId}&quote=${quote.id}" class="btn-link-detail">عرض التفاصيل</a>`
         : `<button type="button" class="btn-open-envelope" data-quote-id="${quote.id}">فتح المظروف</button>`;
@@ -97,7 +105,8 @@
           <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
           <td class="${opened ? '' : 'masked'}">${priceCell}</td>
           <td>${daysCell}</td>
-          <td>${quoteStatusBadge(quote.status)}</td>
+          <td class="${opened ? '' : 'masked'}">${discountCell}</td>
+          <td>${noteCell}</td>
           <td>${action}</td>
         </tr>
       `;
@@ -137,7 +146,7 @@
       const quotes = res.data.quotes || [];
 
       if (!quotes.length) {
-        document.getElementById('quotes-tbody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">لا توجد عروض مقدَّمة</td></tr>';
+        document.getElementById('quotes-tbody').innerHTML = '<tr><td colspan="6" class="text-center text-muted">لا توجد عروض مقدَّمة</td></tr>';
         return;
       }
 

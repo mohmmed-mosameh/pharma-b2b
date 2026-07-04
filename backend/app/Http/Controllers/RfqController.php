@@ -153,6 +153,23 @@ class RfqController extends Controller
             ? $this->scoringService->score($rfq, $rfq->quotes)
             : $rfq->quotes;
 
+        // تصنيف كل شركة: "معتمد" إذا فازت بـ 3 مناقصات أو أكثر (عدد أوامر
+        // الشراء المنسوبة لها)، وإلا "جديد". نرفق العدد مع بيانات الشركة
+        // ليعرضه الفرونت في عمود الملاحظات بشاشة فتح المظاريف.
+        $winsBySupplier = PurchaseOrder::query()
+            ->whereIn('supplier_id', $scoredQuotes->pluck('supplier_id')->unique()->filter()->all())
+            ->selectRaw('supplier_id, COUNT(*) as wins')
+            ->groupBy('supplier_id')
+            ->pluck('wins', 'supplier_id');
+
+        $scoredQuotes->each(function (Quote $quote) use ($winsBySupplier) {
+            if ($quote->supplier) {
+                $wins = (int) ($winsBySupplier[$quote->supplier_id] ?? 0);
+                $quote->supplier->setAttribute('wins_count', $wins);
+                $quote->supplier->setAttribute('is_approved', $wins >= 3);
+            }
+        });
+
         return response()->json([
             'data' => $rfq->setRelation('quotes', $scoredQuotes),
             'all_opened' => $allOpened,

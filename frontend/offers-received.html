@@ -33,12 +33,13 @@
           <thead>
             <tr>
               <th>اسم الشركة</th>
+              <th>اسم الصنف</th>
               <th>عدد الأصناف المسعّرة</th>
               <th>الحالة</th>
             </tr>
           </thead>
           <tbody id="quotes-tbody">
-            <tr><td colspan="3" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
@@ -101,17 +102,25 @@
       const tbody = document.getElementById('quotes-tbody');
 
       if (!quotes.length) {
-        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">لا توجد عروض مقدَّمة بعد</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">لا توجد عروض مقدَّمة بعد</td></tr>';
         return;
       }
 
-      tbody.innerHTML = quotes.map(quote => `
+      tbody.innerHTML = quotes.map(quote => {
+        const items = quote.quote_items || [];
+        const names = items
+          .map(it => it.product ? it.product.name : null)
+          .filter(Boolean);
+        const productNames = names.length ? names.map(escapeHtml).join('، ') : '—';
+        return `
         <tr>
           <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
-          <td>${(quote.quote_items || []).length}</td>
+          <td>${productNames}</td>
+          <td>${items.length}</td>
           <td>${quoteStatusBadge(quote.status)}</td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
     } catch (err) {
       showApiError(err.message || 'تعذّر تحميل العروض');
     }
