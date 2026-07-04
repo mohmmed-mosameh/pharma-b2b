@@ -109,9 +109,11 @@
       tbody.innerHTML = quotes.map(quote => {
         const items = quote.quote_items || [];
         const names = items
-          .map(it => it.product ? it.product.name : null)
+          .map(it => it.product
+            ? escapeHtml(it.product.name) + (it.product.category ? ' (' + escapeHtml(it.product.category) + ')' : '')
+            : null)
           .filter(Boolean);
-        const productNames = names.length ? names.map(escapeHtml).join('، ') : '—';
+        const productNames = names.length ? names.join('، ') : '—';
         return `
         <tr>
           <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>

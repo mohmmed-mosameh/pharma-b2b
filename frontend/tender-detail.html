@@ -86,7 +86,7 @@
 
       document.getElementById('items-tbody').innerHTML = (rfq.rfq_items || []).map(item => `
         <tr>
-          <td>${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}</td>
+          <td>${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
           <td>${item.quantity}</td>
           <td>${item.notes ? escapeHtml(item.notes) : '—'}</td>
         </tr>

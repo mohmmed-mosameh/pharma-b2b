@@ -114,7 +114,10 @@
 
     document.getElementById('items-summary').innerHTML = draft.items.map(it => {
       const product = products.find(p => p.id === it.product_id);
-      return `<div class="kv-row"><span class="k">${product ? escapeHtml(product.name) : 'صنف #' + it.product_id}</span><span class="v">${it.quantity} وحدة${it.notes ? ' — ' + escapeHtml(it.notes) : ''}</span></div>`;
+      const label = product
+        ? escapeHtml(product.name) + (product.category ? ' (' + escapeHtml(product.category) + ')' : '')
+        : 'صنف #' + it.product_id;
+      return `<div class="kv-row"><span class="k">${label}</span><span class="v">${it.quantity} وحدة${it.notes ? ' — ' + escapeHtml(it.notes) : ''}</span></div>`;
     }).join('');
   })();
 

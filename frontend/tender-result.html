@@ -80,10 +80,21 @@
       document.getElementById('result-banner').className = 'result-banner mb-4 ' + banner.cls;
       document.getElementById('result-banner').innerHTML = `<i class="bi ${banner.icon}"></i><div>${banner.text}</div>`;
 
-      document.getElementById('items-summary').innerHTML = (quote.quote_items || []).map(item => `
-        <div class="kv-row"><span class="k">${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}</span>
-        <span class="v">${item.unit_price}$ — خصم ${item.discount_percentage || 0}% — توريد خلال ${item.delivery_days} يوم</span></div>
-      `).join('');
+      const items = quote.quote_items || [];
+      const n = v => Number(v) || 0;
+      const total = items.reduce((s, it) => s + (n(it.net_unit_price) || n(it.unit_price)) * (n(it.available_qty) || 1), 0);
+      const priceStr = Number.isInteger(total) ? total : total.toFixed(2);
+      const maxDays = items.length ? Math.max(...items.map(it => n(it.delivery_days))) : 0;
+      const avgDisc = items.length ? Math.round(items.reduce((s, it) => s + n(it.discount_percentage), 0) / items.length) : 0;
+      const awardDate = quote.updated_at ? new Date(quote.updated_at).toLocaleDateString('ar-EG') : '—';
+
+      document.getElementById('items-summary').innerHTML = `
+        <div class="kv-row"><span class="k">اسم المناقصة:</span><span class="v">${escapeHtml(quote.rfq.title)}</span></div>
+        <div class="kv-row"><span class="k">سعر عرضك:</span><span class="v">${priceStr}$</span></div>
+        <div class="kv-row"><span class="k">مدة التوريد:</span><span class="v">${maxDays} أيام</span></div>
+        <div class="kv-row"><span class="k">نسبة الخصم:</span><span class="v">${avgDisc}%</span></div>
+        <div class="kv-row"><span class="k">تاريخ اعتماد الترسية:</span><span class="v">${awardDate}</span></div>
+      `;
     } catch (err) {
       showApiError(err.message || 'تعذّر تحميل نتيجة المناقصة');
     }

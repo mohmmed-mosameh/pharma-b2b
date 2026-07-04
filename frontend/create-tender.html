@@ -148,7 +148,7 @@
 
   function productOptions(selectedId) {
     return PRODUCTS.map(p =>
-      `<option value="${p.id}" ${String(p.id) === String(selectedId) ? 'selected' : ''}>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}</option>`
+      `<option value="${p.id}" ${String(p.id) === String(selectedId) ? 'selected' : ''}>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}${p.category ? ' (' + escapeHtml(p.category) + ')' : ''}</option>`
     ).join('');
   }
 
@@ -208,7 +208,7 @@
     empty.classList.add('d-none');
     list.innerHTML = mine.map(p => `
       <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-        <span>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}</span>
+        <span>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}${p.category ? ' (' + escapeHtml(p.category) + ')' : ''}</span>
         <button type="button" class="btn btn-sm btn-pl-ghost btn-del-product" data-id="${p.id}" aria-label="حذف الصنف">
           <i class="bi bi-trash text-danger"></i>
         </button>
@@ -242,12 +242,20 @@
   document.getElementById('newProductForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const btn = this.querySelector('button[type="submit"]');
+
+    const npNameVal = document.getElementById('npName').value.trim();
+    const npCategoryVal = document.getElementById('npCategory').value.trim();
+    if (!npNameVal || !npCategoryVal) {
+      showApiError('اسم الدواء والفئة إجباريان.');
+      return;
+    }
+
     btn.disabled = true;
 
     try {
       const res = await apiCall('POST', '/products', {
-        name: document.getElementById('npName').value.trim(),
-        category: document.getElementById('npCategory').value.trim(),
+        name: npNameVal,
+        category: npCategoryVal,
         generic_name: document.getElementById('npGeneric').value.trim() || null,
         company: document.getElementById('npCompany').value.trim() || null,
         form: document.getElementById('npForm').value.trim() || null,
