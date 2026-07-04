@@ -153,18 +153,18 @@
     row.className = 'row g-2 align-items-end mb-2 rfq-item-row';
     row.innerHTML = `
       <div class="col-md-5">
-        <label class="form-label small">الصنف</label>
+        <label class="form-label fw-bold">الصنف</label>
         <select class="form-select item-product" required>
           <option value="" selected disabled>اختر صنفًا</option>
           ${productOptions()}
         </select>
       </div>
       <div class="col-md-2">
-        <label class="form-label small">الكمية</label>
+        <label class="form-label fw-bold">الكمية</label>
         <input type="number" class="form-control item-qty" min="1" placeholder="500" required>
       </div>
       <div class="col-md-4">
-        <label class="form-label small">ملاحظات (اختياري)</label>
+        <label class="form-label fw-bold">ملاحظات (اختياري)</label>
         <input type="text" class="form-control item-notes" placeholder="مثال: تعبئة 10 علب">
       </div>
       <div class="col-md-1">
@@ -232,6 +232,16 @@
     const title = document.getElementById('title').value.trim();
     const quotesDeadlineAt = document.getElementById('closeDate').value;
     const openingAt = document.getElementById('openDate').value;
+
+    if (!title) {
+      showApiError('عنوان المناقصة مطلوب.');
+      return;
+    }
+
+    if (!quotesDeadlineAt || new Date(quotesDeadlineAt) <= new Date()) {
+      showApiError('يجب أن يكون آخر موعد لتقديم العروض وقتًا مستقبليًا.');
+      return;
+    }
 
     const items = Array.from(document.querySelectorAll('.rfq-item-row')).map(row => ({
       product_id: Number(row.querySelector('.item-product').value),

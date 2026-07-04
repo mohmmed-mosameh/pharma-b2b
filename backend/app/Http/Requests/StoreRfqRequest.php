@@ -77,6 +77,9 @@ class StoreRfqRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'title.required'                 => 'عنوان المناقصة مطلوب.',
+            'quotes_deadline_at.required'     => 'آخر موعد لتقديم العروض مطلوب.',
+            'quotes_deadline_at.after'        => 'يجب أن يكون آخر موعد لتقديم العروض وقتًا مستقبليًا.',
             'opening_at.after'               => 'يجب أن يكون وقت فتح المظاريف بعد آخر موعد لتقديم العروض.',
             'items.*.product_id.distinct'    => 'لا يمكن تكرار نفس المنتج أكثر من مرة في المناقصة.',
         ];
