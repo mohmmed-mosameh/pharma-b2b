@@ -98,6 +98,30 @@
   if (user) {
     accountLink.href = user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
     logoutLink.classList.remove('d-none');
+
+    /* بعد تسجيل الدخول: روابط الشريط تُبنى حسب دور المستخدم (نفس روابط
+       الشريط الجانبي في صفحات كل دور)، بدل القائمة العامة لغير المسجّلين */
+    const roleLinks = user.role === 'supplier'
+      ? [
+          ['tenders.html',       'المناقصات المتاحة'],
+          ['submit-offer.html',  'تقديم العرض'],
+          ['track-status.html',  'متابعة حالة المناقصات'],
+          ['tender-result.html', 'نتيجة المناقصة'],
+        ]
+      : [
+          ['dashboard.html',       'لوحة التحكم'],
+          ['create-tender.html',   'إنشاء مناقصة'],
+          ['offers-received.html', 'استلام العروض'],
+          ['open-envelopes.html',  'فتح المظاريف'],
+          ['award-tender.html',    'ترسية المناقصة'],
+          ['tender-report.html',   'تقرير المناقصة'],
+        ];
+
+    document.getElementById('navMenuList').innerHTML =
+      '<li class="nav-item"><a class="nav-link js-nav-link active" href="index.html">الرئيسية</a></li>' +
+      roleLinks.map(([href, label]) =>
+        '<li class="nav-item"><a class="nav-link js-nav-link" href="' + href + '">' + label + '</a></li>'
+      ).join('');
   }
 
   /* زر البحث: مسجّل دخول يوديك لقائمة المناقصات مباشرة، غير مسجّل يفتحلك قائمة الخيارات الموجودة في الشريط */
