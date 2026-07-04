@@ -291,15 +291,14 @@ button{ font-family:inherit; }
   transition:.2s;
 }
 .role-btn:hover{ background:var(--green-dark); }
-.form-floating > label{ color:var(--muted); }
+.form-floating > label{ color:var(--muted); transform-origin:100% 0; }
 .form-control{
   border-radius:12px; border:1px solid var(--line); padding:.9rem 1rem;
 }
 .form-control:focus{ border-color:var(--green); box-shadow:0 0 0 .2rem var(--green-soft); }
-/* padding-left موسّع كي لا يتراكب النص مع أيقونتنا + أيقونة إظهار/حفظ كلمة المرور التي قد يضيفها المتصفح عند حافة الحقل */
-.position-relative > .form-control{ padding-left:4.3rem; }
+.position-relative > .form-control{ padding-left:2.8rem; }
 .toggle-password{
-  position:absolute; top:50%; left:2.6rem; transform:translateY(-50%);
+  position:absolute; top:50%; left:1rem; transform:translateY(-50%);
   cursor:pointer; color:#706E6E; font-size:1.05rem; line-height:1; z-index:5;
 }
 .toggle-password:hover{ color:var(--green); }
