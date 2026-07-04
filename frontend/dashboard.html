@@ -66,11 +66,12 @@
               <th>اسم المناقصة</th>
               <th>آخر موعد</th>
               <th>الحالة</th>
+              <th>النتيجة</th>
               <th>الإجراء</th>
             </tr>
           </thead>
           <tbody id="rfq-tbody">
-            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="5" class="text-center text-muted">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
@@ -113,7 +114,7 @@
 
       const tbody = document.getElementById('rfq-tbody');
       if (!rfqs.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">لا توجد مناقصات بعد</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">لا توجد مناقصات بعد</td></tr>';
         return;
       }
 
@@ -122,6 +123,9 @@
           <td>${escapeHtml(rfq.title)}</td>
           <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
           <td>${rfqStatusBadge(rfq.status)}</td>
+          <td>${rfq.status === 'open'
+            ? '—'
+            : `<a href="tender-report.html?id=${rfq.id}" class="btn-link-detail">تقرير النتيجة</a>`}</td>
           <td><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
         </tr>
       `).join('');
