@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <style>
+        @font-face {
+            font-family: 'Amiri';
+            font-weight: normal;
+            src: url('{{ str_replace('\\', '/', resource_path('fonts/Amiri-Regular.ttf')) }}') format('truetype');
+        }
+        @font-face {
+            font-family: 'Amiri';
+            font-weight: bold;
+            src: url('{{ str_replace('\\', '/', resource_path('fonts/Amiri-Bold.ttf')) }}') format('truetype');
+        }
         body {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
-            font-size: 12px;
+            font-family: 'Amiri', 'DejaVu Sans', sans-serif;
+            font-size: 14px;
             color: #1a1a1a;
             direction: rtl;
         }
@@ -15,13 +25,13 @@
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
-        .header h1 { color: #2d6a4f; font-size: 20px; margin: 0; }
-        .header p  { color: #555; margin: 4px 0 0; font-size: 11px; }
+        .header h1 { color: #2d6a4f; font-size: 22px; margin: 0; }
+        .header p  { color: #555; margin: 4px 0 0; font-size: 12px; }
         .section-title {
             background: #2d6a4f;
             color: #fff;
             padding: 5px 10px;
-            font-size: 13px;
+            font-size: 15px;
             margin: 15px 0 8px;
         }
         table {
@@ -34,12 +44,12 @@
             border: 1px solid #b7dfc8;
             padding: 6px 8px;
             text-align: right;
-            font-size: 11px;
+            font-size: 13px;
         }
         td {
             border: 1px solid #ddd;
             padding: 5px 8px;
-            font-size: 11px;
+            font-size: 13px;
         }
         tr:nth-child(even) td { background: #f9f9f9; }
         .info-grid {
@@ -51,7 +61,7 @@
             padding: 3px 8px;
             width: 50%;
         }
-        .label { color: #555; font-size: 10px; }
+        .label { color: #555; font-size: 12px; }
         .value { font-weight: bold; }
         .badge-awarded {
             background: #2d6a4f;
@@ -78,7 +88,7 @@
 <body>
 
 <div class="header">
-    <h1>🏥 PharmaLink — تقرير المناقصة النهائي</h1>
+    <h1>PharmaLink — تقرير المناقصة النهائي</h1>
     <p>تاريخ الإصدار: {{ $generatedAt }}</p>
 </div>
 
