@@ -106,8 +106,10 @@ class RfqController extends Controller
      * السعرية (unit_price, discount_percentage, net_unit_price)
      * للعروض التي لم تُفتح بعد (opened_at = null)، طبقًا للتصميم:
      * "العروض تبقى مخفية السعر لحد وقت فتح المظاريف"، وحتى داخل
-     * مرحلة الفتح، كل عرض يُفتح بشكل فردي بضغطة منفصلة من الصيدلية،
-     * وليس فتحًا جماعيًا تلقائيًا.
+     * مرحلة الفتح، كل عرض يُفتح بشكل فردي بضغطة منفصلة من الصيدلية.
+     * متاح أيضًا والمناقصة لا تزال "open"، حتى تقدر الصيدلية تتابع
+     * أسماء الشركات التي قدّمت عروضًا أولًا بأول قبل إغلاق باب التقديم
+     * (الأسعار تبقى مخفية دائمًا لحد ما opened_at يصير معبّى).
      */
     public function openQuotes(Request $request, Rfq $rfq): JsonResponse
     {
@@ -118,12 +120,6 @@ class RfqController extends Controller
                 && $request->user()->organization_id === $rfq->pharmacy_id,
             403,
             'فقط الصيدلية صاحبة المناقصة يمكنها عرض المظاريف.'
-        );
-
-        abort_unless(
-            in_array($rfq->status, ['closed', 'pending_opening', 'opened', 'awarded'], true),
-            422,
-            'لا يمكن عرض المظاريف إلا بعد إغلاق باب تقديم العروض.'
         );
 
         // أول مرة تُزار فيها هذه الشاشة بعد الإغلاق، تتحول الحالة من

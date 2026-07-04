@@ -24,7 +24,7 @@
 
       <div id="still-open-note" class="result-banner result-pending d-none">
         <i class="bi bi-hourglass-split"></i>
-        <div>المناقصة لا تزال مفتوحة لاستقبال العروض. راجع هذه الصفحة بعد آخر موعد لتقديم العروض لمشاهدة العروض المقدَّمة.</div>
+        <div>المناقصة لا تزال مفتوحة لاستقبال العروض. القائمة أدناه تعرض الشركات التي قدّمت عروضًا حتى الآن، وتبقى الأسعار مخفية إلى أن يتم إغلاق باب التقديم وفتح المظاريف.</div>
       </div>
 
       <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
@@ -80,11 +80,19 @@
   document.getElementById('goto-open-envelopes').href = 'open-envelopes.html?id=' + rfqId;
 
   (async function load() {
+    let rfqStillOpen = false;
+
     try {
       const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
       document.getElementById('v-title').textContent = 'استلام المناقصة: ' + rfqRes.data.title;
+      rfqStillOpen = rfqRes.data.status === 'open';
     } catch (err) {
       showApiError(err.message || 'تعذّر تحميل بيانات المناقصة');
+    }
+
+    if (rfqStillOpen) {
+      document.getElementById('still-open-note').classList.remove('d-none');
+      document.getElementById('goto-open-envelopes').classList.add('disabled');
     }
 
     try {
@@ -105,13 +113,7 @@
         </tr>
       `).join('');
     } catch (err) {
-      if (err.message && err.message.includes('لا يمكن عرض المظاريف')) {
-        document.getElementById('still-open-note').classList.remove('d-none');
-        document.getElementById('quotes-tbody').innerHTML = '';
-        document.getElementById('goto-open-envelopes').classList.add('disabled');
-      } else {
-        showApiError(err.message || 'تعذّر تحميل العروض');
-      }
+      showApiError(err.message || 'تعذّر تحميل العروض');
     }
   })();
 </script>
