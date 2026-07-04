@@ -257,8 +257,8 @@
 
     sessionStorage.setItem('rfq_draft', JSON.stringify({
       title,
-      quotes_deadline_at: quotesDeadlineAt,
-      opening_at: openingAt,
+      quotes_deadline_at: new Date(quotesDeadlineAt).toISOString(),
+      opening_at: new Date(openingAt).toISOString(),
       items
     }));
 
