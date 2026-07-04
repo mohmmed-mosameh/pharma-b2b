@@ -43,7 +43,10 @@
       </div>
 
       <div class="pl-navbar-actions order-4">
-        <button class="pl-icon-btn" id="searchBtn" aria-label="بحث" title="بحث"><i class="bi bi-search"></i></button>
+        <div class="dropdown" style="position:relative;">
+          <button class="pl-icon-btn" id="searchBtn" aria-label="القائمة" title="القائمة" aria-expanded="false"><i class="bi bi-search"></i></button>
+          <ul class="dropdown-menu dropdown-menu-end mt-1" id="searchMenu" style="right:0; left:auto;"></ul>
+        </div>
         <a href="login.html" class="pl-icon-btn" id="accountLink" aria-label="الحساب" title="حسابي"><i class="bi bi-person"></i></a>
         <a href="#" class="logout-link d-none" id="navLogoutLink">تسجيل الخروج</a>
       </div>
@@ -95,28 +98,28 @@
   const accountLink = document.getElementById('accountLink');
   const logoutLink = document.getElementById('navLogoutLink');
 
+  /* روابط كل دور (نفس روابط الشريط الجانبي في صفحات ذلك الدور) */
+  const roleLinks = !user ? [] : (user.role === 'supplier'
+    ? [
+        ['tenders.html',       'المناقصات المتاحة'],
+        ['submit-offer.html',  'تقديم العرض'],
+        ['track-status.html',  'متابعة حالة المناقصات'],
+        ['tender-result.html', 'نتيجة المناقصة'],
+      ]
+    : [
+        ['dashboard.html',       'لوحة التحكم'],
+        ['create-tender.html',   'إنشاء مناقصة'],
+        ['offers-received.html', 'استلام العروض'],
+        ['open-envelopes.html',  'فتح المظاريف'],
+        ['award-tender.html',    'ترسية المناقصة'],
+        ['tender-report.html',   'تقرير المناقصة'],
+      ]);
+
   if (user) {
     accountLink.href = user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
     logoutLink.classList.remove('d-none');
 
-    /* بعد تسجيل الدخول: روابط الشريط تُبنى حسب دور المستخدم (نفس روابط
-       الشريط الجانبي في صفحات كل دور)، بدل القائمة العامة لغير المسجّلين */
-    const roleLinks = user.role === 'supplier'
-      ? [
-          ['tenders.html',       'المناقصات المتاحة'],
-          ['submit-offer.html',  'تقديم العرض'],
-          ['track-status.html',  'متابعة حالة المناقصات'],
-          ['tender-result.html', 'نتيجة المناقصة'],
-        ]
-      : [
-          ['dashboard.html',       'لوحة التحكم'],
-          ['create-tender.html',   'إنشاء مناقصة'],
-          ['offers-received.html', 'استلام العروض'],
-          ['open-envelopes.html',  'فتح المظاريف'],
-          ['award-tender.html',    'ترسية المناقصة'],
-          ['tender-report.html',   'تقرير المناقصة'],
-        ];
-
+    // بعد تسجيل الدخول: روابط الشريط تُبنى حسب دور المستخدم
     document.getElementById('navMenuList').innerHTML =
       '<li class="nav-item"><a class="nav-link js-nav-link active" href="index.html">الرئيسية</a></li>' +
       roleLinks.map(([href, label]) =>
@@ -124,14 +127,26 @@
       ).join('');
   }
 
-  /* زر البحث: مسجّل دخول يوديك لقائمة المناقصات مباشرة، غير مسجّل يفتحلك قائمة الخيارات الموجودة في الشريط */
-  document.getElementById('searchBtn').addEventListener('click', function () {
-    if (user && user.role === 'supplier') {
-      window.location.href = 'tenders.html';
-    } else if (user) {
-      window.location.href = 'manage-tenders.html';
-    } else {
-      new bootstrap.Collapse(document.getElementById('navMenu')).toggle();
+  /* زر البحث: يفتح قائمة منسدلة بخيارات المستخدم حسب دوره (تبدأ بالرئيسية).
+     غير المسجّل: الرئيسية + تسجيل الدخول. الضغط على أي خيار يوجّه لصفحته. */
+  const searchBtn  = document.getElementById('searchBtn');
+  const searchMenu = document.getElementById('searchMenu');
+  const menuLinks  = [['index.html', 'الرئيسية']].concat(
+    user ? roleLinks : [['login.html', 'تسجيل الدخول']]
+  );
+  searchMenu.innerHTML = menuLinks.map(([href, label]) =>
+    '<li><a class="dropdown-item" href="' + href + '">' + escapeHtml(label) + '</a></li>'
+  ).join('');
+
+  searchBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    const open = searchMenu.classList.toggle('show');
+    searchBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function (e) {
+    if (!searchBtn.contains(e.target) && !searchMenu.contains(e.target)) {
+      searchMenu.classList.remove('show');
+      searchBtn.setAttribute('aria-expanded', 'false');
     }
   });
 </script>
