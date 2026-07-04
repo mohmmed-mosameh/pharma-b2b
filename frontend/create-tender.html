@@ -105,6 +105,10 @@
                 <input type="text" id="npStrength" class="form-control" placeholder="500mg">
               </div>
             </div>
+            <hr class="my-3">
+            <label class="form-label small fw-bold mb-2">الأدوية التي أضفتها (يمكنك حذفها)</label>
+            <ul id="myProductsList" class="list-group list-group-flush small mb-0"></ul>
+            <p id="noMyProducts" class="text-muted small mb-0">لم تُضِف أي دواء بعد. الأصناف الافتراضية لا يمكن حذفها.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal">إلغاء</button>
@@ -187,7 +191,53 @@
   const newProductModalEl = document.getElementById('newProductModal');
   const newProductModal = new bootstrap.Modal(newProductModalEl);
 
-  document.getElementById('addNewProductBtn').addEventListener('click', () => newProductModal.show());
+  /* يعرض فقط الأدوية التي أضافها المستخدم الحالي مع زر حذف لكل منها.
+     الأصناف الافتراضية (created_by = null) لا تظهر هنا أصلًا فلا تُحذف. */
+  function renderMyProducts() {
+    const me = getUser();
+    const myId = me ? me.id : null;
+    const mine = PRODUCTS.filter(p => myId && p.created_by === myId);
+    const list = document.getElementById('myProductsList');
+    const empty = document.getElementById('noMyProducts');
+
+    if (!mine.length) {
+      list.innerHTML = '';
+      empty.classList.remove('d-none');
+      return;
+    }
+    empty.classList.add('d-none');
+    list.innerHTML = mine.map(p => `
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+        <span>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}</span>
+        <button type="button" class="btn btn-sm btn-pl-ghost btn-del-product" data-id="${p.id}" aria-label="حذف الصنف">
+          <i class="bi bi-trash text-danger"></i>
+        </button>
+      </li>
+    `).join('');
+
+    list.querySelectorAll('.btn-del-product').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const id = Number(this.dataset.id);
+        if (!confirm('هل تريد حذف هذا الصنف من الكتالوج؟')) return;
+        this.disabled = true;
+        try {
+          await apiCall('DELETE', '/products/' + id);
+          PRODUCTS = PRODUCTS.filter(p => p.id !== id);
+          refreshProductSelects();
+          renderMyProducts();
+          showApiSuccess('تم حذف الصنف.');
+        } catch (err) {
+          showApiError(err.message || 'تعذّر حذف الصنف');
+          this.disabled = false;
+        }
+      });
+    });
+  }
+
+  document.getElementById('addNewProductBtn').addEventListener('click', () => {
+    renderMyProducts();
+    newProductModal.show();
+  });
 
   document.getElementById('newProductForm').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -206,9 +256,9 @@
 
       PRODUCTS.push(res);
       refreshProductSelects();
-      showApiSuccess('تمت إضافة الدواء، اختره الآن من قائمة الأصناف.');
+      renderMyProducts();
+      showApiSuccess('تمت إضافة الدواء. أغلق النافذة لاختياره من قائمة الأصناف.');
       this.reset();
-      newProductModal.hide();
     } catch (err) {
       showApiError(err.message || 'تعذّر إضافة الدواء');
     } finally {

@@ -74,6 +74,10 @@ class ProductController extends Controller
             $data['supplier_id'] = $request->user()->organization_id;
         }
 
+        // نُسجّل مَن أضاف الصنف حتى يقدر يحذفه لاحقًا لو غلط، بينما تبقى
+        // الأصناف الافتراضية المزروعة (created_by = null) محمية من الحذف.
+        $data['created_by'] = $request->user()->id;
+
         $data['price'] = $data['price'] ?? 0;
 
         $product = Product::create($data);
@@ -125,6 +129,12 @@ class ProductController extends Controller
     public function destroy(Request $request, Product $product): JsonResponse
     {
         $this->authorize('delete', $product);
+
+        // لا نسمح بحذف صنف مستخدَم فعلًا في مناقصة أو عرض، حتى لا تنكسر
+        // المناقصات/التقارير التي تشير إليه.
+        if ($product->rfqItems()->exists() || $product->quoteItems()->exists()) {
+            abort(422, 'لا يمكن حذف هذا الصنف لأنه مستخدَم في مناقصة أو عرض قائم.');
+        }
 
         $product->delete();
 

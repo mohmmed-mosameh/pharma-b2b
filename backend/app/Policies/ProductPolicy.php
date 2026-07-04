@@ -40,10 +40,19 @@ class ProductPolicy
     }
 
     /**
-     * Same ownership rule for deletion.
+     * يجوز الحذف في حالتين فقط:
+     *   1) الصنف أضافه هذا المستخدم بنفسه (created_by يطابقه) — يشمل
+     *      الأصناف التي تضيفها الصيدلية للكتالوج المشترك.
+     *   2) مورد يملك الصنف عبر منظمته (توافقًا مع القاعدة القديمة).
+     * الأصناف الافتراضية المزروعة (created_by = null و supplier_id = null)
+     * تبقى محمية ولا يقدر أحد يحذفها.
      */
     public function delete(User $user, Product $product): bool
     {
+        if ($product->created_by !== null && $product->created_by === $user->id) {
+            return true;
+        }
+
         return $user->role === 'supplier'
             && $user->organization_id !== null
             && $user->organization_id === $product->supplier_id;

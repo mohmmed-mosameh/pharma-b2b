@@ -19,6 +19,7 @@ class Product extends Model
      */
     protected $fillable = [
         'supplier_id',
+        'created_by',
         'name',
         'generic_name',
         'company',
