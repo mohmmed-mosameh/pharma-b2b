@@ -22,6 +22,8 @@
 *{ box-sizing:border-box; }
 
 html{ scroll-behavior:smooth; }
+html, body{ overflow-x:hidden; max-width:100%; }
+img{ max-width:100%; height:auto; }
 
 body{
   font-family:'Cairo', sans-serif;
@@ -340,17 +342,56 @@ button{ font-family:inherit; }
    Utility / responsive
    ========================================================= */
 @media (max-width:991px){
-  .pl-shell{ flex-direction:column-reverse; }
-  .pl-sidebar{ flex:1 1 auto; width:100%; position:static; }
-  .pl-sidebar nav{ display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center; }
-  .pl-sidebar nav a{ flex:1 1 auto; }
+  .pl-shell{ flex-direction:column-reverse; padding:0 .9rem; }
+  .pl-sidebar{ flex:1 1 auto; width:100%; position:static; padding:1rem; }
+  /* شريط تنقّل أفقي قابل للسحب بدل الأزرار المتبعثرة */
+  .pl-sidebar nav{ display:flex; flex-wrap:nowrap; overflow-x:auto; gap:.4rem; padding-bottom:.3rem; -webkit-overflow-scrolling:touch; }
+  .pl-sidebar nav a{ flex:0 0 auto; white-space:nowrap; margin-bottom:0; }
+  .pl-sidebar .sb-logo{ margin-bottom:1.2rem; }
   .hero{ flex-direction:column; text-align:center; padding-top:32px; }
   .hero-media{ flex:0 0 auto; width:80%; max-width:360px; }
   .hero-copy p{ text-align:right; }
 }
+
+/* الجداول العادية: تمرير أفقي سلس على الجوال بدل كسر الصفحة */
+@media (max-width:767px){
+  .table-responsive{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .table-responsive .pl-table:not(.pl-table--cards){ min-width:560px; font-size:.9rem; }
+  .pl-table:not(.pl-table--cards) th,
+  .pl-table:not(.pl-table--cards) td{ white-space:nowrap; }
+}
+
 @media (max-width:576px){
   .auth-card{ padding:2.2rem 1.4rem; }
   .pl-navbar{ border-radius:20px; }
+  .pl-shell{ padding:0 .8rem; margin-top:16px; }
+  .pl-card{ padding:1.2rem 1rem; }
+  .pl-page-title{ font-size:1.3rem; }
+  .pl-page-sub{ font-size:.9rem; }
+  .welcome-banner{ padding:1.4rem 1.2rem; }
+  .welcome-banner h1{ font-size:1.25rem; }
+
+  /* أزرار صفوف الإجراءات أسفل البطاقات تصير بعرض كامل */
+  .pl-card > .d-flex.justify-content-between > .btn,
+  .pl-card > .d-flex.justify-content-between > .btn-pl,
+  .pl-card > .d-flex.justify-content-between > .btn-pl-ghost{ flex:1 1 100%; }
+
+  /* الجداول المهمة: كل صف يصير بطاقة مكدّسة بعناوين */
+  .pl-table--cards thead{ display:none; }
+  .pl-table--cards, .pl-table--cards tbody{ display:block; width:100%; }
+  .pl-table--cards tr{
+    display:block; border:1px solid var(--line); border-radius:12px;
+    padding:.5rem .9rem; margin-bottom:.8rem; box-shadow:var(--shadow-card);
+  }
+  .pl-table--cards td{
+    display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    border:none; padding:.45rem 0; text-align:left; white-space:normal;
+  }
+  .pl-table--cards td::before{
+    content:attr(data-label); color:var(--muted); font-weight:700;
+    text-align:right; flex:0 0 auto;
+  }
+  .pl-table--cards td:not(:last-child){ border-bottom:1px solid var(--line); }
 }
 
 /* =========================================================

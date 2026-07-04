@@ -61,7 +61,7 @@
         <input type="text" id="rfqSearch" class="form-control form-control-sm" style="max-width:260px" placeholder="البحث باسم المناقصة">
       </div>
       <div class="table-responsive">
-        <table class="pl-table">
+        <table class="pl-table pl-table--cards">
           <thead>
             <tr>
               <th>اسم المناقصة</th>
@@ -117,13 +117,13 @@
 
     tbody.innerHTML = list.slice(0, 10).map(rfq => `
       <tr>
-        <td>${escapeHtml(rfq.title)}</td>
-        <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
-        <td>${rfqStatusBadge(rfq.status)}</td>
-        <td>${rfq.status === 'open'
+        <td data-label="اسم المناقصة">${escapeHtml(rfq.title)}</td>
+        <td data-label="آخر موعد">${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
+        <td data-label="الحالة">${rfqStatusBadge(rfq.status)}</td>
+        <td data-label="النتيجة">${rfq.status === 'open'
           ? '—'
           : `<a href="tender-report.html?id=${rfq.id}" class="btn-link-detail">تقرير النتيجة</a>`}</td>
-        <td><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
+        <td data-label="الإجراء"><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
       </tr>
     `).join('');
   }

@@ -24,7 +24,7 @@
 
       <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
       <div class="table-responsive">
-        <table class="pl-table">
+        <table class="pl-table pl-table--cards">
           <thead>
             <tr>
               <th>اسم الشركة</th>
@@ -102,12 +102,12 @@
 
       return `
         <tr>
-          <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
-          <td class="${opened ? '' : 'masked'}">${priceCell}</td>
-          <td>${daysCell}</td>
-          <td class="${opened ? '' : 'masked'}">${discountCell}</td>
-          <td>${noteCell}</td>
-          <td>${action}</td>
+          <td data-label="اسم الشركة">${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
+          <td data-label="سعر العرض" class="${opened ? '' : 'masked'}">${priceCell}</td>
+          <td data-label="مدة التوريد">${daysCell}</td>
+          <td data-label="الخصم" class="${opened ? '' : 'masked'}">${discountCell}</td>
+          <td data-label="الملاحظات">${noteCell}</td>
+          <td data-label="الإجراء">${action}</td>
         </tr>
       `;
     }).join('');
