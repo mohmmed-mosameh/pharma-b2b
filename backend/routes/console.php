@@ -9,6 +9,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+// يغلق المناقصات المنتهية تلقائيًا كل دقيقة (يعتمد على schedule:work في الخلفية).
 Schedule::command(CloseExpiredRfqs::class)
     ->everyMinute()
     ->withoutOverlapping();
