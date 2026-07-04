@@ -13,6 +13,7 @@
 </head>
 <body>
 <a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+<header id="mobileNav"></header>
 
 <main id="main" class="pl-shell">
 
@@ -24,7 +25,7 @@
 
       <h2 class="h6 fw-bold mb-3">عروضي المقدَّمة:</h2>
       <div class="table-responsive">
-        <table class="pl-table">
+        <table class="pl-table pl-table--cards">
           <thead>
             <tr>
               <th>اسم المناقصة</th>
@@ -80,10 +81,10 @@
 
       tbody.innerHTML = quotes.map(quote => `
         <tr>
-          <td>${escapeHtml(quote.rfq ? quote.rfq.title : ('مناقصة #' + quote.rfq_id))}</td>
-          <td>${quoteStatusBadge(quote.status)}</td>
-          <td>${new Date(quote.updated_at).toLocaleDateString('ar-EG')}</td>
-          <td><a href="tender-result.html?id=${quote.rfq_id}" class="btn-link-detail">عرض التفاصيل</a></td>
+          <td data-label="اسم المناقصة">${escapeHtml(quote.rfq ? quote.rfq.title : ('مناقصة #' + quote.rfq_id))}</td>
+          <td data-label="حالة العرض">${quoteStatusBadge(quote.status)}</td>
+          <td data-label="تاريخ آخر تحديث">${new Date(quote.updated_at).toLocaleDateString('ar-EG')}</td>
+          <td data-label="الإجراء"><a href="tender-result.html?id=${quote.rfq_id}" class="btn-link-detail">عرض التفاصيل</a></td>
         </tr>
       `).join('');
     } catch (err) {

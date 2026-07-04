@@ -13,6 +13,7 @@
 </head>
 <body>
 <a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+<header id="mobileNav"></header>
 
 <main id="main" class="pl-shell">
 
@@ -30,7 +31,7 @@
 
       <h2 class="h6 fw-bold mt-4 mb-2">تفاصيل الأصناف المسعّرة:</h2>
       <div class="table-responsive">
-        <table class="pl-table">
+        <table class="pl-table pl-table--cards">
           <thead>
             <tr>
               <th>الصنف</th>
@@ -102,12 +103,12 @@
 
       document.getElementById('items-tbody').innerHTML = (quote.quote_items || []).map(item => `
         <tr>
-          <td>${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
-          <td>${item.unit_price}$</td>
-          <td>${item.discount_percentage || 0}%</td>
-          <td>${item.available_qty ?? '—'}</td>
-          <td>${item.delivery_days} يوم</td>
-          <td>${item.notes ? escapeHtml(item.notes) : '—'}</td>
+          <td data-label="الصنف">${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
+          <td data-label="سعر الوحدة">${item.unit_price}$</td>
+          <td data-label="الخصم">${item.discount_percentage || 0}%</td>
+          <td data-label="الكمية المتوفرة">${item.available_qty ?? '—'}</td>
+          <td data-label="مدة التوريد">${item.delivery_days} يوم</td>
+          <td data-label="ملاحظات">${item.notes ? escapeHtml(item.notes) : '—'}</td>
         </tr>
       `).join('');
     } catch (err) {

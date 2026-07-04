@@ -13,6 +13,7 @@
 </head>
 <body>
 <a href="#main" class="skip-link">تخطي إلى المحتوى</a>
+<header id="mobileNav"></header>
 
 <main id="main" class="pl-shell">
 
@@ -29,7 +30,7 @@
 
       <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
       <div class="table-responsive">
-        <table class="pl-table">
+        <table class="pl-table pl-table--cards">
           <thead>
             <tr>
               <th>اسم الشركة</th>
@@ -116,10 +117,10 @@
         const productNames = names.length ? names.join('، ') : '—';
         return `
         <tr>
-          <td>${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
-          <td>${productNames}</td>
-          <td>${items.length}</td>
-          <td>${quoteStatusBadge(quote.status)}</td>
+          <td data-label="اسم الشركة">${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
+          <td data-label="اسم الصنف">${productNames}</td>
+          <td data-label="عدد الأصناف المسعّرة">${items.length}</td>
+          <td data-label="الحالة">${quoteStatusBadge(quote.status)}</td>
         </tr>
       `;
       }).join('');

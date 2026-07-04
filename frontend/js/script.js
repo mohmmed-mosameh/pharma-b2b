@@ -3,6 +3,9 @@
    ========================================================= */
 document.addEventListener('DOMContentLoaded', function () {
 
+  /* ---------- القائمة العلوية للموبايل (تحقن في صفحات القائمة الجانبية) ---------- */
+  initMobileNav();
+
   /* ---------- تبديل تبويب تسجيل الدخول / إنشاء حساب ---------- */
   var tabLogin = document.getElementById('tab-login');
   var tabRegister = document.getElementById('tab-register');
@@ -216,3 +219,82 @@ document.addEventListener('DOMContentLoaded', function () {
     if (notesRow) notesRow.style.display = d.notes ? 'flex' : 'none';
   }
 });
+
+/* =========================================================
+   القائمة العلوية للموبايل — تُحقن داخل <header id="mobileNav">
+   الموجود في صفحات القائمة الجانبية (لا تُستخدم في index.html
+   الذي له رأسه الخاص، ولا في صفحات تسجيل الدخول التي لا تملك
+   هذا العنصر أصلًا). على سطح المكتب تبقى مخفية والقائمة الجانبية
+   كما هي (انظر @media (max-width:991px) في style.css).
+   ========================================================= */
+function initMobileNav() {
+  var host = document.getElementById('mobileNav');
+  if (!host) return;
+
+  var user = getUser();
+  var roleLinks = !user ? [] : (user.role === 'supplier'
+    ? [
+        ['tenders.html',       'المناقصات المتاحة'],
+        ['submit-offer.html',  'تقديم العرض'],
+        ['track-status.html',  'متابعة حالة المناقصات'],
+        ['tender-result.html', 'نتيجة المناقصة'],
+      ]
+    : [
+        ['dashboard.html',       'لوحة التحكم'],
+        ['create-tender.html',   'إنشاء مناقصة'],
+        ['tender-criteria.html', 'تحديد شروط ترسية المناقصة'],
+        ['review-publish.html',  'مراجعة ونشر المناقصة'],
+        ['offers-received.html', 'استلام العروض'],
+        ['open-envelopes.html',  'فتح المظاريف'],
+        ['award-tender.html',    'ترسية المناقصة'],
+        ['tender-report.html',   'تقرير المناقصة'],
+      ]);
+  var menuLinks = [['index.html', 'الرئيسية']].concat(
+    user ? roleLinks : [['login.html', 'تسجيل الدخول']]
+  );
+
+  host.className = 'pl-mobile-nav';
+  host.innerHTML =
+    '<nav class="navbar navbar-expand-lg pl-navbar">' +
+      '<div class="container-fluid">' +
+        '<button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavMenu" aria-controls="mobileNavMenu" aria-expanded="false" aria-label="فتح قائمة التنقل">' +
+          '<span class="navbar-toggler-icon"></span>' +
+        '</button>' +
+        '<a class="pl-brand order-2 order-lg-3" href="index.html"><img src="img/logo.png" alt="شعار PharmaLink"></a>' +
+        '<div class="collapse navbar-collapse order-3 order-lg-2" id="mobileNavMenu">' +
+          '<ul class="navbar-nav mx-auto mb-2 mb-lg-0" id="mobileNavMenuList"></ul>' +
+        '</div>' +
+        '<div class="pl-navbar-actions order-4">' +
+          '<div class="dropdown" style="position:relative;">' +
+            '<button class="pl-icon-btn" id="mobileSearchBtn" aria-label="القائمة" title="القائمة" aria-expanded="false"><i class="bi bi-search"></i></button>' +
+            '<ul class="dropdown-menu dropdown-menu-end mt-1" id="searchMenu"></ul>' +
+          '</div>' +
+          '<a href="' + (user && user.role === 'supplier' ? 'tenders.html' : 'dashboard.html') + '" class="pl-icon-btn" aria-label="الحساب" title="حسابي"><i class="bi bi-person"></i></a>' +
+          (user ? '<a href="#" class="logout-link">تسجيل الخروج</a>' : '') +
+        '</div>' +
+      '</div>' +
+    '</nav>';
+
+  var menuItemsHtml = menuLinks.map(function (link) {
+    return '<li class="nav-item"><a class="nav-link js-nav-link" href="' + link[0] + '">' + escapeHtml(link[1]) + '</a></li>';
+  }).join('');
+  document.getElementById('mobileNavMenuList').innerHTML = menuItemsHtml;
+
+  var searchMenu = document.getElementById('searchMenu');
+  searchMenu.innerHTML = menuLinks.map(function (link) {
+    return '<li><a class="dropdown-item" href="' + link[0] + '">' + escapeHtml(link[1]) + '</a></li>';
+  }).join('');
+
+  var searchBtn = document.getElementById('mobileSearchBtn');
+  searchBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var open = searchMenu.classList.toggle('show');
+    searchBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function (e) {
+    if (!searchBtn.contains(e.target) && !searchMenu.contains(e.target)) {
+      searchMenu.classList.remove('show');
+      searchBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
