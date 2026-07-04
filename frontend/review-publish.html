@@ -99,8 +99,8 @@
 
   (async function render() {
     document.getElementById('v-title').textContent = draft.title;
-    document.getElementById('v-deadline').textContent = new Date(draft.quotes_deadline_at).toLocaleString('ar-EG');
-    document.getElementById('v-opening').textContent = new Date(draft.opening_at).toLocaleString('ar-EG');
+    document.getElementById('v-deadline').textContent = new Date(draft.quotes_deadline_at).toLocaleDateString('ar-EG');
+    document.getElementById('v-opening').textContent = new Date(draft.opening_at).toLocaleDateString('ar-EG');
     document.getElementById('v-w1').textContent = draft.score_weight_price + '%';
     document.getElementById('v-w2').textContent = draft.score_weight_delivery + '%';
     document.getElementById('v-w3').textContent = draft.score_weight_rating + '%';

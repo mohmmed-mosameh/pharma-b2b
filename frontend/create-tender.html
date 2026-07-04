@@ -39,11 +39,11 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label fw-bold" for="closeDate">آخر موعد لتقديم العروض</label>
-            <input type="datetime-local" id="closeDate" class="form-control" required>
+            <input type="date" id="closeDate" class="form-control" required>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-bold" for="openDate">موعد فتح المظاريف</label>
-            <input type="datetime-local" id="openDate" class="form-control" required>
+            <input type="date" id="openDate" class="form-control" required>
           </div>
         </div>
 
@@ -148,24 +148,24 @@
     ).join('');
   }
 
-  function addItemRow() {
+  function addItemRow(item) {
     const row = document.createElement('div');
     row.className = 'row g-2 align-items-end mb-2 rfq-item-row';
     row.innerHTML = `
       <div class="col-md-5">
         <label class="form-label fw-bold">الصنف</label>
         <select class="form-select item-product" required>
-          <option value="" selected disabled>اختر صنفًا</option>
-          ${productOptions()}
+          <option value="" ${item && item.product_id ? '' : 'selected'} disabled>اختر صنفًا</option>
+          ${productOptions(item ? item.product_id : '')}
         </select>
       </div>
       <div class="col-md-2">
         <label class="form-label fw-bold">الكمية</label>
-        <input type="number" class="form-control item-qty" min="1" placeholder="500" required>
+        <input type="number" class="form-control item-qty" min="1" placeholder="500" required value="${item && item.quantity ? item.quantity : ''}">
       </div>
       <div class="col-md-4">
         <label class="form-label fw-bold">ملاحظات (اختياري)</label>
-        <input type="text" class="form-control item-notes" placeholder="مثال: تعبئة 10 علب">
+        <input type="text" class="form-control item-notes" placeholder="مثال: تعبئة 10 علب" value="${item && item.notes ? escapeHtml(item.notes) : ''}">
       </div>
       <div class="col-md-1">
         <button type="button" class="btn btn-pl-ghost btn-remove-item" aria-label="حذف الصنف"><i class="bi bi-trash"></i></button>
@@ -216,23 +216,12 @@
     }
   });
 
-  /* يحوّل لحظة زمنية إلى نص يقبله input[type=datetime-local] بالتوقيت المحلي
-     (بدون Z)، مع تصفير الثواني حتى لا يقع المستخدم في فخّ "الوقت في الماضي". */
-  function toLocalInputValue(date) {
+  /* يحوّل ISO مخزّن (UTC) إلى نص تاريخ محلي بصيغة YYYY-MM-DD لحقل input[type=date] */
+  function isoToDateInput(iso) {
+    const d = new Date(iso);
     const pad = n => String(n).padStart(2, '0');
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
-           `T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   }
-
-  /* قيم افتراضية منطقية: آخر موعد للتقديم بعد ساعة من الآن، وفتح المظاريف
-     بعد ساعتين — تمنع اختيار وقت ماضٍ بالخطأ ويقدر المستخدم يعدّلها. */
-  (function prefillDates() {
-    const now = new Date();
-    const deadline = new Date(now.getTime() + 60 * 60 * 1000);
-    const opening  = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-    document.getElementById('closeDate').value = toLocalInputValue(deadline);
-    document.getElementById('openDate').value  = toLocalInputValue(opening);
-  })();
 
   (async function init() {
     try {
@@ -241,23 +230,53 @@
     } catch (err) {
       showApiError('تعذّر تحميل قائمة الأصناف: ' + err.message);
     }
-    addItemRow();
+
+    // استرجاع المسوّدة إذا رجع المستخدم من خطوة الشروط، حتى لا تضيع بياناته.
+    const draft = JSON.parse(sessionStorage.getItem('rfq_draft') || 'null');
+    if (draft) {
+      document.getElementById('title').value = draft.title || '';
+      if (draft.quotes_deadline_at) document.getElementById('closeDate').value = isoToDateInput(draft.quotes_deadline_at);
+      if (draft.opening_at)         document.getElementById('openDate').value  = isoToDateInput(draft.opening_at);
+      const items = (draft.items && draft.items.length) ? draft.items : [null];
+      items.forEach(it => addItemRow(it));
+    } else {
+      addItemRow();
+    }
   })();
 
   document.getElementById('createTenderForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const title = document.getElementById('title').value.trim();
-    const quotesDeadlineAt = document.getElementById('closeDate').value;
-    const openingAt = document.getElementById('openDate').value;
+    const deadlineDay = document.getElementById('closeDate').value; // YYYY-MM-DD
+    const openingDay  = document.getElementById('openDate').value;
 
     if (!title) {
       showApiError('عنوان المناقصة مطلوب.');
       return;
     }
 
-    if (!quotesDeadlineAt || new Date(quotesDeadlineAt) <= new Date()) {
-      showApiError('يجب أن يكون آخر موعد لتقديم العروض وقتًا مستقبليًا.');
+    if (!deadlineDay) {
+      showApiError('حدّد آخر موعد لتقديم العروض.');
+      return;
+    }
+    if (!openingDay) {
+      showApiError('حدّد موعد فتح المظاريف.');
+      return;
+    }
+
+    // اليوم المختار يُحسب حتى نهايته (23:59:59) بالتوقيت المحلي:
+    // باب التقديم يبقى مفتوحًا طوال اليوم المحدد.
+    const deadlineDt = new Date(deadlineDay + 'T23:59:59');
+    const openingDt  = new Date(openingDay + 'T23:59:59');
+
+    if (deadlineDt <= new Date()) {
+      showApiError('يجب أن يكون آخر موعد لتقديم العروض اليوم أو تاريخًا لاحقًا.');
+      return;
+    }
+
+    if (openingDt <= deadlineDt) {
+      showApiError('يجب أن يكون يوم فتح المظاريف بعد يوم آخر موعد لتقديم العروض.');
       return;
     }
 
@@ -278,15 +297,10 @@
       return;
     }
 
-    if (new Date(openingAt) <= new Date(quotesDeadlineAt)) {
-      showApiError('يجب أن يكون موعد فتح المظاريف بعد آخر موعد لتقديم العروض.');
-      return;
-    }
-
     sessionStorage.setItem('rfq_draft', JSON.stringify({
       title,
-      quotes_deadline_at: new Date(quotesDeadlineAt).toISOString(),
-      opening_at: new Date(openingAt).toISOString(),
+      quotes_deadline_at: deadlineDt.toISOString(),
+      opening_at: openingDt.toISOString(),
       items
     }));
 

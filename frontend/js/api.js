@@ -28,6 +28,14 @@ async function apiCall(method, endpoint, data = null) {
         const json = await res.json().catch(() => ({}));
 
         if (res.status === 401) {
+            // على مسارات الدخول/التسجيل، الـ 401 معناها "بيانات خاطئة" وليست
+            // جلسة منتهية — لا تُعِد التوجيه، خلّي الصفحة تعرض الخطأ في مكانها.
+            // فقط الصفحات المحمية (توكن منتهٍ) تُعاد لصفحة الدخول.
+            const isAuthEndpoint = endpoint.startsWith('/auth/login')
+                || endpoint.startsWith('/auth/register');
+            if (isAuthEndpoint) {
+                throw new Error(json.message || 'بيانات الدخول غير صحيحة');
+            }
             localStorage.clear();
             window.location.href = 'login.html';
             return null;

@@ -79,8 +79,8 @@
 
       localStorage.setItem('current_rfq_id', rfq.id);
       document.getElementById('v-title').textContent = rfq.title;
-      document.getElementById('v-deadline').textContent = new Date(rfq.quotes_deadline_at).toLocaleString('ar-EG');
-      document.getElementById('v-opening').textContent = new Date(rfq.opening_at).toLocaleString('ar-EG');
+      document.getElementById('v-deadline').textContent = new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG');
+      document.getElementById('v-opening').textContent = new Date(rfq.opening_at).toLocaleDateString('ar-EG');
       document.getElementById('v-weights').textContent =
         `أقل سعر (${rfq.score_weight_price}%) — أسرع توريد (${rfq.score_weight_delivery}%) — تقييم سابق (${rfq.score_weight_rating}%) — شركة معتمدة (${rfq.score_weight_verified}%)`;
 
