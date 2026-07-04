@@ -78,7 +78,7 @@ button{ font-family:inherit; }
   background:var(--purple-soft);
   color:var(--purple);
 }
-.pl-brand{ display:flex; align-items:center; gap:.5rem; font-weight:800; }
+.pl-brand{ display:flex; align-items:center; gap:.5rem; font-weight:800; direction:ltr; }
 .pl-brand img{ height:34px; }
 .pl-navbar-actions{ display:flex; align-items:center; gap:.75rem; }
 .pl-icon-btn{
@@ -177,7 +177,7 @@ button{ font-family:inherit; }
   position:sticky; top:24px;
 }
 .pl-sidebar .sb-logo{
-  display:flex; align-items:center; gap:.5rem;
+  display:flex; align-items:center; gap:.5rem; direction:ltr;
   font-weight:800; font-size:1.15rem;
   color:var(--green); justify-content:center;
   margin-bottom:2.2rem;
