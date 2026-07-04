@@ -58,6 +58,7 @@
     <div class="pl-card">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <h2 class="h6 fw-bold mb-0">أحدث المناقصات:</h2>
+        <input type="text" id="rfqSearch" class="form-control form-control-sm" style="max-width:260px" placeholder="البحث باسم المناقصة">
       </div>
       <div class="table-responsive">
         <table class="pl-table">
@@ -102,33 +103,44 @@
 <script>
   requireRole('pharmacy');
 
+  let allRfqs = [];
+
+  function renderRfqs() {
+    const q = (document.getElementById('rfqSearch').value || '').trim().toLowerCase();
+    const list = q ? allRfqs.filter(r => (r.title || '').toLowerCase().includes(q)) : allRfqs;
+    const tbody = document.getElementById('rfq-tbody');
+
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">${q ? 'لا توجد مناقصة بهذا الاسم' : 'لا توجد مناقصات بعد'}</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = list.slice(0, 10).map(rfq => `
+      <tr>
+        <td>${escapeHtml(rfq.title)}</td>
+        <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
+        <td>${rfqStatusBadge(rfq.status)}</td>
+        <td>${rfq.status === 'open'
+          ? '—'
+          : `<a href="tender-report.html?id=${rfq.id}" class="btn-link-detail">تقرير النتيجة</a>`}</td>
+        <td><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('rfqSearch').addEventListener('input', renderRfqs);
+
   (async function load() {
     try {
       const res = await apiCall('GET', '/rfqs?per_page=100');
-      const rfqs = res.data.data || [];
+      allRfqs = res.data.data || [];
 
-      document.getElementById('stat-total').textContent = res.data.total ?? rfqs.length;
-      document.getElementById('stat-open').textContent = rfqs.filter(r => r.status === 'open').length;
-      document.getElementById('stat-pending').textContent = rfqs.filter(r => ['closed', 'pending_opening', 'opened'].includes(r.status)).length;
-      document.getElementById('stat-awarded').textContent = rfqs.filter(r => r.status === 'awarded').length;
+      document.getElementById('stat-total').textContent = res.data.total ?? allRfqs.length;
+      document.getElementById('stat-open').textContent = allRfqs.filter(r => r.status === 'open').length;
+      document.getElementById('stat-pending').textContent = allRfqs.filter(r => ['closed', 'pending_opening', 'opened'].includes(r.status)).length;
+      document.getElementById('stat-awarded').textContent = allRfqs.filter(r => r.status === 'awarded').length;
 
-      const tbody = document.getElementById('rfq-tbody');
-      if (!rfqs.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">لا توجد مناقصات بعد</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = rfqs.slice(0, 10).map(rfq => `
-        <tr>
-          <td>${escapeHtml(rfq.title)}</td>
-          <td>${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
-          <td>${rfqStatusBadge(rfq.status)}</td>
-          <td>${rfq.status === 'open'
-            ? '—'
-            : `<a href="tender-report.html?id=${rfq.id}" class="btn-link-detail">تقرير النتيجة</a>`}</td>
-          <td><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
-        </tr>
-      `).join('');
+      renderRfqs();
     } catch (err) {
       showApiError(err.message || 'تعذّر تحميل المناقصات');
     }
