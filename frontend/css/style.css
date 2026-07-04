@@ -291,7 +291,14 @@ button{ font-family:inherit; }
   transition:.2s;
 }
 .role-btn:hover{ background:var(--green-dark); }
-.form-floating > label{ color:var(--muted); transform-origin:100% 0; }
+/* Bootstrap يثبّت تسمية form-floating بـ left:0 (فعلي وليس منطقي)، فتنجرف يسارًا
+   دومًا بصرف النظر عن RTL — هنا نعيدها لليمين لتطابق اتجاه الكتابة العربية
+   ولا تتراكب مع أيقونة إظهار كلمة المرور المثبّتة يسار الحقل */
+.form-floating > label{
+  color:var(--muted);
+  left:auto; right:0;
+  transform-origin:100% 0;
+}
 .form-control{
   border-radius:12px; border:1px solid var(--line); padding:.9rem 1rem;
 }
