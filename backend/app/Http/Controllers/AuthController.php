@@ -8,7 +8,6 @@ use App\Models\Organization;
 use App\Models\PasswordResetOtp; // تأكد أن الموديل موجود لديك
 use App\Models\PendingRegistration;
 use App\Services\BrevoMailService;
-use App\Services\SmsService;
 use App\Support\PhoneNumber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -228,12 +227,13 @@ class AuthController extends Controller
      */
     public function forgotPassword(Request $request)
     {
+        // استعادة كلمة المرور عبر البريد الإلكتروني فقط (رقم الهاتف أُلغي من هذه الميزة تحديدًا)
         $validated = $request->validate([
-            'identifier' => 'required|string',
+            'identifier' => 'required|string|email',
         ]);
 
-        [$field, $identifier] = $this->resolveIdentifier($validated['identifier']);
-        $user = User::where($field, $identifier)->first();
+        $identifier = strtolower(trim($validated['identifier']));
+        $user = User::where('email', $identifier)->first();
 
         if (! $user) {
             return response()->json(['message' => 'إذا كان هذا الحساب موجوداً، سيتم إرسال رمز التحقق.']);
@@ -250,30 +250,18 @@ class AuthController extends Controller
             'expires_at' => now()->addMinutes(10),
         ]);
 
-        if ($field === 'email') {
-            try {
-                $html = view('emails.password-reset-otp', ['otp' => $otp])->render();
-                (new BrevoMailService())->send($identifier, 'رمز إعادة تعيين كلمة المرور - PharmaLink', $html);
-            } catch (\Throwable $e) {
-                Log::error('Failed to send password-reset email', ['identifier' => $identifier, 'error' => $e->getMessage()]);
-
-                return response()->json(['message' => 'تعذّر إرسال رمز التحقق إلى بريدك الإلكتروني، حاول لاحقاً.'], 500);
-            }
-
-            return response()->json([
-                'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.',
-            ]);
-        }
-
         try {
-            (new SmsService())->send($identifier, "رمز التحقق الخاص بك في PharmaLink هو: {$otp}");
+            $html = view('emails.password-reset-otp', ['otp' => $otp])->render();
+            (new BrevoMailService())->send($identifier, 'رمز إعادة تعيين كلمة المرور - PharmaLink', $html);
         } catch (\Throwable $e) {
-            Log::error('Failed to send password-reset SMS', ['identifier' => $identifier, 'error' => $e->getMessage()]);
+            Log::error('Failed to send password-reset email', ['identifier' => $identifier, 'error' => $e->getMessage()]);
 
-            return response()->json(['message' => 'تعذّر إرسال رمز التحقق عبر الرسائل النصية، حاول لاحقاً.'], 500);
+            return response()->json(['message' => 'تعذّر إرسال رمز التحقق إلى بريدك الإلكتروني، حاول لاحقاً.'], 500);
         }
 
-        return response()->json(['message' => 'تم إرسال رمز التحقق إلى رقم هاتفك.']);
+        return response()->json([
+            'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.',
+        ]);
     }
 
     /** * 6. التحقق من الـ OTP
