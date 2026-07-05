@@ -21,6 +21,12 @@ Route::prefix('auth')->group(function () {
     Route::post('verify-otp',      [AuthController::class, 'verifyOtp']);
     Route::post('reset-password',  [AuthController::class, 'resetPassword']);
 
+    // تسجيل الدخول عبر جوجل/فيسبوك (تحويل المتصفح كاملاً، وليس عبر fetch)
+    Route::get('google/redirect',   [AuthController::class, 'googleRedirect']);
+    Route::get('google/callback',   [AuthController::class, 'googleCallback']);
+    Route::get('facebook/redirect', [AuthController::class, 'facebookRedirect']);
+    Route::get('facebook/callback', [AuthController::class, 'facebookCallback']);
+
     // مسارات توثيق تحتاج لتسجيل دخول (Token)
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('me',          [AuthController::class, 'me']);

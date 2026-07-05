@@ -68,10 +68,10 @@
 
         <div class="auth-divider">أو</div>
 
-        <button type="button" class="social-btn">
+        <button type="button" id="google-login-btn" class="social-btn">
           <img src="img/google-icon.png" alt=""> تسجيل الدخول باستخدام جوجل
         </button>
-        <button type="button" class="social-btn">
+        <button type="button" id="facebook-login-btn" class="social-btn">
           <img src="img/facebook-icon.png" alt=""> تسجيل الدخول باستخدام الفيسبوك
         </button>
 
@@ -217,6 +217,21 @@
       localStorage.setItem('selected_role', roleMap[this.dataset.role] || 'pharmacy');
     });
   });
+
+  /* ── تسجيل الدخول عبر جوجل/فيسبوك: تحويل كامل للصفحة (مش fetch) لأنه OAuth ── */
+  document.getElementById('google-login-btn').addEventListener('click', function () {
+    const role = localStorage.getItem('selected_role') || 'pharmacy';
+    window.location.href = `${API_URL}/auth/google/redirect?role=${role}`;
+  });
+  document.getElementById('facebook-login-btn').addEventListener('click', function () {
+    const role = localStorage.getItem('selected_role') || 'pharmacy';
+    window.location.href = `${API_URL}/auth/facebook/redirect?role=${role}`;
+  });
+
+  /* ── لو رجع المستخدم من جوجل/فيسبوك بخطأ ── */
+  if (new URLSearchParams(window.location.search).get('social_error')) {
+    showApiError('تعذّر تسجيل الدخول عبر الحساب الاجتماعي، حاول مرة أخرى.');
+  }
 </script>
 </body>
 </html>

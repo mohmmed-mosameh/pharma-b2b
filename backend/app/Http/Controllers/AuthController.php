@@ -12,7 +12,9 @@ use App\Support\PhoneNumber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -238,5 +240,85 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح. يرجى تسجيل الدخول.']);
+    }
+
+    /** * 8. تسجيل الدخول عبر جوجل/فيسبوك
+     */
+    public function googleRedirect(Request $request)
+    {
+        return $this->socialRedirect('google', $request);
+    }
+
+    public function googleCallback(Request $request)
+    {
+        return $this->socialCallback('google', $request);
+    }
+
+    public function facebookRedirect(Request $request)
+    {
+        return $this->socialRedirect('facebook', $request);
+    }
+
+    public function facebookCallback(Request $request)
+    {
+        return $this->socialCallback('facebook', $request);
+    }
+
+    /**
+     * يحوّل المستخدم لصفحة تسجيل الدخول عند المزوّد. الدور (صيدلية/مورد) المختار
+     * بصفحة الدخول يُمرَّر عبر state كي نستخدمه لاحقًا فقط لو الحساب جديد كليًا،
+     * لأنه المتصفح بينتقل لموقع خارجي والـ localStorage ما بيرجع معنا.
+     */
+    private function socialRedirect(string $provider, Request $request)
+    {
+        $role = $request->query('role') === 'supplier' ? 'supplier' : 'pharmacy';
+
+        return Socialite::driver($provider)->stateless()->with(['state' => $role])->redirect();
+    }
+
+    private function socialCallback(string $provider, Request $request)
+    {
+        $frontendUrl = rtrim((string) config('services.frontend_url'), '/');
+        $role = $request->query('state') === 'supplier' ? 'supplier' : 'pharmacy';
+
+        try {
+            $socialUser = Socialite::driver($provider)->stateless()->user();
+        } catch (\Throwable $e) {
+            Log::error("Social login ($provider) failed", ['error' => $e->getMessage()]);
+
+            return redirect($frontendUrl.'/login.html?social_error=1');
+        }
+
+        $user = User::where('email', $socialUser->getEmail())->first();
+
+        if (! $user) {
+            $user = DB::transaction(function () use ($socialUser, $provider, $role) {
+                $org = Organization::create([
+                    'name'        => $socialUser->getName() ?: $socialUser->getEmail(),
+                    'type'        => $role === 'pharmacy' ? 'pharmacy' : 'supplier',
+                    'is_verified' => false,
+                ]);
+
+                return User::create([
+                    'organization_id'    => $org->id,
+                    'name'               => $socialUser->getName() ?: $socialUser->getEmail(),
+                    'email'              => $socialUser->getEmail(),
+                    'password'           => Hash::make(Str::random(40)),
+                    'role'               => $role,
+                    'social_provider'    => $provider,
+                    'social_provider_id' => $socialUser->getId(),
+                ]);
+            });
+        } elseif (! $user->social_provider) {
+            // حساب موجود بإيميل/كلمة مرور من قبل: نربطه بمزوّد السوشيال دون التأثير على كلمة مروره الحالية
+            $user->update([
+                'social_provider'    => $provider,
+                'social_provider_id' => $socialUser->getId(),
+            ]);
+        }
+
+        $token = $user->createToken('social-'.$provider)->plainTextToken;
+
+        return redirect($frontendUrl.'/social-callback.html?token='.$token);
     }
 }

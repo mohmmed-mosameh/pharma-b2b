@@ -28,6 +28,20 @@ return [
         'from_name'  => env('BREVO_FROM_NAME', 'PharmaLink'),
     ],
 
+    'google' => [
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect'      => env('GOOGLE_REDIRECT_URI'),
+    ],
+
+    'facebook' => [
+        'client_id'     => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect'      => env('FACEBOOK_REDIRECT_URI'),
+    ],
+
+    'frontend_url' => env('FRONTEND_URL', 'https://pharma-b2b-two.vercel.app'),
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
