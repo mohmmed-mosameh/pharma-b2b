@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>فارما لينك | PharmaLink — حلول ذكية لإدارة مناقصات وتوريد الأدوية</title>
+<title data-i18n-text="index.title">فارما لينك | PharmaLink — حلول ذكية لإدارة مناقصات وتوريد الأدوية</title>
 <meta name="description" content="منصة PharmaLink تربط مباشرة بين مخازن الأدوية وشركات التوريد، لتسهيل إدارة المناقصات الدوائية ومقارنة عروض الموردين بكل شفافية.">
 
 <!-- Bootstrap -->
@@ -22,33 +22,34 @@
 <header>
   <nav class="navbar navbar-expand-lg pl-navbar">
     <div class="container-fluid">
-      <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="فتح قائمة التنقل">
+      <button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="فتح قائمة التنقل" data-i18n-aria-label="common.openNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <a class="pl-brand order-2 order-lg-3" href="index.html">
-        <img src="img/logo.png" alt="شعار PharmaLink">
+        <img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt">
       </a>
 
       <div class="collapse navbar-collapse order-3 order-lg-2" id="navMenu">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0" id="navMenuList">
-          <li class="nav-item"><a class="nav-link js-nav-link active" href="index.html">الرئيسية</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="dashboard.html">لوحة التحكم</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="create-tender.html">إنشاء مناقصة</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="offers-received.html">استلام العروض</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="open-envelopes.html">فتح المظاريف</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="tender-report.html">تقرير المناقصة</a></li>
-          <li class="nav-item"><a class="nav-link js-nav-link" href="review-publish.html">مراجعة ونشر المناقصة</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link active" href="index.html" data-i18n-text="nav.home">الرئيسية</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link" href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link" href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link" href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link" href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link" href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a></li>
+          <li class="nav-item"><a class="nav-link js-nav-link" href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a></li>
         </ul>
       </div>
 
       <div class="pl-navbar-actions order-4">
+        <button type="button" id="langToggle" class="lang-toggle" data-i18n-text="common.langToggle">English</button>
         <div class="dropdown" style="position:relative;">
-          <button class="pl-icon-btn" id="searchBtn" aria-label="القائمة" title="القائمة" aria-expanded="false"><i class="bi bi-search"></i></button>
-          <ul class="dropdown-menu dropdown-menu-end mt-1" id="searchMenu" style="right:0; left:auto;"></ul>
+          <button class="pl-icon-btn" id="searchBtn" aria-label="القائمة" title="القائمة" aria-expanded="false" data-i18n-aria-label="common.menu" data-i18n-title="common.menu"><i class="bi bi-search"></i></button>
+          <ul class="dropdown-menu dropdown-menu-end mt-1" id="searchMenu"></ul>
         </div>
-        <a href="login.html" class="pl-icon-btn" id="accountLink" aria-label="الحساب" title="حسابي"><i class="bi bi-person"></i></a>
-        <a href="#" class="logout-link d-none" id="navLogoutLink">تسجيل الخروج</a>
+        <a href="login.html" class="pl-icon-btn" id="accountLink" aria-label="الحساب" title="حسابي" data-i18n-aria-label="common.account" data-i18n-title="common.account"><i class="bi bi-person"></i></a>
+        <a href="#" class="logout-link d-none" id="navLogoutLink" data-i18n-text="common.logout">تسجيل الخروج</a>
       </div>
     </div>
   </nav>
@@ -60,21 +61,21 @@
     <div class="hero-media">
       <div class="blob" aria-hidden="true"></div>
       <div class="shadow-ellipse" aria-hidden="true"></div>
-      <img src="img/hero.svg" alt="لوحة تحكم PharmaLink تظهر على شاشة حاسوب محاط بعبوات أدوية">
+      <img src="img/hero.svg" alt="لوحة تحكم PharmaLink تظهر على شاشة حاسوب محاط بعبوات أدوية" data-i18n-alt="index.heroImgAlt">
     </div>
 
     <div class="hero-copy">
-      <h1>
+      <h1 data-i18n="index.heroTitle">
         حلول ذكية لإدارة مناقصات وتوريد الأدوية <span aria-hidden="true">..!</span><br>
         ربط مباشر بين مخازن الأدوية وشركات التوريد
       </h1>
-      <p>
+      <p data-i18n="index.heroText">
         توفّر منصة <span class="brand-name">PharmaLink</span> بيئة رقمية آمنة
         لتسهيل إدارة المناقصات الدوائية، ومقارنة عروض الموردين،
         وضمان أعلى درجات الشفافية والكفاءة في اتخاذ القرار.
       </p>
       <div class="mt-4">
-        <button id="cta-start" class="btn-pl">ابدأ الآن</button>
+        <button id="cta-start" class="btn-pl" data-i18n-text="index.ctaStart">ابدأ الآن</button>
       </div>
     </div>
   </section>
@@ -84,13 +85,14 @@
 <footer class="pl-footer">
   <div class="pl-footer-inner">
     <div class="pl-brand">
-      <img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;">
+      <img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;" data-i18n-alt="index.logoAlt">
     </div>
-    <small>© 2026 PharmaLink — جميع الحقوق محفوظة</small>
+    <small data-i18n-text="index.footer">© 2026 PharmaLink — جميع الحقوق محفوظة</small>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
@@ -98,21 +100,21 @@
   const accountLink = document.getElementById('accountLink');
   const logoutLink = document.getElementById('navLogoutLink');
 
-  /* روابط كل دور (نفس روابط الشريط الجانبي في صفحات ذلك الدور) */
+  /* روابط كل دور (نفس روابط الشريط الجانبي في صفحات ذلك الدور) — القيمة الثانية مفتاح ترجمة وليست نصًا مباشرًا */
   const roleLinks = !user ? [] : (user.role === 'supplier'
     ? [
-        ['tenders.html',       'المناقصات المتاحة'],
-        ['submit-offer.html',  'تقديم العرض'],
-        ['track-status.html',  'متابعة حالة المناقصات'],
-        ['tender-result.html', 'نتيجة المناقصة'],
+        ['tenders.html',       'nav.availableTenders'],
+        ['submit-offer.html',  'nav.submitOffer'],
+        ['track-status.html',  'nav.trackStatus'],
+        ['tender-result.html', 'nav.tenderResult'],
       ]
     : [
-        ['dashboard.html',       'لوحة التحكم'],
-        ['create-tender.html',   'إنشاء مناقصة'],
-        ['offers-received.html', 'استلام العروض'],
-        ['open-envelopes.html',  'فتح المظاريف'],
-        ['award-tender.html',    'ترسية المناقصة'],
-        ['tender-report.html',   'تقرير المناقصة'],
+        ['dashboard.html',       'nav.dashboard'],
+        ['create-tender.html',   'nav.createTender'],
+        ['offers-received.html', 'nav.offersReceived'],
+        ['open-envelopes.html',  'nav.openEnvelopes'],
+        ['award-tender.html',    'nav.awardTender'],
+        ['tender-report.html',   'nav.tenderReport'],
       ]);
 
   if (user) {
@@ -121,9 +123,9 @@
 
     // بعد تسجيل الدخول: روابط الشريط تُبنى حسب دور المستخدم
     document.getElementById('navMenuList').innerHTML =
-      '<li class="nav-item"><a class="nav-link js-nav-link active" href="index.html">الرئيسية</a></li>' +
-      roleLinks.map(([href, label]) =>
-        '<li class="nav-item"><a class="nav-link js-nav-link" href="' + href + '">' + label + '</a></li>'
+      '<li class="nav-item"><a class="nav-link js-nav-link active" href="index.html">' + t('nav.home') + '</a></li>' +
+      roleLinks.map(([href, key]) =>
+        '<li class="nav-item"><a class="nav-link js-nav-link" href="' + href + '">' + escapeHtml(t(key)) + '</a></li>'
       ).join('');
   }
 
@@ -131,11 +133,11 @@
      غير المسجّل: الرئيسية + تسجيل الدخول. الضغط على أي خيار يوجّه لصفحته. */
   const searchBtn  = document.getElementById('searchBtn');
   const searchMenu = document.getElementById('searchMenu');
-  const menuLinks  = [['index.html', 'الرئيسية']].concat(
-    user ? roleLinks : [['login.html', 'تسجيل الدخول']]
+  const menuLinks  = [['index.html', 'nav.home']].concat(
+    user ? roleLinks : [['login.html', 'nav.login']]
   );
-  searchMenu.innerHTML = menuLinks.map(([href, label]) =>
-    '<li><a class="dropdown-item" href="' + href + '">' + escapeHtml(label) + '</a></li>'
+  searchMenu.innerHTML = menuLinks.map(([href, key]) =>
+    '<li><a class="dropdown-item" href="' + href + '">' + escapeHtml(t(key)) + '</a></li>'
   ).join('');
 
   searchBtn.addEventListener('click', function (e) {
@@ -148,6 +150,11 @@
       searchMenu.classList.remove('show');
       searchBtn.setAttribute('aria-expanded', 'false');
     }
+  });
+
+  /* ── تبديل اللغة عربي/إنجليزي ── */
+  document.getElementById('langToggle').addEventListener('click', function () {
+    setLang(getLang() === 'ar' ? 'en' : 'ar');
   });
 </script>
 </body>

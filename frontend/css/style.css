@@ -29,8 +29,8 @@ body{
   font-family:'Cairo', sans-serif;
   color:var(--text);
   background:var(--white);
-  direction:rtl;
-  text-align:right;
+  /* direction تُؤخذ تلقائيًا من dir بوسم html (rtl/ltr) بدل تثبيتها هون */
+  text-align:start;
   -webkit-font-smoothing:antialiased;
 }
 
@@ -39,11 +39,11 @@ button{ font-family:inherit; }
 
 /* ---------- Skip link (a11y) ---------- */
 .skip-link{
-  position:absolute; right:-999px; top:0;
+  position:absolute; inset-inline-start:-999px; top:0;
   background:var(--purple); color:#fff; padding:.6rem 1rem;
   border-radius:0 0 8px 8px; z-index:2000;
 }
-.skip-link:focus{ right:0; }
+.skip-link:focus{ inset-inline-start:0; }
 
 :focus-visible{
   outline:3px solid var(--purple);
@@ -83,6 +83,10 @@ button{ font-family:inherit; }
 .pl-brand{ display:flex; align-items:center; }
 .pl-brand img{ height:34px; }
 .pl-navbar-actions{ display:flex; align-items:center; gap:.75rem; }
+/* قائمة نتائج البحث المنسدلة على سطح المكتب: نضبطها هون بدل style مباشر بالـ HTML
+   كي تنعكس صح حسب الاتجاه (بالعربي تكبر يسارًا، بالإنجليزي تكبر يمينًا) */
+[dir="rtl"] #searchMenu{ right:0; left:auto; }
+[dir="ltr"] #searchMenu{ left:0; right:auto; }
 .pl-icon-btn{
   width:40px; height:40px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
@@ -92,6 +96,13 @@ button{ font-family:inherit; }
 .pl-icon-btn:hover{ background:var(--green-soft); color:var(--green-dark); }
 .logout-link{ font-weight:700; color:var(--text); }
 .logout-link:hover{ color:var(--purple); }
+.lang-toggle{
+  background:var(--bg-soft); border:none; color:var(--text);
+  font-weight:700; font-size:.9rem; border-radius:999px;
+  padding:.5rem 1.1rem; transition:.2s;
+}
+.lang-toggle:hover{ background:var(--green-soft); color:var(--green-dark); }
+.auth-lang-toggle{ position:absolute; top:1.4rem; inset-inline-end:1.4rem; }
 
 /* =========================================================
    HERO (index)
@@ -274,6 +285,7 @@ button{ font-family:inherit; }
   padding:2rem 1rem;
 }
 .auth-card{
+  position:relative;
   background:#fff; border-radius:var(--radius-lg);
   box-shadow:var(--shadow-pop);
   padding:3rem 2.6rem;
@@ -291,11 +303,12 @@ button{ font-family:inherit; }
   transition:.2s;
 }
 .role-btn:hover{ background:var(--green-dark); }
+.form-floating > label{ color:var(--muted); }
 /* Bootstrap يثبّت تسمية form-floating بـ left:0 (فعلي وليس منطقي)، فتنجرف يسارًا
-   دومًا بصرف النظر عن RTL — هنا نعيدها لليمين لتطابق اتجاه الكتابة العربية
-   ولا تتراكب مع أيقونة إظهار كلمة المرور المثبّتة يسار الحقل */
-.form-floating > label{
-  color:var(--muted);
+   دومًا بصرف النظر عن الاتجاه — بالعربي (rtl) نعيدها لليمين لتطابق اتجاه الكتابة
+   ولا تتراكب مع أيقونة إظهار كلمة المرور. بالإنجليزي (ltr) القيمة الافتراضية من
+   Bootstrap صحيحة أصلًا فلا داعي لتجاوزها. */
+[dir="rtl"] .form-floating > label{
   left:auto; right:0;
   transform-origin:100% 0;
 }
@@ -314,11 +327,15 @@ button{ font-family:inherit; }
   caret-color:var(--text);
   transition:background-color 5000s ease-in-out 0s;
 }
-.position-relative > .form-control{ padding-left:2.8rem; }
+/* أيقونة إظهار/إخفاء كلمة المرور — يسار الحقل بالعربي (rtl)، يمينه بالإنجليزي (ltr) */
+[dir="rtl"] .position-relative > .form-control{ padding-left:2.8rem; }
+[dir="ltr"] .position-relative > .form-control{ padding-right:2.8rem; }
 .toggle-password{
-  position:absolute; top:50%; left:1rem; transform:translateY(-50%);
+  position:absolute; top:50%; transform:translateY(-50%);
   cursor:pointer; color:#706E6E; font-size:1.05rem; line-height:1; z-index:5;
 }
+[dir="rtl"] .toggle-password{ left:1rem; }
+[dir="ltr"] .toggle-password{ right:1rem; }
 .toggle-password:hover{ color:var(--green); }
 .auth-divider{
   display:flex; align-items:center; gap:.75rem; color:var(--muted);
@@ -369,16 +386,14 @@ button{ font-family:inherit; }
   .pl-mobile-nav{ display:block; }
   .hero{ flex-direction:column; text-align:center; padding-top:32px; }
   .hero-media{ flex:0 0 auto; width:80%; max-width:360px; }
-  .hero-copy p{ text-align:right; }
+  .hero-copy p{ text-align:start; }
 }
 
-/* قائمة نتائج البحث المنسدلة: على الموبايل تنمو نحو يمين الشاشة كي لا تُقصّ عند حافة العرض */
+/* قائمة نتائج البحث المنسدلة: على الموبايل تنمو نحو داخل الشاشة كي لا تُقصّ عند حافة العرض */
 @media (max-width:991px){
-  #searchMenu.dropdown-menu{
-    right:auto !important;
-    left:0 !important;
-    max-width:calc(100vw - 2rem);
-  }
+  #searchMenu.dropdown-menu{ max-width:calc(100vw - 2rem); }
+  [dir="rtl"] #searchMenu.dropdown-menu{ right:auto !important; left:0 !important; }
+  [dir="ltr"] #searchMenu.dropdown-menu{ left:auto !important; right:0 !important; }
 }
 
 /* الجداول العادية: تمرير أفقي سلس على الجوال بدل كسر الصفحة */

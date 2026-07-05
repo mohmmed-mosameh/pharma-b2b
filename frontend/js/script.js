@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         roleStep.classList.add('d-none');
         formStep.classList.remove('d-none');
       }
-      if (roleLabel) roleLabel.textContent = role;
+      if (roleLabel) roleLabel.textContent = t('login.role.' + role);
     });
   });
   var backToRole = document.getElementById('back-to-role');
@@ -100,11 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
           '<div class="modal-content">' +
             '<div class="modal-body">' +
               '<i class="bi bi-box-arrow-right d-block"></i>' +
-              '<h2 class="h5 fw-bold mb-2">هل انت متأكد من تسجيل الخروج من حسابك؟</h2>' +
+              '<h2 class="h5 fw-bold mb-2">' + escapeHtml(t('common.confirmLogout')) + '</h2>' +
             '</div>' +
             '<div class="modal-footer">' +
-              '<button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal">الغاء</button>' +
-              '<a href="#" id="confirmLogoutBtn" class="btn btn-pl">تسجيل الخروج</a>' +
+              '<button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal">' + escapeHtml(t('common.cancel')) + '</button>' +
+              '<a href="#" id="confirmLogoutBtn" class="btn btn-pl">' + escapeHtml(t('common.logout')) + '</a>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -234,56 +234,61 @@ function initMobileNav() {
   var user = getUser();
   var roleLinks = !user ? [] : (user.role === 'supplier'
     ? [
-        ['tenders.html',       'المناقصات المتاحة'],
-        ['submit-offer.html',  'تقديم العرض'],
-        ['track-status.html',  'متابعة حالة المناقصات'],
-        ['tender-result.html', 'نتيجة المناقصة'],
+        ['tenders.html',       'nav.availableTenders'],
+        ['submit-offer.html',  'nav.submitOffer'],
+        ['track-status.html',  'nav.trackStatus'],
+        ['tender-result.html', 'nav.tenderResult'],
       ]
     : [
-        ['dashboard.html',       'لوحة التحكم'],
-        ['create-tender.html',   'إنشاء مناقصة'],
-        ['tender-criteria.html', 'تحديد شروط ترسية المناقصة'],
-        ['review-publish.html',  'مراجعة ونشر المناقصة'],
-        ['offers-received.html', 'استلام العروض'],
-        ['open-envelopes.html',  'فتح المظاريف'],
-        ['award-tender.html',    'ترسية المناقصة'],
-        ['tender-report.html',   'تقرير المناقصة'],
+        ['dashboard.html',       'nav.dashboard'],
+        ['create-tender.html',   'nav.createTender'],
+        ['tender-criteria.html', 'nav.tenderCriteria'],
+        ['review-publish.html',  'nav.reviewPublish'],
+        ['offers-received.html', 'nav.offersReceived'],
+        ['open-envelopes.html',  'nav.openEnvelopes'],
+        ['award-tender.html',    'nav.awardTender'],
+        ['tender-report.html',   'nav.tenderReport'],
       ]);
-  var menuLinks = [['index.html', 'الرئيسية']].concat(
-    user ? roleLinks : [['login.html', 'تسجيل الدخول']]
+  var menuLinks = [['index.html', 'nav.home']].concat(
+    user ? roleLinks : [['login.html', 'nav.login']]
   );
 
   host.className = 'pl-mobile-nav';
   host.innerHTML =
     '<nav class="navbar navbar-expand-lg pl-navbar">' +
       '<div class="container-fluid">' +
-        '<button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavMenu" aria-controls="mobileNavMenu" aria-expanded="false" aria-label="فتح قائمة التنقل">' +
+        '<button class="navbar-toggler order-1" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavMenu" aria-controls="mobileNavMenu" aria-expanded="false" aria-label="' + escapeHtml(t('common.openNav')) + '">' +
           '<span class="navbar-toggler-icon"></span>' +
         '</button>' +
-        '<a class="pl-brand order-2 order-lg-3" href="index.html"><img src="img/logo.png" alt="شعار PharmaLink"></a>' +
+        '<a class="pl-brand order-2 order-lg-3" href="index.html"><img src="img/logo.png" alt="' + escapeHtml(t('index.logoAlt')) + '"></a>' +
         '<div class="collapse navbar-collapse order-3 order-lg-2" id="mobileNavMenu">' +
           '<ul class="navbar-nav mx-auto mb-2 mb-lg-0" id="mobileNavMenuList"></ul>' +
         '</div>' +
         '<div class="pl-navbar-actions order-4">' +
+          '<button type="button" id="mobileLangToggle" class="lang-toggle">' + escapeHtml(t('common.langToggle')) + '</button>' +
           '<div class="dropdown" style="position:relative;">' +
-            '<button class="pl-icon-btn" id="mobileSearchBtn" aria-label="القائمة" title="القائمة" aria-expanded="false"><i class="bi bi-search"></i></button>' +
+            '<button class="pl-icon-btn" id="mobileSearchBtn" aria-label="' + escapeHtml(t('common.menu')) + '" title="' + escapeHtml(t('common.menu')) + '" aria-expanded="false"><i class="bi bi-search"></i></button>' +
             '<ul class="dropdown-menu dropdown-menu-end mt-1" id="searchMenu"></ul>' +
           '</div>' +
-          '<a href="' + (user && user.role === 'supplier' ? 'tenders.html' : 'dashboard.html') + '" class="pl-icon-btn" aria-label="الحساب" title="حسابي"><i class="bi bi-person"></i></a>' +
-          (user ? '<a href="#" class="logout-link">تسجيل الخروج</a>' : '') +
+          '<a href="' + (user && user.role === 'supplier' ? 'tenders.html' : 'dashboard.html') + '" class="pl-icon-btn" aria-label="' + escapeHtml(t('common.account')) + '" title="' + escapeHtml(t('common.account')) + '"><i class="bi bi-person"></i></a>' +
+          (user ? '<a href="#" class="logout-link">' + escapeHtml(t('common.logout')) + '</a>' : '') +
         '</div>' +
       '</div>' +
     '</nav>';
 
   var menuItemsHtml = menuLinks.map(function (link) {
-    return '<li class="nav-item"><a class="nav-link js-nav-link" href="' + link[0] + '">' + escapeHtml(link[1]) + '</a></li>';
+    return '<li class="nav-item"><a class="nav-link js-nav-link" href="' + link[0] + '">' + escapeHtml(t(link[1])) + '</a></li>';
   }).join('');
   document.getElementById('mobileNavMenuList').innerHTML = menuItemsHtml;
 
   var searchMenu = document.getElementById('searchMenu');
   searchMenu.innerHTML = menuLinks.map(function (link) {
-    return '<li><a class="dropdown-item" href="' + link[0] + '">' + escapeHtml(link[1]) + '</a></li>';
+    return '<li><a class="dropdown-item" href="' + link[0] + '">' + escapeHtml(t(link[1])) + '</a></li>';
   }).join('');
+
+  document.getElementById('mobileLangToggle').addEventListener('click', function () {
+    setLang(getLang() === 'ar' ? 'en' : 'ar');
+  });
 
   var searchBtn = document.getElementById('mobileSearchBtn');
   searchBtn.addEventListener('click', function (e) {

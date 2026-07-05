@@ -99,7 +99,7 @@ function showApiError(msg) {
             background:#dc3545; color:#fff; padding:14px 28px;
             border-radius:10px; font-weight:700; font-size:15px;
             z-index:99999; box-shadow:0 4px 20px rgba(0,0,0,.25);
-            direction:rtl; max-width:90vw; text-align:center;
+            direction:${typeof getLang === 'function' && getLang() === 'en' ? 'ltr' : 'rtl'}; max-width:90vw; text-align:center;
         `;
         document.body.appendChild(toast);
     }
@@ -118,7 +118,7 @@ function showApiSuccess(msg) {
             background:#198754; color:#fff; padding:14px 28px;
             border-radius:10px; font-weight:700; font-size:15px;
             z-index:99999; box-shadow:0 4px 20px rgba(0,0,0,.25);
-            direction:rtl; max-width:90vw; text-align:center;
+            direction:${typeof getLang === 'function' && getLang() === 'en' ? 'ltr' : 'rtl'}; max-width:90vw; text-align:center;
         `;
         document.body.appendChild(toast);
     }
