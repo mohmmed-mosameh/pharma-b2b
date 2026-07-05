@@ -7,17 +7,41 @@ use App\Models\User;
 use App\Models\Organization;
 use App\Models\PasswordResetOtp; // تأكد أن الموديل موجود لديك
 use App\Mail\PasswordResetOtpMail;
+use App\Services\SmsService;
+use App\Support\PhoneNumber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * يحدّد نوع المعرّف (إيميل أو هاتف) ويطبّعه، كي يتطابق دائمًا مع القيمة
+     * المخزّنة بغضّ النظر عن الصيغة التي كتبها المستخدم بكل مرة.
+     *
+     * @return array{0: string, 1: string} [$field, $normalizedValue]
+     */
+    private function resolveIdentifier(string $raw): array
+    {
+        if (filter_var($raw, FILTER_VALIDATE_EMAIL)) {
+            return ['email', strtolower(trim($raw))];
+        }
+
+        return ['phone', PhoneNumber::normalize($raw)];
+    }
+
     /** * 1. دالة إنشاء حساب جديد (تم دمجها لإنشاء المؤسسة والمستخدم معاً)
      */
     public function register(Request $request)
     {
+        // نطبّع رقم الهاتف قبل التحقق كي يُفحص التكرار (unique) على نفس الصيغة
+        // المخزّنة فعليًا، بصرف النظر عن شكل الرقم الذي كتبه المستخدم
+        if ($request->filled('phone')) {
+            $request->merge(['phone' => PhoneNumber::normalize($request->input('phone'))]);
+        }
+
         // التحقق المدمج (من الملف الأصلي)
         $validated = $request->validate([
             'organization_name'    => 'required|string|max:255',
@@ -75,8 +99,7 @@ class AuthController extends Controller
             'device_name' => 'nullable|string'
         ]);
 
-        $login = $validated['login'];
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        [$field, $login] = $this->resolveIdentifier($validated['login']);
 
         $user = User::where($field, $login)->first();
 
@@ -122,9 +145,8 @@ class AuthController extends Controller
             'identifier' => 'required|string',
         ]);
 
-        $identifier = $validated['identifier'];
-        $field = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
-        $user  = User::where($field, $identifier)->first();
+        [$field, $identifier] = $this->resolveIdentifier($validated['identifier']);
+        $user = User::where($field, $identifier)->first();
 
         if (! $user) {
             return response()->json(['message' => 'إذا كان هذا الحساب موجوداً، سيتم إرسال رمز التحقق.']);
@@ -141,8 +163,6 @@ class AuthController extends Controller
             'expires_at' => now()->addMinutes(10),
         ]);
 
-        // لو الحقل بريد إلكتروني نبعت الكود فعليًا عبر الإيميل. رقم الهاتف
-        // بدون تكامل SMS حاليًا، فبيظهر الكود في الرد لتسهيل الاختبار مؤقتًا.
         if ($field === 'email') {
             Mail::to($identifier)->send(new PasswordResetOtpMail($otp));
 
@@ -151,10 +171,15 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
-            'message' => 'تم إرسال رمز التحقق.',
-            'otp'     => $otp, // يظهر في الرد لتسهيل الاختبار حالياً (لا يوجد تكامل SMS بعد)
-        ]);
+        try {
+            (new SmsService())->send($identifier, "رمز التحقق الخاص بك في PharmaLink هو: {$otp}");
+        } catch (\Throwable $e) {
+            Log::error('Failed to send password-reset SMS', ['identifier' => $identifier, 'error' => $e->getMessage()]);
+
+            return response()->json(['message' => 'تعذّر إرسال رمز التحقق عبر الرسائل النصية، حاول لاحقاً.'], 500);
+        }
+
+        return response()->json(['message' => 'تم إرسال رمز التحقق إلى رقم هاتفك.']);
     }
 
     /** * 6. التحقق من الـ OTP
@@ -166,7 +191,9 @@ class AuthController extends Controller
             'otp'        => 'required|string|size:4',
         ]);
 
-        $rec = PasswordResetOtp::where('identifier', $v['identifier'])
+        [, $identifier] = $this->resolveIdentifier($v['identifier']);
+
+        $rec = PasswordResetOtp::where('identifier', $identifier)
                                ->where('otp', $v['otp'])->latest()->first();
 
         // افتراض وجود دالة isValid() في موديل PasswordResetOtp
@@ -187,15 +214,16 @@ class AuthController extends Controller
             'password'   => 'required|string|min:8|confirmed',
         ]);
 
-        $rec = PasswordResetOtp::where('identifier', $v['identifier'])
+        [$field, $identifier] = $this->resolveIdentifier($v['identifier']);
+
+        $rec = PasswordResetOtp::where('identifier', $identifier)
                                ->where('otp', $v['otp'])->latest()->first();
 
         if (! $rec || ! $rec->isValid()) {
             return response()->json(['message' => 'رمز التحقق غير صحيح أو منتهي الصلاحية.'], 400);
         }
 
-        $field = filter_var($v['identifier'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
-        $user  = User::where($field, $v['identifier'])->first();
+        $user = User::where($field, $identifier)->first();
 
         if($user) {
             $user->update(['password' => Hash::make($v['password'])]);
