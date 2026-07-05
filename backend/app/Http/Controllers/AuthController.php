@@ -171,9 +171,6 @@ class AuthController extends Controller
             return true;
         } catch (\Throwable $e) {
             Log::error('Failed to send registration OTP email', ['email' => $email, 'error' => $e->getMessage()]);
-            if (config('app.debug')) {
-                throw $e;
-            }
 
             return false;
         }
