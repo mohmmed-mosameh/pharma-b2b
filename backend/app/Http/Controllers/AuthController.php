@@ -228,15 +228,16 @@ class AuthController extends Controller
     public function forgotPassword(Request $request)
     {
         // استعادة كلمة المرور عبر البريد الإلكتروني فقط (رقم الهاتف أُلغي من هذه الميزة تحديدًا)
-        $validated = $request->validate([
-            'identifier' => 'required|string|email',
-        ]);
+        $identifier = strtolower(trim((string) $request->input('identifier')));
 
-        $identifier = strtolower(trim($validated['identifier']));
+        if (! filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+            return response()->json(['message' => 'الرجاء إدخال بريد إلكتروني صحيح، لا يمكن استعادة كلمة المرور برقم الهاتف.'], 422);
+        }
+
         $user = User::where('email', $identifier)->first();
 
         if (! $user) {
-            return response()->json(['message' => 'إذا كان هذا الحساب موجوداً، سيتم إرسال رمز التحقق.']);
+            return response()->json(['message' => 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.'], 404);
         }
 
         // مسح أي أكواد قديمة
