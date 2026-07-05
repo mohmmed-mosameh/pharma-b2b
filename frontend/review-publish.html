@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مراجعة ونشر المناقصة | PharmaLink</title>
+<title data-i18n-text="reviewPublish.title">مراجعة ونشر المناقصة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -21,48 +21,48 @@
     <div class="pl-card">
 
       <div class="step-track">
-        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> إنشاء مناقصة</div>
+        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> <span data-i18n-text="createTender.step1">إنشاء مناقصة</span></div>
         <div class="sep"></div>
-        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> تحديد شروط الترسية</div>
+        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> <span data-i18n-text="createTender.step2">تحديد شروط الترسية</span></div>
         <div class="sep"></div>
-        <div class="step done"><span class="dot">3</span> مراجعة ونشر</div>
+        <div class="step done"><span class="dot">3</span> <span data-i18n-text="createTender.step3">مراجعة ونشر</span></div>
       </div>
 
-      <h1 class="pl-page-title">مراجعة ونشر المناقصة</h1>
-      <p class="pl-page-sub">يرجى مراجعة جميع تفاصيل المناقصة قبل تأكيد نشرها *</p>
+      <h1 class="pl-page-title" data-i18n-text="reviewPublish.heading">مراجعة ونشر المناقصة</h1>
+      <p class="pl-page-sub" data-i18n-text="reviewPublish.subtitle">يرجى مراجعة جميع تفاصيل المناقصة قبل تأكيد نشرها *</p>
 
       <div class="section-block">
-        <h2>قسم بيانات المناقصة:</h2>
-        <div class="kv-row"><span class="k">عنوان المناقصة:</span><span class="v" id="v-title">—</span></div>
-        <div class="kv-row"><span class="k">آخر موعد لتقديم العروض:</span><span class="v" id="v-deadline">—</span></div>
-        <div class="kv-row"><span class="k">موعد فتح المظاريف:</span><span class="v" id="v-opening">—</span></div>
+        <h2 data-i18n-text="reviewPublish.tenderDataSection">قسم بيانات المناقصة:</h2>
+        <div class="kv-row"><span class="k" data-i18n-text="reviewPublish.title2">عنوان المناقصة:</span><span class="v" id="v-title">—</span></div>
+        <div class="kv-row"><span class="k" data-i18n-text="reviewPublish.deadline2">آخر موعد لتقديم العروض:</span><span class="v" id="v-deadline">—</span></div>
+        <div class="kv-row"><span class="k" data-i18n-text="reviewPublish.opening2">موعد فتح المظاريف:</span><span class="v" id="v-opening">—</span></div>
       </div>
 
       <div class="section-block">
-        <h2>الأصناف المطلوبة:</h2>
+        <h2 data-i18n-text="reviewPublish.itemsSection">الأصناف المطلوبة:</h2>
         <div id="items-summary"></div>
       </div>
 
       <div class="section-block">
-        <h2>قسم شروط إرساء المناقصة:</h2>
-        <div class="kv-row"><span class="k">أقل سعر</span><span class="v" id="v-w1">—</span></div>
-        <div class="kv-row"><span class="k">أسرع مدة توريد</span><span class="v" id="v-w2">—</span></div>
-        <div class="kv-row"><span class="k">أعلى تقييم سابق للمورد</span><span class="v" id="v-w3">—</span></div>
-        <div class="kv-row"><span class="k">شركة معتمدة</span><span class="v" id="v-w4">—</span></div>
+        <h2 data-i18n-text="reviewPublish.criteriaSection">قسم شروط إرساء المناقصة:</h2>
+        <div class="kv-row"><span class="k" data-i18n-text="criteria.lowestPrice">أقل سعر</span><span class="v" id="v-w1">—</span></div>
+        <div class="kv-row"><span class="k" data-i18n-text="criteria.fastestDelivery">أسرع مدة توريد</span><span class="v" id="v-w2">—</span></div>
+        <div class="kv-row"><span class="k" data-i18n-text="criteria.highestRating">أعلى تقييم سابق للمورد</span><span class="v" id="v-w3">—</span></div>
+        <div class="kv-row"><span class="k" data-i18n-text="criteria.verifiedCompany">شركة معتمدة</span><span class="v" id="v-w4">—</span></div>
       </div>
 
-      <p class="text-muted small">* يرجى مراجعة جميع تفاصيل المناقصة قبل تأكيد نشرها</p>
+      <p class="text-muted small" data-i18n-text="reviewPublish.note">* يرجى مراجعة جميع تفاصيل المناقصة قبل تأكيد نشرها</p>
 
       <div class="d-flex justify-content-between mt-4">
-        <a href="tender-criteria.html" class="btn btn-pl-ghost">رجوع</a>
-        <button type="button" class="btn btn-pl" id="publishBtn">نشر المناقصة</button>
+        <a href="tender-criteria.html" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+        <button type="button" class="btn btn-pl" id="publishBtn" data-i18n-text="reviewPublish.publish">نشر المناقصة</button>
       </div>
 
       <div id="publishSuccess" class="result-banner result-success d-none mt-4">
         <i class="bi bi-check-circle-fill"></i>
         <div>
-          تم نشر المناقصة بنجاح
-          <div><a href="offers-received.html" class="btn-link-detail">الانتقال إلى صفحة استلام العروض</a></div>
+          <span data-i18n-text="reviewPublish.publishedSuccess">تم نشر المناقصة بنجاح</span>
+          <div><a href="offers-received.html" class="btn-link-detail" data-i18n-text="reviewPublish.goToOffersReceived">الانتقال إلى صفحة استلام العروض</a></div>
         </div>
       </div>
 
@@ -70,18 +70,18 @@
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html" class="active">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" class="active" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -101,8 +101,8 @@
 
   (async function render() {
     document.getElementById('v-title').textContent = draft.title;
-    document.getElementById('v-deadline').textContent = new Date(draft.quotes_deadline_at).toLocaleDateString('ar-EG');
-    document.getElementById('v-opening').textContent = new Date(draft.opening_at).toLocaleDateString('ar-EG');
+    document.getElementById('v-deadline').textContent = fmtDate(draft.quotes_deadline_at);
+    document.getElementById('v-opening').textContent = fmtDate(draft.opening_at);
     document.getElementById('v-w1').textContent = draft.score_weight_price + '%';
     document.getElementById('v-w2').textContent = draft.score_weight_delivery + '%';
     document.getElementById('v-w3').textContent = draft.score_weight_rating + '%';
@@ -118,8 +118,8 @@
       const product = products.find(p => p.id === it.product_id);
       const label = product
         ? escapeHtml(product.name) + (product.category ? ' (' + escapeHtml(product.category) + ')' : '')
-        : 'صنف #' + it.product_id;
-      return `<div class="kv-row"><span class="k">${label}</span><span class="v">${it.quantity} وحدة${it.notes ? ' — ' + escapeHtml(it.notes) : ''}</span></div>`;
+        : t('reviewPublish.unknownItem') + it.product_id;
+      return `<div class="kv-row"><span class="k">${label}</span><span class="v">${it.quantity} ${t('reviewPublish.unit')}${it.notes ? ' — ' + escapeHtml(it.notes) : ''}</span></div>`;
     }).join('');
   })();
 
@@ -132,7 +132,7 @@
       document.getElementById('publishSuccess').classList.remove('d-none');
       document.getElementById('publishSuccess').querySelector('a').href = 'offers-received.html?id=' + rfqId;
     } catch (err) {
-      showApiError(err.message || 'تعذّر نشر المناقصة');
+      showApiError(err.message || t('reviewPublish.err.publishFailed'));
       this.disabled = false;
     }
   });

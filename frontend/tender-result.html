@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نتيجة المناقصة | PharmaLink</title>
+<title data-i18n-text="tenderResult.title">نتيجة المناقصة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,31 +19,31 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">نتيجة المناقصة</p>
-      <h1 class="pl-page-title" id="v-title">نتيجة المناقصة</h1>
-      <p class="pl-page-sub">"يعرض ملخصًا لنتيجة عرضك بعد اعتماد قرار الترسية من إدارة المخزن."</p>
+      <p class="pl-eyebrow" data-i18n-text="nav.tenderResult">نتيجة المناقصة</p>
+      <h1 class="pl-page-title" id="v-title" data-i18n-text="tenderResult.heading">نتيجة المناقصة</h1>
+      <p class="pl-page-sub" data-i18n-text="tenderResult.subtitle">"يعرض ملخصًا لنتيجة عرضك بعد اعتماد قرار الترسية من إدارة المخزن."</p>
 
       <div id="result-banner" class="result-banner mb-4"></div>
 
       <div id="items-summary"></div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="track-status.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="tenders.html" class="btn btn-pl">تصفح مناقصات أخرى</a>
+        <a href="track-status.html" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+        <a href="tenders.html" class="btn btn-pl" data-i18n-text="tenderResult.browseOthers">تصفح مناقصات أخرى</a>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="tenders.html">المناقصات المتاحة</a>
-      <a href="tender-detail.html">تفاصيل المناقصة</a>
-      <a href="submit-offer.html">تقديم العرض</a>
-      <a href="track-status.html">متابعة حالة المناقصات</a>
-      <a href="tender-result.html" class="active">نتيجة المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="tenders.html" data-i18n-text="nav.availableTenders">المناقصات المتاحة</a>
+      <a href="tender-detail.html" data-i18n-text="tenderDetail.eyebrow">تفاصيل المناقصة</a>
+      <a href="submit-offer.html" data-i18n-text="nav.submitOffer">تقديم العرض</a>
+      <a href="track-status.html" data-i18n-text="nav.trackStatus">متابعة حالة المناقصات</a>
+      <a href="tender-result.html" class="active" data-i18n-text="nav.tenderResult">نتيجة المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -60,10 +60,10 @@
   if (!rfqId) window.location.href = 'track-status.html';
 
   const BANNERS = {
-    awarded: { cls: 'result-success', icon: 'bi-trophy-fill', text: 'مبروك! تم ترسية المناقصة على عرضك المقدَّم' },
-    rejected: { cls: 'result-danger', icon: 'bi-x-circle-fill', text: 'لم يقع الاختيار على عرضك هذه المرة' },
-    submitted: { cls: 'result-pending', icon: 'bi-hourglass-split', text: 'عرضك لا يزال قيد المراجعة من الصيدلية' },
-    cancelled: { cls: 'result-danger', icon: 'bi-x-circle-fill', text: 'تم إلغاء هذا العرض' }
+    awarded: { cls: 'result-success', icon: 'bi-trophy-fill', key: 'tenderResult.banner.awarded' },
+    rejected: { cls: 'result-danger', icon: 'bi-x-circle-fill', key: 'tenderResult.banner.rejected' },
+    submitted: { cls: 'result-pending', icon: 'bi-hourglass-split', key: 'tenderResult.banner.submitted' },
+    cancelled: { cls: 'result-danger', icon: 'bi-x-circle-fill', key: 'tenderResult.banner.cancelled' }
   };
 
   (async function load() {
@@ -72,15 +72,15 @@
       const quote = (res.data.data || []).find(q => String(q.rfq_id) === String(rfqId));
 
       if (!quote) {
-        showApiError('لم يتم العثور على عرض مقدَّم من طرفك على هذه المناقصة.');
+        showApiError(t('tenderResult.err.noQuoteFound'));
         return;
       }
 
-      document.getElementById('v-title').textContent = 'نتيجة المناقصة: ' + quote.rfq.title;
+      document.getElementById('v-title').textContent = t('tenderResult.headingWithTitle') + quote.rfq.title;
 
       const banner = BANNERS[quote.status] || BANNERS.submitted;
       document.getElementById('result-banner').className = 'result-banner mb-4 ' + banner.cls;
-      document.getElementById('result-banner').innerHTML = `<i class="bi ${banner.icon}"></i><div>${banner.text}</div>`;
+      document.getElementById('result-banner').innerHTML = `<i class="bi ${banner.icon}"></i><div>${t(banner.key)}</div>`;
 
       const items = quote.quote_items || [];
       const n = v => Number(v) || 0;
@@ -88,17 +88,17 @@
       const priceStr = Number.isInteger(total) ? total : total.toFixed(2);
       const maxDays = items.length ? Math.max(...items.map(it => n(it.delivery_days))) : 0;
       const avgDisc = items.length ? Math.round(items.reduce((s, it) => s + n(it.discount_percentage), 0) / items.length) : 0;
-      const awardDate = quote.updated_at ? new Date(quote.updated_at).toLocaleDateString('ar-EG') : '—';
+      const awardDate = quote.updated_at ? fmtDate(quote.updated_at) : '—';
 
       document.getElementById('items-summary').innerHTML = `
-        <div class="kv-row"><span class="k">اسم المناقصة:</span><span class="v">${escapeHtml(quote.rfq.title)}</span></div>
-        <div class="kv-row"><span class="k">سعر عرضك:</span><span class="v">${priceStr}$</span></div>
-        <div class="kv-row"><span class="k">مدة التوريد:</span><span class="v">${maxDays} أيام</span></div>
-        <div class="kv-row"><span class="k">نسبة الخصم:</span><span class="v">${avgDisc}%</span></div>
-        <div class="kv-row"><span class="k">تاريخ اعتماد الترسية:</span><span class="v">${awardDate}</span></div>
+        <div class="kv-row"><span class="k">${t('tenderResult.tenderName')}</span><span class="v">${escapeHtml(quote.rfq.title)}</span></div>
+        <div class="kv-row"><span class="k">${t('tenderResult.yourPrice')}</span><span class="v">${priceStr}$</span></div>
+        <div class="kv-row"><span class="k">${t('tenderResult.deliveryTime')}</span><span class="v">${maxDays} ${t('tenderResult.days')}</span></div>
+        <div class="kv-row"><span class="k">${t('tenderResult.discountPct')}</span><span class="v">${avgDisc}%</span></div>
+        <div class="kv-row"><span class="k">${t('tenderResult.awardDate')}</span><span class="v">${awardDate}</span></div>
       `;
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل نتيجة المناقصة');
+      showApiError(err.message || t('tenderResult.err.loadFailed'));
     }
   })();
 </script>

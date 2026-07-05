@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تأكيد إنشاء الحساب | PharmaLink</title>
+<title data-i18n-text="verifyReg.title">تأكيد إنشاء الحساب | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -20,7 +20,7 @@
       <img src="img/logo.png" alt="شعار PharmaLink">
     </a>
 
-    <h1 class="auth-title">تم إرسال رمز التحقق إلى بريدك الإلكتروني</h1>
+    <h1 class="auth-title" data-i18n-text="verifyReg.heading">تم إرسال رمز التحقق إلى بريدك الإلكتروني</h1>
 
     <form id="otpForm" novalidate>
       <div class="otp-row">
@@ -30,9 +30,9 @@
         <input type="text" inputmode="numeric" maxlength="1" required>
       </div>
 
-      <p class="mb-4"><a href="#" id="resendCode">أعد ارسال الرمز؟</a></p>
+      <p class="mb-4"><a href="#" id="resendCode" data-i18n-text="common.resendCode">أعد ارسال الرمز؟</a></p>
 
-      <button type="submit" class="btn btn-pl w-100">تأكيد وإنشاء الحساب</button>
+      <button type="submit" class="btn btn-pl w-100" data-i18n-text="verifyReg.submit">تأكيد وإنشاء الحساب</button>
     </form>
   </div>
 </main>
@@ -54,23 +54,23 @@
     const btn = this.querySelector('button[type="submit"]');
     const otp = [...otpInputs].map(i => i.value).join('');
 
-    if (otp.length < 4) { showApiError('أدخل الرمز كاملاً'); return; }
+    if (otp.length < 4) { showApiError(t('otp.err.incomplete')); return; }
 
     btn.disabled = true;
-    btn.textContent = 'جارٍ التأكيد...';
+    btn.textContent = t('verifyReg.confirmingBusy');
 
     try {
       const res = await apiCall('POST', '/auth/verify-registration', { email: pendingEmail, otp });
       localStorage.removeItem('pending_registration_email');
       localStorage.setItem('pharma_token', res.token);
       localStorage.setItem('pharma_user',  JSON.stringify(res.user));
-      showApiSuccess('تم إنشاء الحساب بنجاح!');
+      showApiSuccess(t('verifyReg.success'));
       const nextPage = res.user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
       setTimeout(() => { window.location.href = nextPage; }, 1200);
     } catch (err) {
-      showApiError(err.message || 'رمز غير صحيح أو منتهي الصلاحية');
+      showApiError(err.message || t('otp.err.invalid'));
       btn.disabled = false;
-      btn.textContent = 'تأكيد وإنشاء الحساب';
+      btn.textContent = t('verifyReg.submit');
     }
   });
 
@@ -81,7 +81,7 @@
       const res = await apiCall('POST', '/auth/resend-registration-otp', { email: pendingEmail });
       showApiSuccess(res.message || 'تم إعادة الإرسال');
     } catch (err) {
-      showApiError('تعذّر إعادة الإرسال');
+      showApiError(t('otp.err.resendFailed'));
     }
   });
 </script>

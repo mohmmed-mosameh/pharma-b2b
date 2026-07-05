@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>استلام العروض | PharmaLink</title>
+<title data-i18n-text="offersReceived.title">استلام العروض | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,53 +19,53 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">استلام العروض</p>
-      <h1 class="pl-page-title" id="v-title">استلام المناقصة</h1>
-      <p class="pl-page-sub">هذه العروض المقدَّمة من الموردين حتى الآن — الأسعار تبقى مخفية حتى إغلاق باب التقديم وفتح المظاريف</p>
+      <p class="pl-eyebrow" data-i18n-text="nav.offersReceived">استلام العروض</p>
+      <h1 class="pl-page-title" id="v-title" data-i18n-text="offersReceived.heading">استلام المناقصة</h1>
+      <p class="pl-page-sub" data-i18n-text="offersReceived.subtitle">هذه العروض المقدَّمة من الموردين حتى الآن — الأسعار تبقى مخفية حتى إغلاق باب التقديم وفتح المظاريف</p>
 
       <div id="still-open-note" class="result-banner result-pending d-none">
         <i class="bi bi-hourglass-split"></i>
-        <div>المناقصة لا تزال مفتوحة لاستقبال العروض. القائمة أدناه تعرض الشركات التي قدّمت عروضًا حتى الآن، وتبقى الأسعار مخفية إلى أن يتم إغلاق باب التقديم وفتح المظاريف.</div>
+        <div data-i18n-text="offersReceived.stillOpenNote">المناقصة لا تزال مفتوحة لاستقبال العروض. القائمة أدناه تعرض الشركات التي قدّمت عروضًا حتى الآن، وتبقى الأسعار مخفية إلى أن يتم إغلاق باب التقديم وفتح المظاريف.</div>
       </div>
 
-      <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
+      <h2 class="h6 fw-bold mb-3" data-i18n-text="offersReceived.submittedOffers">العروض المقدَّمة:</h2>
       <div class="table-responsive">
         <table class="pl-table pl-table--cards">
           <thead>
             <tr>
-              <th>اسم الشركة</th>
-              <th>اسم الصنف</th>
-              <th>عدد الأصناف المسعّرة</th>
-              <th>الحالة</th>
+              <th data-i18n-text="offersReceived.col.company">اسم الشركة</th>
+              <th data-i18n-text="offersReceived.col.itemNames">اسم الصنف</th>
+              <th data-i18n-text="offersReceived.col.pricedCount">عدد الأصناف المسعّرة</th>
+              <th data-i18n-text="table.status">الحالة</th>
             </tr>
           </thead>
           <tbody id="quotes-tbody">
-            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="4" class="text-center text-muted" data-i18n-text="common.loading">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="text-muted small">الأسعار تبقى مخفية إلى أن يتم فتح المظاريف رسميًا من شاشة "فتح المظاريف"</p>
+      <p class="text-muted small" data-i18n-text="offersReceived.footnote">الأسعار تبقى مخفية إلى أن يتم فتح المظاريف رسميًا من شاشة "فتح المظاريف"</p>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="manage-tenders.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="#" id="goto-open-envelopes" class="btn btn-pl">الانتقال لفتح المظاريف</a>
+        <a href="manage-tenders.html" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+        <a href="#" id="goto-open-envelopes" class="btn btn-pl" data-i18n-text="offersReceived.gotoOpenEnvelopes">الانتقال لفتح المظاريف</a>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html" class="active">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" class="active" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -87,10 +87,10 @@
 
     try {
       const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
-      document.getElementById('v-title').textContent = 'استلام المناقصة: ' + rfqRes.data.title;
+      document.getElementById('v-title').textContent = t('offersReceived.headingWithTitle') + rfqRes.data.title;
       rfqStillOpen = rfqRes.data.status === 'open';
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل بيانات المناقصة');
+      showApiError(err.message || t('offersReceived.err.rfqLoadFailed'));
     }
 
     if (rfqStillOpen) {
@@ -104,7 +104,7 @@
       const tbody = document.getElementById('quotes-tbody');
 
       if (!quotes.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">لا توجد عروض مقدَّمة بعد</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">${t('offersReceived.noOffers')}</td></tr>`;
         return;
       }
 
@@ -118,15 +118,15 @@
         const productNames = names.length ? names.join('، ') : '—';
         return `
         <tr>
-          <td data-label="اسم الشركة">${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
-          <td data-label="اسم الصنف">${productNames}</td>
-          <td data-label="عدد الأصناف المسعّرة">${items.length}</td>
-          <td data-label="الحالة">${quoteStatusBadge(quote.status)}</td>
+          <td data-label="${t('offersReceived.col.company')}">${escapeHtml(quote.supplier ? quote.supplier.name : (t('offersReceived.unknownSupplier') + quote.supplier_id))}</td>
+          <td data-label="${t('offersReceived.col.itemNames')}">${productNames}</td>
+          <td data-label="${t('offersReceived.col.pricedCount')}">${items.length}</td>
+          <td data-label="${t('table.status')}">${quoteStatusBadge(quote.status)}</td>
         </tr>
       `;
       }).join('');
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل العروض');
+      showApiError(err.message || t('offersReceived.err.quotesLoadFailed'));
     }
   })();
 </script>

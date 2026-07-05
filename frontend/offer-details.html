@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تفاصيل العرض – شركة A | PharmaLink</title>
+<title data-i18n-text="offerDetails.title">تفاصيل العرض – شركة A | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,27 +19,27 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">استلام العروض</p>
-      <h1 class="pl-page-title" id="offer-title">تفاصيل العرض</h1>
+      <p class="pl-eyebrow" data-i18n-text="nav.offersReceived">استلام العروض</p>
+      <h1 class="pl-page-title" id="offer-title" data-i18n-text="offerDetails.heading">تفاصيل العرض</h1>
       <p class="offer-quote" id="offer-quote"></p>
 
       <span class="offer-badge" id="offer-badge"></span>
 
-      <div class="kv-row"><span class="k">اسم الشركة:</span><span class="v" id="v-company">—</span></div>
-      <div class="kv-row"><span class="k">حالة الشركة:</span><span class="v" id="v-status">—</span></div>
-      <div class="kv-row"><span class="k">تاريخ تقديم العرض:</span><span class="v" id="v-date">—</span></div>
+      <div class="kv-row"><span class="k" data-i18n-text="offerDetails.companyName">اسم الشركة:</span><span class="v" id="v-company">—</span></div>
+      <div class="kv-row"><span class="k" data-i18n-text="offerDetails.companyStatus">حالة الشركة:</span><span class="v" id="v-status">—</span></div>
+      <div class="kv-row"><span class="k" data-i18n-text="offerDetails.submissionDate">تاريخ تقديم العرض:</span><span class="v" id="v-date">—</span></div>
 
-      <h2 class="h6 fw-bold mt-4 mb-2">تفاصيل الأصناف المسعّرة:</h2>
+      <h2 class="h6 fw-bold mt-4 mb-2" data-i18n-text="offerDetails.pricedItems">تفاصيل الأصناف المسعّرة:</h2>
       <div class="table-responsive">
         <table class="pl-table pl-table--cards">
           <thead>
             <tr>
-              <th>الصنف</th>
-              <th>سعر الوحدة</th>
-              <th>الخصم</th>
-              <th>الكمية المتوفرة</th>
-              <th>مدة التوريد</th>
-              <th>ملاحظات</th>
+              <th data-i18n-text="offerDetails.col.item">الصنف</th>
+              <th data-i18n-text="offerDetails.col.unitPrice">سعر الوحدة</th>
+              <th data-i18n-text="offerDetails.col.discount">الخصم</th>
+              <th data-i18n-text="offerDetails.col.availableQty">الكمية المتوفرة</th>
+              <th data-i18n-text="offerDetails.col.deliveryTime">مدة التوريد</th>
+              <th data-i18n-text="offerDetails.col.notes">ملاحظات</th>
             </tr>
           </thead>
           <tbody id="items-tbody"></tbody>
@@ -47,24 +47,24 @@
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="#" id="back-link" class="btn btn-pl-ghost">رجوع</a>
+        <a href="#" id="back-link" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html" class="active">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" class="active" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -72,8 +72,8 @@
 
 <footer class="pl-footer">
   <div class="pl-footer-inner">
-    <div class="pl-brand"><img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;"></div>
-    <small>© 2026 PharmaLink — جميع الحقوق محفوظة</small>
+    <div class="pl-brand"><img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;" data-i18n-alt="index.logoAlt"></div>
+    <small data-i18n-text="index.footer">© 2026 PharmaLink — جميع الحقوق محفوظة</small>
   </div>
 </footer>
 
@@ -95,25 +95,25 @@
       const res = await apiCall('GET', '/quotes/' + quoteId);
       const quote = res.data;
 
-      document.getElementById('offer-title').textContent = 'تفاصيل العرض – ' + (quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id));
-      document.getElementById('offer-quote').textContent = 'عرض مقدم ضمن مناقصة: ' + (quote.rfq ? quote.rfq.title : '');
+      document.getElementById('offer-title').textContent = t('offerDetails.headingWithSupplier') + (quote.supplier ? quote.supplier.name : (t('offersReceived.unknownSupplier') + quote.supplier_id));
+      document.getElementById('offer-quote').textContent = t('offerDetails.quoteLine') + (quote.rfq ? quote.rfq.title : '');
       document.getElementById('offer-badge').textContent = quote.supplier ? quote.supplier.name : '';
       document.getElementById('v-company').textContent = quote.supplier ? quote.supplier.name : '—';
-      document.getElementById('v-date').textContent = new Date(quote.created_at).toLocaleString('ar-EG');
+      document.getElementById('v-date').textContent = fmtDateTime(quote.created_at);
       document.getElementById('v-status').innerHTML = quoteStatusBadge(quote.status);
 
       document.getElementById('items-tbody').innerHTML = (quote.quote_items || []).map(item => `
         <tr>
-          <td data-label="الصنف">${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
-          <td data-label="سعر الوحدة">${item.unit_price}$</td>
-          <td data-label="الخصم">${item.discount_percentage || 0}%</td>
-          <td data-label="الكمية المتوفرة">${item.available_qty ?? '—'}</td>
-          <td data-label="مدة التوريد">${item.delivery_days} يوم</td>
-          <td data-label="ملاحظات">${item.notes ? escapeHtml(item.notes) : '—'}</td>
+          <td data-label="${t('offerDetails.col.item')}">${escapeHtml(item.product ? item.product.name : (t('tenderDetail.unknownItem') + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
+          <td data-label="${t('offerDetails.col.unitPrice')}">${item.unit_price}$</td>
+          <td data-label="${t('offerDetails.col.discount')}">${item.discount_percentage || 0}%</td>
+          <td data-label="${t('offerDetails.col.availableQty')}">${item.available_qty ?? '—'}</td>
+          <td data-label="${t('offerDetails.col.deliveryTime')}">${item.delivery_days} ${t('offerDetails.day')}</td>
+          <td data-label="${t('offerDetails.col.notes')}">${item.notes ? escapeHtml(item.notes) : '—'}</td>
         </tr>
       `).join('');
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل تفاصيل العرض');
+      showApiError(err.message || t('offerDetails.err.loadFailed'));
     }
   })();
 </script>

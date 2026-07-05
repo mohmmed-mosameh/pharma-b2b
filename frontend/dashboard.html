@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة التحكم | PharmaLink</title>
+<title data-i18n-text="dashboard.title">لوحة التحكم | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,61 +19,61 @@
 
   <section class="pl-content">
     <div class="welcome-banner">
-      <h1>أهلًا بك في فارما لينك <span aria-hidden="true">👋</span></h1>
-      <p class="text-muted mb-0">إليك ملخص سريع عن نشاط مناقصاتك اليوم</p>
+      <h1 data-i18n="dashboard.welcome">أهلًا بك في فارما لينك <span aria-hidden="true">👋</span></h1>
+      <p class="text-muted mb-0" data-i18n-text="dashboard.subtitle">إليك ملخص سريع عن نشاط مناقصاتك اليوم</p>
     </div>
 
     <div class="row g-3 mb-4">
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="num" id="stat-open">—</div>
-          <div class="lbl">عدد المناقصات النشطة</div>
+          <div class="lbl" data-i18n-text="dashboard.stat.open">عدد المناقصات النشطة</div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="num" id="stat-pending">—</div>
-          <div class="lbl">مناقصة قيد الترسية</div>
+          <div class="lbl" data-i18n-text="dashboard.stat.pending">مناقصة قيد الترسية</div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="num" id="stat-awarded">—</div>
-          <div class="lbl">مناقصات مُرسّاة</div>
+          <div class="lbl" data-i18n-text="dashboard.stat.awarded">مناقصات مُرسّاة</div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="num" id="stat-total">—</div>
-          <div class="lbl">إجمالي المناقصات</div>
+          <div class="lbl" data-i18n-text="dashboard.stat.total">إجمالي المناقصات</div>
         </div>
       </div>
     </div>
 
     <div class="quick-actions">
-      <p class="fw-bold w-100 mb-1">الإجراءات السريعة:</p>
-      <a href="create-tender.html" class="btn btn-pl"><i class="bi bi-plus-lg"></i> إنشاء مناقصة جديدة</a>
-      <a href="manage-tenders.html" class="btn btn-pl-outline">عرض جميع المناقصات</a>
+      <p class="fw-bold w-100 mb-1" data-i18n-text="dashboard.quickActions">الإجراءات السريعة:</p>
+      <a href="create-tender.html" class="btn btn-pl"><i class="bi bi-plus-lg"></i> <span data-i18n-text="dashboard.newTender">إنشاء مناقصة جديدة</span></a>
+      <a href="manage-tenders.html" class="btn btn-pl-outline" data-i18n-text="dashboard.viewAllTenders">عرض جميع المناقصات</a>
     </div>
 
     <div class="pl-card">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-        <h2 class="h6 fw-bold mb-0">أحدث المناقصات:</h2>
-        <input type="text" id="rfqSearch" class="form-control form-control-sm" style="max-width:260px" placeholder="البحث باسم المناقصة">
+        <h2 class="h6 fw-bold mb-0" data-i18n-text="dashboard.latestTenders">أحدث المناقصات:</h2>
+        <input type="text" id="rfqSearch" class="form-control form-control-sm" style="max-width:260px" placeholder="البحث باسم المناقصة" data-i18n-placeholder="dashboard.searchPlaceholder">
       </div>
       <div class="table-responsive">
         <table class="pl-table pl-table--cards">
           <thead>
             <tr>
-              <th>اسم المناقصة</th>
-              <th>آخر موعد</th>
-              <th>الحالة</th>
-              <th>النتيجة</th>
-              <th>الإجراء</th>
+              <th data-i18n-text="dashboard.col.name">اسم المناقصة</th>
+              <th data-i18n-text="dashboard.col.deadline">آخر موعد</th>
+              <th data-i18n-text="table.status">الحالة</th>
+              <th data-i18n-text="dashboard.col.result">النتيجة</th>
+              <th data-i18n-text="table.action">الإجراء</th>
             </tr>
           </thead>
           <tbody id="rfq-tbody">
-            <tr><td colspan="5" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="5" class="text-center text-muted" data-i18n-text="common.loading">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
@@ -81,18 +81,18 @@
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html" class="active">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" class="active" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -113,19 +113,19 @@
     const tbody = document.getElementById('rfq-tbody');
 
     if (!list.length) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">${q ? 'لا توجد مناقصة بهذا الاسم' : 'لا توجد مناقصات بعد'}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">${q ? t('dashboard.noResultsNamed') : t('dashboard.noResults')}</td></tr>`;
       return;
     }
 
     tbody.innerHTML = list.slice(0, 10).map(rfq => `
       <tr>
-        <td data-label="اسم المناقصة">${escapeHtml(rfq.title)}</td>
-        <td data-label="آخر موعد">${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
-        <td data-label="الحالة">${rfqStatusBadge(rfq.status)}</td>
-        <td data-label="النتيجة">${rfq.status === 'open'
+        <td data-label="${t('dashboard.col.name')}">${escapeHtml(rfq.title)}</td>
+        <td data-label="${t('dashboard.col.deadline')}">${fmtDate(rfq.quotes_deadline_at)}</td>
+        <td data-label="${t('table.status')}">${rfqStatusBadge(rfq.status)}</td>
+        <td data-label="${t('dashboard.col.result')}">${rfq.status === 'open'
           ? '—'
-          : `<a href="tender-report.html?id=${rfq.id}" class="btn-link-detail">تقرير النتيجة</a>`}</td>
-        <td data-label="الإجراء"><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">عرض</a></td>
+          : `<a href="tender-report.html?id=${rfq.id}" class="btn-link-detail">${t('dashboard.resultReportLink')}</a>`}</td>
+        <td data-label="${t('table.action')}"><a href="${rfqPharmacyActionUrl(rfq)}" class="btn-link-detail">${t('common.view')}</a></td>
       </tr>
     `).join('');
   }
@@ -144,7 +144,7 @@
 
       renderRfqs();
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل المناقصات');
+      showApiError(err.message || t('dashboard.err.loadFailed'));
     }
   })();
 </script>

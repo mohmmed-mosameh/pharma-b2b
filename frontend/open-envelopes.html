@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>فتح المظاريف | PharmaLink</title>
+<title data-i18n-text="openEnvelopes.title">فتح المظاريف | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,49 +19,49 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">فتح المظاريف</p>
-      <h1 class="pl-page-title" id="v-title">فتح المظاريف</h1>
-      <p class="pl-page-sub">افتح كل مظروف على حدة للاطلاع على السعر الرسمي — لا يمكن الانتقال للترسية إلا بعد فتح كل المظاريف</p>
+      <p class="pl-eyebrow" data-i18n-text="nav.openEnvelopes">فتح المظاريف</p>
+      <h1 class="pl-page-title" id="v-title" data-i18n-text="openEnvelopes.heading">فتح المظاريف</h1>
+      <p class="pl-page-sub" data-i18n-text="openEnvelopes.subtitle">افتح كل مظروف على حدة للاطلاع على السعر الرسمي — لا يمكن الانتقال للترسية إلا بعد فتح كل المظاريف</p>
 
-      <h2 class="h6 fw-bold mb-3">العروض المقدَّمة:</h2>
+      <h2 class="h6 fw-bold mb-3" data-i18n-text="openEnvelopes.submittedOffers">العروض المقدَّمة:</h2>
       <div class="table-responsive">
         <table class="pl-table pl-table--cards">
           <thead>
             <tr>
-              <th>اسم الشركة</th>
-              <th>سعر العرض</th>
-              <th>مدة التوريد</th>
-              <th>الخصم</th>
-              <th>الملاحظات</th>
-              <th>الإجراء</th>
+              <th data-i18n-text="offersReceived.col.company">اسم الشركة</th>
+              <th data-i18n-text="openEnvelopes.col.offerPrice">سعر العرض</th>
+              <th data-i18n-text="openEnvelopes.col.deliveryTime">مدة التوريد</th>
+              <th data-i18n-text="openEnvelopes.col.discount">الخصم</th>
+              <th data-i18n-text="openEnvelopes.col.notes">الملاحظات</th>
+              <th data-i18n-text="table.action">الإجراء</th>
             </tr>
           </thead>
           <tbody id="quotes-tbody">
-            <tr><td colspan="6" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="6" class="text-center text-muted" data-i18n-text="common.loading">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="#" id="back-link" class="btn btn-pl-ghost">رجوع</a>
-        <a href="#" id="goto-award" class="btn btn-pl disabled">الانتقال لإرساء المناقصة</a>
+        <a href="#" id="back-link" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+        <a href="#" id="goto-award" class="btn btn-pl disabled" data-i18n-text="openEnvelopes.gotoAward">الانتقال لإرساء المناقصة</a>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html">استلام العروض</a>
-      <a href="open-envelopes.html" class="active">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" class="active" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -91,25 +91,25 @@
         ? (avg(quote.quote_items || [], 'net_unit_price') ?? avg(quote.quote_items || [], 'unit_price') ?? '—') + '$'
         : '****';
       const days = avg(quote.quote_items || [], 'delivery_days');
-      const daysCell = days === null ? '—' : Math.round(days) + ' أيام';
+      const daysCell = days === null ? '—' : Math.round(days) + ' ' + t('openEnvelopes.days');
       const discount = avg(quote.quote_items || [], 'discount_percentage');
       const discountCell = opened ? (discount === null ? '—' : discount + '%') : '****';
       const approved = quote.supplier && quote.supplier.wins_count >= 3;
       const noteCell = approved
-        ? '<span class="badge-status badge-approved">معتمد</span>'
-        : '<span class="badge-status badge-new">جديد</span>';
+        ? `<span class="badge-status badge-approved">${t('badge.approved')}</span>`
+        : `<span class="badge-status badge-new">${t('badge.new')}</span>`;
       const action = opened
-        ? `<a href="offer-details.html?rfq=${rfqId}&quote=${quote.id}" class="btn-link-detail">عرض التفاصيل</a>`
-        : `<button type="button" class="btn-open-envelope" data-quote-id="${quote.id}">فتح المظروف</button>`;
+        ? `<a href="offer-details.html?rfq=${rfqId}&quote=${quote.id}" class="btn-link-detail">${t('openEnvelopes.viewDetails')}</a>`
+        : `<button type="button" class="btn-open-envelope" data-quote-id="${quote.id}">${t('openEnvelopes.openEnvelope')}</button>`;
 
       return `
         <tr>
-          <td data-label="اسم الشركة">${escapeHtml(quote.supplier ? quote.supplier.name : ('مورد #' + quote.supplier_id))}</td>
-          <td data-label="سعر العرض" class="${opened ? '' : 'masked'}">${priceCell}</td>
-          <td data-label="مدة التوريد">${daysCell}</td>
-          <td data-label="الخصم" class="${opened ? '' : 'masked'}">${discountCell}</td>
-          <td data-label="الملاحظات">${noteCell}</td>
-          <td data-label="الإجراء">${action}</td>
+          <td data-label="${t('offersReceived.col.company')}">${escapeHtml(quote.supplier ? quote.supplier.name : (t('offersReceived.unknownSupplier') + quote.supplier_id))}</td>
+          <td data-label="${t('openEnvelopes.col.offerPrice')}" class="${opened ? '' : 'masked'}">${priceCell}</td>
+          <td data-label="${t('openEnvelopes.col.deliveryTime')}">${daysCell}</td>
+          <td data-label="${t('openEnvelopes.col.discount')}" class="${opened ? '' : 'masked'}">${discountCell}</td>
+          <td data-label="${t('openEnvelopes.col.notes')}">${noteCell}</td>
+          <td data-label="${t('table.action')}">${action}</td>
         </tr>
       `;
     }).join('');
@@ -117,14 +117,14 @@
     document.querySelectorAll('.btn-open-envelope').forEach(btn => {
       btn.addEventListener('click', async function () {
         this.disabled = true;
-        this.textContent = 'جارٍ الفتح...';
+        this.textContent = t('openEnvelopes.openingBusy');
         try {
           await apiCall('POST', '/rfqs/' + rfqId + '/quotes/' + this.dataset.quoteId + '/open');
           await load();
         } catch (err) {
-          showApiError(err.message || 'تعذّر فتح المظروف');
+          showApiError(err.message || t('openEnvelopes.err.openFailed'));
           this.disabled = false;
-          this.textContent = 'فتح المظروف';
+          this.textContent = t('openEnvelopes.openEnvelope');
         }
       });
     });
@@ -142,19 +142,19 @@
   async function load() {
     try {
       const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
-      document.getElementById('v-title').textContent = 'فتح المظاريف – ' + rfqRes.data.title;
+      document.getElementById('v-title').textContent = t('openEnvelopes.headingWithTitle') + rfqRes.data.title;
 
       const res = await apiCall('GET', '/rfqs/' + rfqId + '/quotes');
       const quotes = res.data.quotes || [];
 
       if (!quotes.length) {
-        document.getElementById('quotes-tbody').innerHTML = '<tr><td colspan="6" class="text-center text-muted">لا توجد عروض مقدَّمة</td></tr>';
+        document.getElementById('quotes-tbody').innerHTML = `<tr><td colspan="6" class="text-center text-muted">${t('openEnvelopes.noOffers')}</td></tr>`;
         return;
       }
 
       renderQuotes(quotes, res.all_opened);
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل المظاريف');
+      showApiError(err.message || t('openEnvelopes.err.loadFailed'));
     }
   }
 

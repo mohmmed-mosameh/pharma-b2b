@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تقديم العرض | PharmaLink</title>
+<title data-i18n-text="submitOffer.title">تقديم العرض | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,39 +19,39 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">تقديم العرض</p>
-      <h1 class="pl-page-title" id="v-title">تقديم عرض</h1>
-      <p class="pl-page-sub">أدخل سعرك ومدة التوريد لكل صنف — يجب تسعير كل الأصناف المطلوبة</p>
+      <p class="pl-eyebrow" data-i18n-text="nav.submitOffer">تقديم العرض</p>
+      <h1 class="pl-page-title" id="v-title" data-i18n-text="submitOffer.heading">تقديم عرض</h1>
+      <p class="pl-page-sub" data-i18n-text="submitOffer.subtitle">أدخل سعرك ومدة التوريد لكل صنف — يجب تسعير كل الأصناف المطلوبة</p>
 
       <form id="submitOfferForm" novalidate>
         <div id="items-form"></div>
 
         <div class="d-flex justify-content-between mt-4">
-          <a href="tender-detail.html" id="back-link" class="btn btn-pl-ghost">رجوع</a>
-          <button type="submit" class="btn btn-pl">إرسال العرض</button>
+          <a href="tender-detail.html" id="back-link" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+          <button type="submit" class="btn btn-pl" data-i18n-text="submitOffer.submit">إرسال العرض</button>
         </div>
       </form>
 
       <div id="offerSuccess" class="result-banner result-success d-none mt-4">
         <i class="bi bi-check-circle-fill"></i>
         <div>
-          تم إرسال عرضك بنجاح
-          <div><a href="track-status.html" class="btn-link-detail">متابعة حالة العرض</a></div>
+          <span data-i18n-text="submitOffer.submittedSuccess">تم إرسال عرضك بنجاح</span>
+          <div><a href="track-status.html" class="btn-link-detail" data-i18n-text="submitOffer.trackStatusLink">متابعة حالة العرض</a></div>
         </div>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="tenders.html">المناقصات المتاحة</a>
-      <a href="tender-detail.html">تفاصيل المناقصة</a>
-      <a href="submit-offer.html" class="active">تقديم العرض</a>
-      <a href="track-status.html">متابعة حالة المناقصات</a>
-      <a href="tender-result.html">نتيجة المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="tenders.html" data-i18n-text="nav.availableTenders">المناقصات المتاحة</a>
+      <a href="tender-detail.html" data-i18n-text="tenderDetail.eyebrow">تفاصيل المناقصة</a>
+      <a href="submit-offer.html" class="active" data-i18n-text="nav.submitOffer">تقديم العرض</a>
+      <a href="track-status.html" data-i18n-text="nav.trackStatus">متابعة حالة المناقصات</a>
+      <a href="tender-result.html" data-i18n-text="nav.tenderResult">نتيجة المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -74,44 +74,44 @@
     try {
       const res = await apiCall('GET', '/rfqs/' + rfqId);
       const rfq = res.data;
-      document.getElementById('v-title').textContent = 'تقديم عرض – ' + rfq.title;
+      document.getElementById('v-title').textContent = t('submitOffer.headingWithTitle') + rfq.title;
       rfqItems = rfq.rfq_items || [];
 
       document.getElementById('items-form').innerHTML = rfqItems.map(item => `
         <div class="pl-card mb-3 offer-item-row" data-rfq-item-id="${item.id}">
-          <h3 class="h6 fw-bold">${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''} <span class="text-muted small">(الكمية المطلوبة: ${item.quantity})</span></h3>
+          <h3 class="h6 fw-bold">${escapeHtml(item.product ? item.product.name : (t('tenderDetail.unknownItem') + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''} <span class="text-muted small">(${t('submitOffer.requestedQty')}${item.quantity})</span></h3>
           <div class="row g-3">
             <div class="col-md-3">
-              <label class="form-label small">سعر الوحدة</label>
+              <label class="form-label small">${t('submitOffer.unitPrice')}</label>
               <div class="input-group">
                 <span class="input-group-text">$</span>
                 <input type="number" step="0.01" class="form-control item-price" min="0.01" required>
               </div>
             </div>
             <div class="col-md-3">
-              <label class="form-label small">مدة التوريد (أيام)</label>
+              <label class="form-label small">${t('submitOffer.deliveryDays')}</label>
               <input type="number" class="form-control item-days" min="0" required>
             </div>
             <div class="col-md-3">
-              <label class="form-label small">نسبة الخصم (اختياري)</label>
+              <label class="form-label small">${t('submitOffer.discountPct')}</label>
               <div class="input-group">
                 <input type="number" class="form-control item-discount" min="0" max="100">
                 <span class="input-group-text">%</span>
               </div>
             </div>
             <div class="col-md-3">
-              <label class="form-label small">الكمية المتوفرة (اختياري)</label>
+              <label class="form-label small">${t('submitOffer.availableQty')}</label>
               <input type="number" class="form-control item-available" min="1" placeholder="${item.quantity}">
             </div>
             <div class="col-12">
-              <label class="form-label small">ملاحظات (اختياري)</label>
+              <label class="form-label small">${t('submitOffer.notes')}</label>
               <input type="text" class="form-control item-notes">
             </div>
           </div>
         </div>
       `).join('');
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل بيانات المناقصة');
+      showApiError(err.message || t('submitOffer.err.rfqLoadFailed'));
     }
   })();
 
@@ -133,7 +133,7 @@
       await apiCall('POST', '/rfqs/' + rfqId + '/quotes', { items });
       document.getElementById('offerSuccess').classList.remove('d-none');
     } catch (err) {
-      showApiError(err.message || 'تعذّر إرسال العرض');
+      showApiError(err.message || t('submitOffer.err.submitFailed'));
       btn.disabled = false;
     }
   });

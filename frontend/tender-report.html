@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تقرير المناقصة | PharmaLink</title>
+<title data-i18n-text="tenderReport.title">تقرير المناقصة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,39 +19,39 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">تقرير المناقصة</p>
-      <h1 class="pl-page-title" id="v-title">تقرير المناقصة</h1>
-      <p class="pl-page-sub">"يعرض هذا التقرير ملخصًا رسميًا لنتيجة المناقصة بعد اعتماد قرار الترسية."</p>
+      <p class="pl-eyebrow" data-i18n-text="nav.tenderReport">تقرير المناقصة</p>
+      <h1 class="pl-page-title" id="v-title" data-i18n-text="tenderReport.heading">تقرير المناقصة</h1>
+      <p class="pl-page-sub" data-i18n-text="tenderReport.subtitle">"يعرض هذا التقرير ملخصًا رسميًا لنتيجة المناقصة بعد اعتماد قرار الترسية."</p>
 
-      <span class="offer-badge">التقرير النهائي</span>
+      <span class="offer-badge" data-i18n-text="tenderReport.finalReport">التقرير النهائي</span>
 
       <div id="report-body">
-        <p class="text-muted">جارٍ التحميل...</p>
+        <p class="text-muted" data-i18n-text="common.loading">جارٍ التحميل...</p>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="dashboard.html" class="btn btn-pl-ghost">الرجوع للوحة التحكم</a>
+        <a href="dashboard.html" class="btn btn-pl-ghost" data-i18n-text="tenderReport.backToDashboard">الرجوع للوحة التحكم</a>
         <button type="button" id="downloadPdfBtn" class="btn btn-pl" disabled>
           <img src="img/download-icon.png" alt="" style="height:16px; filter:brightness(0) invert(1); margin-left:.4rem;">
-          تحميل التقرير PDF
+          <span data-i18n-text="tenderReport.downloadPdf">تحميل التقرير PDF</span>
         </button>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html" class="active">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" class="active" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -77,10 +77,10 @@
     try {
       const rfqRes = await apiCall('GET', '/rfqs/' + rfqId);
       const rfq = rfqRes.data;
-      document.getElementById('v-title').textContent = 'تقرير المناقصة: ' + rfq.title;
+      document.getElementById('v-title').textContent = t('tenderReport.headingWithTitle') + rfq.title;
 
       if (rfq.status !== 'awarded') {
-        document.getElementById('report-body').innerHTML = '<p class="text-muted">التقرير متاح فقط بعد ترسية المناقصة.</p>';
+        document.getElementById('report-body').innerHTML = `<p class="text-muted">${t('tenderReport.notAwardedYet')}</p>`;
         return;
       }
 
@@ -88,19 +88,19 @@
       const winner = (quotesRes.data.quotes || []).find(q => q.status === 'awarded');
 
       document.getElementById('report-body').innerHTML = `
-        <div class="kv-row"><span class="k">اسم المناقصة:</span><span class="v">${escapeHtml(rfq.title)}</span></div>
-        <div class="kv-row"><span class="k">الشركة الفائزة:</span><span class="v">${winner ? escapeHtml(winner.supplier.name) : '—'}</span></div>
-        <div class="kv-row"><span class="k">متوسط سعر الوحدة النهائي:</span><span class="v">${winner ? (avg(winner.quote_items, 'net_unit_price') ?? avg(winner.quote_items, 'unit_price')) : '—'}$</span></div>
-        <div class="kv-row"><span class="k">متوسط مدة التوريد:</span><span class="v">${winner ? avg(winner.quote_items, 'delivery_days') : '—'} يوم</span></div>
+        <div class="kv-row"><span class="k">${t('tenderReport.tenderName')}</span><span class="v">${escapeHtml(rfq.title)}</span></div>
+        <div class="kv-row"><span class="k">${t('tenderReport.winningCompany')}</span><span class="v">${winner ? escapeHtml(winner.supplier.name) : '—'}</span></div>
+        <div class="kv-row"><span class="k">${t('tenderReport.finalUnitPrice')}</span><span class="v">${winner ? (avg(winner.quote_items, 'net_unit_price') ?? avg(winner.quote_items, 'unit_price')) : '—'}$</span></div>
+        <div class="kv-row"><span class="k">${t('tenderReport.avgDeliveryTime')}</span><span class="v">${winner ? avg(winner.quote_items, 'delivery_days') : '—'} ${t('tenderReport.day')}</span></div>
         <ul class="report-check-list">
-          <li><i class="bi bi-check-circle-fill"></i> تم اعتماد الترسية بتاريخ: ${new Date(rfq.updated_at).toLocaleDateString('ar-EG')}</li>
-          <li><i class="bi bi-check-circle-fill"></i> تم إشعار الشركة الفائزة بنجاح العملية</li>
+          <li><i class="bi bi-check-circle-fill"></i> ${t('tenderReport.awardedOn')}${fmtDate(rfq.updated_at)}</li>
+          <li><i class="bi bi-check-circle-fill"></i> ${t('tenderReport.winnerNotified')}</li>
         </ul>
       `;
 
       document.getElementById('downloadPdfBtn').disabled = false;
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل بيانات التقرير');
+      showApiError(err.message || t('tenderReport.err.loadFailed'));
     }
   })();
 
@@ -109,7 +109,7 @@
     try {
       await apiDownloadFile('/rfqs/' + rfqId + '/report', 'rfq-' + rfqId + '-report.pdf');
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل التقرير');
+      showApiError(err.message || t('tenderReport.err.downloadFailed'));
     } finally {
       this.disabled = false;
     }

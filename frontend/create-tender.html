@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إنشاء مناقصة جديدة | PharmaLink</title>
+<title data-i18n-text="createTender.title">إنشاء مناقصة جديدة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -21,29 +21,29 @@
     <div class="pl-card">
 
       <div class="step-track">
-        <div class="step done"><span class="dot">1</span> إنشاء مناقصة</div>
+        <div class="step done"><span class="dot">1</span> <span data-i18n-text="createTender.step1">إنشاء مناقصة</span></div>
         <div class="sep"></div>
-        <div class="step"><span class="dot">2</span> تحديد شروط الترسية</div>
+        <div class="step"><span class="dot">2</span> <span data-i18n-text="createTender.step2">تحديد شروط الترسية</span></div>
         <div class="sep"></div>
-        <div class="step"><span class="dot">3</span> مراجعة ونشر</div>
+        <div class="step"><span class="dot">3</span> <span data-i18n-text="createTender.step3">مراجعة ونشر</span></div>
       </div>
 
-      <h1 class="pl-page-title">إنشاء مناقصة جديدة</h1>
-      <p class="pl-page-sub">أدخل تفاصيل المناقصة ليتم عرضها على الموردين المعتمدين</p>
+      <h1 class="pl-page-title" data-i18n-text="createTender.heading">إنشاء مناقصة جديدة</h1>
+      <p class="pl-page-sub" data-i18n-text="createTender.subtitle">أدخل تفاصيل المناقصة ليتم عرضها على الموردين المعتمدين</p>
 
       <form id="createTenderForm" novalidate>
         <div class="mb-3">
-          <label class="form-label fw-bold" for="title">عنوان المناقصة</label>
-          <input type="text" id="title" class="form-control" placeholder="مثال: توريد مضادات حيوية" required>
+          <label class="form-label fw-bold" for="title" data-i18n-text="createTender.fieldTitle">عنوان المناقصة</label>
+          <input type="text" id="title" class="form-control" placeholder="مثال: توريد مضادات حيوية" required data-i18n-placeholder="createTender.titlePlaceholder">
         </div>
 
         <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label fw-bold" for="closeDate">آخر موعد لتقديم العروض</label>
+            <label class="form-label fw-bold" for="closeDate" data-i18n-text="createTender.fieldCloseDate">آخر موعد لتقديم العروض</label>
             <input type="date" id="closeDate" class="form-control" required>
           </div>
           <div class="col-md-6">
-            <label class="form-label fw-bold" for="openDate">موعد فتح المظاريف</label>
+            <label class="form-label fw-bold" for="openDate" data-i18n-text="createTender.fieldOpenDate">موعد فتح المظاريف</label>
             <input type="date" id="openDate" class="form-control" required>
           </div>
         </div>
@@ -51,19 +51,19 @@
         <hr class="my-4">
 
         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-          <label class="form-label fw-bold mb-0">أصناف المناقصة</label>
+          <label class="form-label fw-bold mb-0" data-i18n-text="createTender.itemsHeading">أصناف المناقصة</label>
           <div class="d-flex gap-2">
-            <button type="button" id="addNewProductBtn" class="btn btn-sm btn-pl-ghost"><i class="bi bi-capsule"></i> الدواء مش موجود؟ أضِفه</button>
-            <button type="button" id="addItemBtn" class="btn btn-sm btn-pl-outline"><i class="bi bi-plus-lg"></i> إضافة صنف</button>
+            <button type="button" id="addNewProductBtn" class="btn btn-sm btn-pl-ghost"><i class="bi bi-capsule"></i> <span data-i18n-text="createTender.addNewProductBtn">الدواء مش موجود؟ أضِفه</span></button>
+            <button type="button" id="addItemBtn" class="btn btn-sm btn-pl-outline"><i class="bi bi-plus-lg"></i> <span data-i18n-text="createTender.addItemBtn">إضافة صنف</span></button>
           </div>
         </div>
-        <p class="text-muted small">اختر الأصناف المطلوب توريدها وكمية كل صنف (لا يمكن تكرار نفس الصنف مرتين)</p>
+        <p class="text-muted small" data-i18n-text="createTender.itemsHint">اختر الأصناف المطلوب توريدها وكمية كل صنف (لا يمكن تكرار نفس الصنف مرتين)</p>
 
         <div id="itemsWrap"></div>
 
         <div class="d-flex justify-content-between mt-4">
-          <button type="button" class="btn btn-pl-ghost" onclick="window.location.href='dashboard.html'">إلغاء</button>
-          <button type="submit" class="btn btn-pl">تحديد شروط الترسية</button>
+          <button type="button" class="btn btn-pl-ghost" onclick="window.location.href='dashboard.html'" data-i18n-text="common.cancel">إلغاء</button>
+          <button type="submit" class="btn btn-pl" data-i18n-text="createTender.submit">تحديد شروط الترسية</button>
         </div>
       </form>
 
@@ -75,45 +75,45 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title h6 fw-bold">إضافة دواء جديد للكتالوج</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+          <h2 class="modal-title h6 fw-bold" data-i18n-text="createTender.modalTitle">إضافة دواء جديد للكتالوج</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق" data-i18n-aria-label="createTender.close"></button>
         </div>
         <form id="newProductForm">
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label small fw-bold" for="npName">اسم الدواء التجاري</label>
+              <label class="form-label small fw-bold" for="npName" data-i18n-text="createTender.tradeNameLabel">اسم الدواء التجاري</label>
               <input type="text" id="npName" class="form-control" required>
             </div>
             <div class="row g-2">
               <div class="col-md-6">
-                <label class="form-label small fw-bold" for="npCategory">الفئة</label>
-                <input type="text" id="npCategory" class="form-control" placeholder="مثال: مضادات حيوية" required>
+                <label class="form-label small fw-bold" for="npCategory" data-i18n-text="createTender.categoryLabel">الفئة</label>
+                <input type="text" id="npCategory" class="form-control" placeholder="مثال: مضادات حيوية" required data-i18n-placeholder="createTender.categoryPlaceholder">
               </div>
               <div class="col-md-6">
-                <label class="form-label small fw-bold" for="npGeneric">الاسم العلمي (اختياري)</label>
+                <label class="form-label small fw-bold" for="npGeneric" data-i18n-text="createTender.genericLabel">الاسم العلمي (اختياري)</label>
                 <input type="text" id="npGeneric" class="form-control">
               </div>
               <div class="col-md-6">
-                <label class="form-label small fw-bold" for="npCompany">الشركة المصنّعة (اختياري)</label>
+                <label class="form-label small fw-bold" for="npCompany" data-i18n-text="createTender.companyLabel">الشركة المصنّعة (اختياري)</label>
                 <input type="text" id="npCompany" class="form-control">
               </div>
               <div class="col-md-3">
-                <label class="form-label small fw-bold" for="npForm">الشكل (اختياري)</label>
-                <input type="text" id="npForm" class="form-control" placeholder="قرص/كبسول">
+                <label class="form-label small fw-bold" for="npForm" data-i18n-text="createTender.formLabel">الشكل (اختياري)</label>
+                <input type="text" id="npForm" class="form-control" placeholder="قرص/كبسول" data-i18n-placeholder="createTender.formPlaceholder">
               </div>
               <div class="col-md-3">
-                <label class="form-label small fw-bold" for="npStrength">التركيز (اختياري)</label>
-                <input type="text" id="npStrength" class="form-control" placeholder="500mg">
+                <label class="form-label small fw-bold" for="npStrength" data-i18n-text="createTender.strengthLabel">التركيز (اختياري)</label>
+                <input type="text" id="npStrength" class="form-control" placeholder="500mg" data-i18n-placeholder="createTender.strengthPlaceholder">
               </div>
             </div>
             <hr class="my-3">
-            <label class="form-label small fw-bold mb-2">الأدوية التي أضفتها (يمكنك حذفها)</label>
+            <label class="form-label small fw-bold mb-2" data-i18n-text="createTender.myProductsLabel">الأدوية التي أضفتها (يمكنك حذفها)</label>
             <ul id="myProductsList" class="list-group list-group-flush small mb-0"></ul>
-            <p id="noMyProducts" class="text-muted small mb-0">لم تُضِف أي دواء بعد. الأصناف الافتراضية لا يمكن حذفها.</p>
+            <p id="noMyProducts" class="text-muted small mb-0" data-i18n-text="createTender.noMyProducts">لم تُضِف أي دواء بعد. الأصناف الافتراضية لا يمكن حذفها.</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal">إلغاء</button>
-            <button type="submit" class="btn btn-pl">إضافة الدواء</button>
+            <button type="button" class="btn btn-pl-ghost" data-bs-dismiss="modal" data-i18n-text="common.cancel">إلغاء</button>
+            <button type="submit" class="btn btn-pl" data-i18n-text="createTender.addProduct">إضافة الدواء</button>
           </div>
         </form>
       </div>
@@ -121,18 +121,18 @@
   </div>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html" class="active">إنشاء مناقصة</a>
-      <a href="tender-criteria.html">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" class="active" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -159,22 +159,22 @@
     row.className = 'row g-2 align-items-end mb-2 rfq-item-row';
     row.innerHTML = `
       <div class="col-md-5">
-        <label class="form-label small fw-bold mb-1">الصنف</label>
+        <label class="form-label small fw-bold mb-1">${t('createTender.itemLabel')}</label>
         <select class="form-select form-select-sm item-product" required>
-          <option value="" ${item && item.product_id ? '' : 'selected'} disabled>اختر صنفًا</option>
+          <option value="" ${item && item.product_id ? '' : 'selected'} disabled>${t('createTender.selectItem')}</option>
           ${productOptions(item ? item.product_id : '')}
         </select>
       </div>
       <div class="col-md-2">
-        <label class="form-label small fw-bold mb-1">الكمية</label>
+        <label class="form-label small fw-bold mb-1">${t('createTender.qtyLabel')}</label>
         <input type="number" class="form-control form-control-sm item-qty" min="1" placeholder="500" required value="${item && item.quantity ? item.quantity : ''}">
       </div>
       <div class="col-md-4">
-        <label class="form-label small fw-bold mb-1">ملاحظات (اختياري)</label>
-        <input type="text" class="form-control form-control-sm item-notes" placeholder="مثال: تعبئة 10 علب" value="${item && item.notes ? escapeHtml(item.notes) : ''}">
+        <label class="form-label small fw-bold mb-1">${t('createTender.notesLabel')}</label>
+        <input type="text" class="form-control form-control-sm item-notes" placeholder="${t('createTender.notesPlaceholder')}" value="${item && item.notes ? escapeHtml(item.notes) : ''}">
       </div>
       <div class="col-md-1">
-        <button type="button" class="btn btn-sm btn-pl-ghost btn-remove-item" aria-label="حذف الصنف"><i class="bi bi-trash"></i></button>
+        <button type="button" class="btn btn-sm btn-pl-ghost btn-remove-item" aria-label="${t('createTender.deleteItem')}"><i class="bi bi-trash"></i></button>
       </div>
     `;
     row.querySelector('.btn-remove-item').addEventListener('click', () => row.remove());
@@ -186,7 +186,7 @@
   function refreshProductSelects() {
     document.querySelectorAll('.item-product').forEach(select => {
       const current = select.value;
-      select.innerHTML = `<option value="" ${current ? '' : 'selected'} disabled>اختر صنفًا</option>${productOptions(current)}`;
+      select.innerHTML = `<option value="" ${current ? '' : 'selected'} disabled>${t('createTender.selectItem')}</option>${productOptions(current)}`;
     });
   }
 
@@ -211,7 +211,7 @@
     list.innerHTML = mine.map(p => `
       <li class="list-group-item d-flex justify-content-between align-items-center px-0">
         <span>${escapeHtml(p.name)}${p.strength ? ' - ' + escapeHtml(p.strength) : ''}${p.category ? ' (' + escapeHtml(p.category) + ')' : ''}</span>
-        <button type="button" class="btn btn-sm btn-pl-ghost btn-del-product" data-id="${p.id}" aria-label="حذف الصنف">
+        <button type="button" class="btn btn-sm btn-pl-ghost btn-del-product" data-id="${p.id}" aria-label="${t('createTender.deleteItem')}">
           <i class="bi bi-trash text-danger"></i>
         </button>
       </li>
@@ -220,16 +220,16 @@
     list.querySelectorAll('.btn-del-product').forEach(btn => {
       btn.addEventListener('click', async function () {
         const id = Number(this.dataset.id);
-        if (!confirm('هل تريد حذف هذا الصنف من الكتالوج؟')) return;
+        if (!confirm(t('createTender.confirmDeleteProduct'))) return;
         this.disabled = true;
         try {
           await apiCall('DELETE', '/products/' + id);
           PRODUCTS = PRODUCTS.filter(p => p.id !== id);
           refreshProductSelects();
           renderMyProducts();
-          showApiSuccess('تم حذف الصنف.');
+          showApiSuccess(t('createTender.productDeleted'));
         } catch (err) {
-          showApiError(err.message || 'تعذّر حذف الصنف');
+          showApiError(err.message || t('createTender.err.productDeleteFailed'));
           this.disabled = false;
         }
       });
@@ -248,7 +248,7 @@
     const npNameVal = document.getElementById('npName').value.trim();
     const npCategoryVal = document.getElementById('npCategory').value.trim();
     if (!npNameVal || !npCategoryVal) {
-      showApiError('اسم الدواء والفئة إجباريان.');
+      showApiError(t('createTender.err.nameAndCategoryRequired'));
       return;
     }
 
@@ -267,10 +267,10 @@
       PRODUCTS.push(res);
       refreshProductSelects();
       renderMyProducts();
-      showApiSuccess('تمت إضافة الدواء. أغلق النافذة لاختياره من قائمة الأصناف.');
+      showApiSuccess(t('createTender.productAdded'));
       this.reset();
     } catch (err) {
-      showApiError(err.message || 'تعذّر إضافة الدواء');
+      showApiError(err.message || t('createTender.err.productAddFailed'));
     } finally {
       btn.disabled = false;
     }
@@ -288,7 +288,7 @@
       const res = await apiCall('GET', '/products?per_page=100');
       PRODUCTS = res.data || [];
     } catch (err) {
-      showApiError('تعذّر تحميل قائمة الأصناف: ' + err.message);
+      showApiError(t('createTender.err.productsLoadFailed') + err.message);
     }
 
     // استرجاع المسوّدة إذا رجع المستخدم من خطوة الشروط، حتى لا تضيع بياناته.
@@ -312,16 +312,16 @@
     const openingDay  = document.getElementById('openDate').value;
 
     if (!title) {
-      showApiError('عنوان المناقصة مطلوب.');
+      showApiError(t('createTender.err.titleRequired'));
       return;
     }
 
     if (!deadlineDay) {
-      showApiError('حدّد آخر موعد لتقديم العروض.');
+      showApiError(t('createTender.err.closeDateRequired'));
       return;
     }
     if (!openingDay) {
-      showApiError('حدّد موعد فتح المظاريف.');
+      showApiError(t('createTender.err.openDateRequired'));
       return;
     }
 
@@ -331,12 +331,12 @@
     const openingDt  = new Date(openingDay + 'T23:59:59');
 
     if (deadlineDt <= new Date()) {
-      showApiError('يجب أن يكون آخر موعد لتقديم العروض اليوم أو تاريخًا لاحقًا.');
+      showApiError(t('createTender.err.closeDateInPast'));
       return;
     }
 
     if (openingDt <= deadlineDt) {
-      showApiError('يجب أن يكون يوم فتح المظاريف بعد يوم آخر موعد لتقديم العروض.');
+      showApiError(t('createTender.err.openBeforeClose'));
       return;
     }
 
@@ -347,13 +347,13 @@
     }));
 
     if (!items.length || items.some(it => !it.product_id || !it.quantity)) {
-      showApiError('أضف صنفًا واحدًا على الأقل مع تحديد الكمية.');
+      showApiError(t('createTender.err.needOneItem'));
       return;
     }
 
     const productIds = items.map(it => it.product_id);
     if (new Set(productIds).size !== productIds.length) {
-      showApiError('لا يمكن تكرار نفس الصنف أكثر من مرة في المناقصة.');
+      showApiError(t('createTender.err.duplicateItem'));
       return;
     }
 

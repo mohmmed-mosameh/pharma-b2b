@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متابعة حالة المناقصات | PharmaLink</title>
+<title data-i18n-text="trackStatus.title">متابعة حالة المناقصات | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,44 +19,44 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">متابعة حالة المناقصات</p>
-      <h1 class="pl-page-title">متابعة حالة المناقصات</h1>
-      <p class="pl-page-sub">"يمكنك الآن متابعة حالة جميع العروض التي قمت بتقديمها"</p>
+      <p class="pl-eyebrow" data-i18n-text="nav.trackStatus">متابعة حالة المناقصات</p>
+      <h1 class="pl-page-title" data-i18n-text="trackStatus.heading">متابعة حالة المناقصات</h1>
+      <p class="pl-page-sub" data-i18n-text="trackStatus.subtitle">"يمكنك الآن متابعة حالة جميع العروض التي قمت بتقديمها"</p>
 
-      <h2 class="h6 fw-bold mb-3">عروضي المقدَّمة:</h2>
+      <h2 class="h6 fw-bold mb-3" data-i18n-text="trackStatus.myOffers">عروضي المقدَّمة:</h2>
       <div class="table-responsive">
         <table class="pl-table pl-table--cards">
           <thead>
             <tr>
-              <th>اسم المناقصة</th>
-              <th>حالة العرض</th>
-              <th>تاريخ آخر تحديث</th>
-              <th>الإجراء</th>
+              <th data-i18n-text="dashboard.col.name">اسم المناقصة</th>
+              <th data-i18n-text="trackStatus.col.offerStatus">حالة العرض</th>
+              <th data-i18n-text="trackStatus.col.lastUpdate">تاريخ آخر تحديث</th>
+              <th data-i18n-text="table.action">الإجراء</th>
             </tr>
           </thead>
           <tbody id="quotes-tbody">
-            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="4" class="text-center text-muted" data-i18n-text="common.loading">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="tenders.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="tender-result.html" class="btn btn-pl">الانتقال لمشاهدة النتيجة</a>
+        <a href="tenders.html" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+        <a href="tender-result.html" class="btn btn-pl" data-i18n-text="trackStatus.gotoResult">الانتقال لمشاهدة النتيجة</a>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="tenders.html">المناقصات المتاحة</a>
-      <a href="tender-detail.html">تفاصيل المناقصة</a>
-      <a href="submit-offer.html">تقديم العرض</a>
-      <a href="track-status.html" class="active">متابعة حالة المناقصات</a>
-      <a href="tender-result.html">نتيجة المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="tenders.html" data-i18n-text="nav.availableTenders">المناقصات المتاحة</a>
+      <a href="tender-detail.html" data-i18n-text="tenderDetail.eyebrow">تفاصيل المناقصة</a>
+      <a href="submit-offer.html" data-i18n-text="nav.submitOffer">تقديم العرض</a>
+      <a href="track-status.html" class="active" data-i18n-text="nav.trackStatus">متابعة حالة المناقصات</a>
+      <a href="tender-result.html" data-i18n-text="nav.tenderResult">نتيجة المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -76,20 +76,20 @@
       const tbody = document.getElementById('quotes-tbody');
 
       if (!quotes.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">لم تقدّم أي عروض بعد</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">${t('trackStatus.noOffers')}</td></tr>`;
         return;
       }
 
       tbody.innerHTML = quotes.map(quote => `
         <tr>
-          <td data-label="اسم المناقصة">${escapeHtml(quote.rfq ? quote.rfq.title : ('مناقصة #' + quote.rfq_id))}</td>
-          <td data-label="حالة العرض">${quoteStatusBadge(quote.status)}</td>
-          <td data-label="تاريخ آخر تحديث">${new Date(quote.updated_at).toLocaleDateString('ar-EG')}</td>
-          <td data-label="الإجراء"><a href="tender-result.html?id=${quote.rfq_id}" class="btn-link-detail">عرض التفاصيل</a></td>
+          <td data-label="${t('dashboard.col.name')}">${escapeHtml(quote.rfq ? quote.rfq.title : (t('trackStatus.unknownTender') + quote.rfq_id))}</td>
+          <td data-label="${t('trackStatus.col.offerStatus')}">${quoteStatusBadge(quote.status)}</td>
+          <td data-label="${t('trackStatus.col.lastUpdate')}">${fmtDate(quote.updated_at)}</td>
+          <td data-label="${t('table.action')}"><a href="tender-result.html?id=${quote.rfq_id}" class="btn-link-detail">${t('trackStatus.viewDetails')}</a></td>
         </tr>
       `).join('');
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل حالة العروض');
+      showApiError(err.message || t('trackStatus.err.loadFailed'));
     }
   })();
 </script>

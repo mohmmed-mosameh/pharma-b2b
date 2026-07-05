@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تأكيد الرمز | PharmaLink</title>
+<title data-i18n-text="otp.title">تأكيد الرمز | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -20,7 +20,7 @@
       <img src="img/logo.png" alt="شعار PharmaLink">
     </a>
 
-    <h1 class="auth-title">تم إرسال الكود بنجاح، قم بإدخاله</h1>
+    <h1 class="auth-title" data-i18n-text="otp.heading">تم إرسال الكود بنجاح، قم بإدخاله</h1>
 
     <form id="otpForm" novalidate>
       <div class="otp-row">
@@ -30,9 +30,9 @@
         <input type="text" inputmode="numeric" maxlength="1" required>
       </div>
 
-      <p class="mb-4"><a href="#" id="resendCode">أعد ارسال الرمز؟</a></p>
+      <p class="mb-4"><a href="#" id="resendCode" data-i18n-text="common.resendCode">أعد ارسال الرمز؟</a></p>
 
-      <button type="submit" class="btn btn-pl w-100">إرسال</button>
+      <button type="submit" class="btn btn-pl w-100" data-i18n-text="common.submit">إرسال</button>
     </form>
   </div>
 </main>
@@ -60,20 +60,20 @@
     const otp = [...otpInputs].map(i => i.value).join('');
     const identifier = localStorage.getItem('reset_identifier');
 
-    if (otp.length < 4) { showApiError('أدخل الرمز كاملاً'); return; }
+    if (otp.length < 4) { showApiError(t('otp.err.incomplete')); return; }
 
     btn.disabled = true;
-    btn.textContent = 'جارٍ التحقق...';
+    btn.textContent = t('otp.verifyingBusy');
 
     try {
       await apiCall('POST', '/auth/verify-otp', { identifier, otp });
       localStorage.setItem('reset_otp', otp);
-      showApiSuccess('رمز التحقق صحيح!');
+      showApiSuccess(t('otp.verifiedOk'));
       setTimeout(() => { window.location.href = 'new-password.html'; }, 1200);
     } catch(err) {
-      showApiError(err.message || 'رمز غير صحيح أو منتهي الصلاحية');
+      showApiError(err.message || t('otp.err.invalid'));
       btn.disabled = false;
-      btn.textContent = 'إرسال';
+      btn.textContent = t('common.submit');
     }
   });
 
@@ -86,7 +86,7 @@
       const res = await apiCall('POST', '/auth/forgot-password', { identifier });
       showApiSuccess(res.message || 'تم إعادة الإرسال');
     } catch(err) {
-      showApiError('تعذّر إعادة الإرسال');
+      showApiError(t('otp.err.resendFailed'));
     }
   });
 </script>

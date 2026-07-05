@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المناقصات المتاحة | PharmaLink</title>
+<title data-i18n-text="tenders.title">المناقصات المتاحة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,42 +19,42 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">المناقصات المتاحة</p>
-      <h1 class="pl-page-title">تصفح المناقصات المتاحة واختر المناسبة لتقديم عرضك</h1>
+      <p class="pl-eyebrow" data-i18n-text="nav.availableTenders">المناقصات المتاحة</p>
+      <h1 class="pl-page-title" data-i18n-text="tenders.heading">تصفح المناقصات المتاحة واختر المناسبة لتقديم عرضك</h1>
 
       <div class="filter-row">
-        <input id="tender-search" type="search" class="form-control" style="max-width:260px" placeholder="ابحث باسم المناقصة...">
+        <input id="tender-search" type="search" class="form-control" style="max-width:260px" placeholder="ابحث باسم المناقصة..." data-i18n-placeholder="tenders.searchPlaceholder">
       </div>
 
-      <h2 class="h6 fw-bold mb-3">جدول المناقصات:</h2>
+      <h2 class="h6 fw-bold mb-3" data-i18n-text="tenders.tableTitle">جدول المناقصات:</h2>
       <div class="table-responsive">
         <table class="pl-table pl-table--cards">
           <thead>
             <tr>
-              <th>اسم المناقصة</th>
-              <th>عدد الأصناف</th>
-              <th>تاريخ الإغلاق</th>
-              <th>الإجراء</th>
+              <th data-i18n-text="dashboard.col.name">اسم المناقصة</th>
+              <th data-i18n-text="table.itemCount">عدد الأصناف</th>
+              <th data-i18n-text="table.closeDate">تاريخ الإغلاق</th>
+              <th data-i18n-text="table.action">الإجراء</th>
             </tr>
           </thead>
           <tbody id="rfq-tbody">
-            <tr><td colspan="4" class="text-center text-muted">جارٍ التحميل...</td></tr>
+            <tr><td colspan="4" class="text-center text-muted" data-i18n-text="common.loading">جارٍ التحميل...</td></tr>
           </tbody>
         </table>
-        <p id="no-results" class="text-muted text-center py-4 d-none">لا توجد مناقصات مطابقة لبحثك.</p>
+        <p id="no-results" class="text-muted text-center py-4 d-none" data-i18n-text="tenders.noResults">لا توجد مناقصات مطابقة لبحثك.</p>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="tenders.html" class="active">المناقصات المتاحة</a>
-      <a href="submit-offer.html">تقديم العرض</a>
-      <a href="track-status.html">متابعة حالة المناقصات</a>
-      <a href="tender-result.html">نتيجة المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="tenders.html" class="active" data-i18n-text="nav.availableTenders">المناقصات المتاحة</a>
+      <a href="submit-offer.html" data-i18n-text="nav.submitOffer">تقديم العرض</a>
+      <a href="track-status.html" data-i18n-text="nav.trackStatus">متابعة حالة المناقصات</a>
+      <a href="tender-result.html" data-i18n-text="nav.tenderResult">نتيجة المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -62,8 +62,8 @@
 
 <footer class="pl-footer">
   <div class="pl-footer-inner">
-    <div class="pl-brand"><img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;"></div>
-    <small>© 2026 PharmaLink — جميع الحقوق محفوظة</small>
+    <div class="pl-brand"><img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;" data-i18n-alt="index.logoAlt"></div>
+    <small data-i18n-text="index.footer">© 2026 PharmaLink — جميع الحقوق محفوظة</small>
   </div>
 </footer>
 
@@ -86,10 +86,10 @@
     document.getElementById('no-results').classList.add('d-none');
     tbody.innerHTML = list.map(rfq => `
       <tr>
-        <td data-label="اسم المناقصة">${escapeHtml(rfq.title)}</td>
-        <td data-label="عدد الأصناف">${(rfq.rfq_items || []).length}</td>
-        <td data-label="تاريخ الإغلاق">${new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG')}</td>
-        <td data-label="الإجراء"><a href="tender-detail.html?id=${rfq.id}" class="btn-link-detail">عرض التفاصيل <i class="bi bi-arrow-left"></i></a></td>
+        <td data-label="${t('dashboard.col.name')}">${escapeHtml(rfq.title)}</td>
+        <td data-label="${t('table.itemCount')}">${(rfq.rfq_items || []).length}</td>
+        <td data-label="${t('table.closeDate')}">${fmtDate(rfq.quotes_deadline_at)}</td>
+        <td data-label="${t('table.action')}"><a href="tender-detail.html?id=${rfq.id}" class="btn-link-detail">${t('tenders.viewDetails')} <i class="bi bi-arrow-left"></i></a></td>
       </tr>
     `).join('');
   }
@@ -105,7 +105,7 @@
       RFQS = res.data.data || [];
       renderRows(RFQS);
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل المناقصات');
+      showApiError(err.message || t('dashboard.err.loadFailed'));
     }
   })();
 </script>

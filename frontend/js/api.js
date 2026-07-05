@@ -167,17 +167,18 @@ async function apiDownloadFile(endpoint, filename) {
 /* ------------------------------------------------------------------ */
 /* مساعدات حالة المناقصة (Rfq.status) — مشتركة بين شاشات الصيدلية      */
 /* ------------------------------------------------------------------ */
-const RFQ_STATUS_LABELS = {
-    open: { label: 'مفتوحة', cls: 'badge-open' },
-    closed: { label: 'مغلقة', cls: 'badge-closed' },
-    pending_opening: { label: 'بانتظار فتح المظاريف', cls: 'badge-new' },
-    opened: { label: 'المظاريف مفتوحة', cls: 'badge-approved' },
-    awarded: { label: 'مُرسّاة', cls: 'badge-approved' }
+const RFQ_STATUS_CLASSES = {
+    open: 'badge-open',
+    closed: 'badge-closed',
+    pending_opening: 'badge-new',
+    opened: 'badge-approved',
+    awarded: 'badge-approved'
 };
 
 function rfqStatusBadge(status) {
-    const s = RFQ_STATUS_LABELS[status] || { label: status, cls: 'badge-new' };
-    return `<span class="badge-status ${s.cls}">${s.label}</span>`;
+    const cls = RFQ_STATUS_CLASSES[status] || 'badge-new';
+    const label = RFQ_STATUS_CLASSES[status] ? t('status.rfq.' + status) : status;
+    return `<span class="badge-status ${cls}">${label}</span>`;
 }
 
 /* الصفحة المناسبة لمتابعة المناقصة من لوحة الصيدلية حسب حالتها الحالية */
@@ -192,16 +193,17 @@ function rfqPharmacyActionUrl(rfq) {
     }
 }
 
-const QUOTE_STATUS_LABELS = {
-    submitted: { label: 'قيد التقييم', cls: 'badge-new' },
-    awarded: { label: 'فزت بالمناقصة 🏆', cls: 'badge-approved' },
-    rejected: { label: 'لم يتم الاختيار', cls: 'badge-closed' },
-    cancelled: { label: 'ملغى', cls: 'badge-closed' }
+const QUOTE_STATUS_CLASSES = {
+    submitted: 'badge-new',
+    awarded: 'badge-approved',
+    rejected: 'badge-closed',
+    cancelled: 'badge-closed'
 };
 
 function quoteStatusBadge(status) {
-    const s = QUOTE_STATUS_LABELS[status] || { label: status, cls: 'badge-new' };
-    return `<span class="badge-status ${s.cls}">${s.label}</span>`;
+    const cls = QUOTE_STATUS_CLASSES[status] || 'badge-new';
+    const label = QUOTE_STATUS_CLASSES[status] ? t('status.quote.' + status) : status;
+    return `<span class="badge-status ${cls}">${label}</span>`;
 }
 
 /* ------------------------------------------------------------------ */

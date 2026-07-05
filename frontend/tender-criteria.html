@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تحديد شروط ترسية المناقصة | PharmaLink</title>
+<title data-i18n-text="criteria.title">تحديد شروط ترسية المناقصة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -21,20 +21,20 @@
     <div class="pl-card">
 
       <div class="step-track">
-        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> إنشاء مناقصة</div>
+        <div class="step done"><span class="dot"><i class="bi bi-check-lg"></i></span> <span data-i18n-text="createTender.step1">إنشاء مناقصة</span></div>
         <div class="sep"></div>
-        <div class="step done"><span class="dot">2</span> تحديد شروط الترسية</div>
+        <div class="step done"><span class="dot">2</span> <span data-i18n-text="createTender.step2">تحديد شروط الترسية</span></div>
         <div class="sep"></div>
-        <div class="step"><span class="dot">3</span> مراجعة ونشر</div>
+        <div class="step"><span class="dot">3</span> <span data-i18n-text="createTender.step3">مراجعة ونشر</span></div>
       </div>
 
-      <h1 class="pl-page-title">تحديد شروط ترسية المناقصة</h1>
-      <p class="pl-page-sub">معايير التقييم: حدّد الوزن النسبي لكل معيار سيتم اختيار الفائز على أساسه</p>
+      <h1 class="pl-page-title" data-i18n-text="criteria.heading">تحديد شروط ترسية المناقصة</h1>
+      <p class="pl-page-sub" data-i18n-text="criteria.subtitle">معايير التقييم: حدّد الوزن النسبي لكل معيار سيتم اختيار الفائز على أساسه</p>
 
       <form id="criteriaForm">
         <div class="criteria-item">
           <div class="row-top">
-            <span class="label">أقل سعر</span>
+            <span class="label" data-i18n-text="criteria.lowestPrice">أقل سعر</span>
             <span class="pct"><span id="out1">50</span>%</span>
           </div>
           <input type="range" min="0" max="100" value="50" id="range1" oninput="out1.textContent=this.value; updateSum();">
@@ -42,7 +42,7 @@
 
         <div class="criteria-item">
           <div class="row-top">
-            <span class="label">أسرع مدة توريد</span>
+            <span class="label" data-i18n-text="criteria.fastestDelivery">أسرع مدة توريد</span>
             <span class="pct"><span id="out2">30</span>%</span>
           </div>
           <input type="range" min="0" max="100" value="30" id="range2" oninput="out2.textContent=this.value; updateSum();">
@@ -50,7 +50,7 @@
 
         <div class="criteria-item">
           <div class="row-top">
-            <span class="label">أعلى تقييم سابق للمورد</span>
+            <span class="label" data-i18n-text="criteria.highestRating">أعلى تقييم سابق للمورد</span>
             <span class="pct"><span id="out3">15</span>%</span>
           </div>
           <input type="range" min="0" max="100" value="15" id="range3" oninput="out3.textContent=this.value; updateSum();">
@@ -58,18 +58,18 @@
 
         <div class="criteria-item">
           <div class="row-top">
-            <span class="criteria-check"><i class="bi bi-check-circle-fill"></i> <span class="label">شركة معتمدة</span></span>
+            <span class="criteria-check"><i class="bi bi-check-circle-fill"></i> <span class="label" data-i18n-text="criteria.verifiedCompany">شركة معتمدة</span></span>
             <span class="pct"><span id="out4">5</span>%</span>
           </div>
           <input type="range" min="0" max="100" value="5" id="range4" oninput="out4.textContent=this.value; updateSum();">
         </div>
 
-        <p class="small mt-3">مجموع الأوزان الحالي: <strong id="weightSum">100</strong>% (يجب أن يساوي 100% بالضبط)</p>
-        <p class="text-muted small">* سيتم اختيار العرض الفائز بناءً على المعايير المحددة أعلاه</p>
+        <p class="small mt-3"><span data-i18n-text="criteria.weightSum">مجموع الأوزان الحالي:</span> <strong id="weightSum">100</strong><span data-i18n-text="criteria.weightSumHint">% (يجب أن يساوي 100% بالضبط)</span></p>
+        <p class="text-muted small" data-i18n-text="criteria.note">* سيتم اختيار العرض الفائز بناءً على المعايير المحددة أعلاه</p>
 
         <div class="d-flex justify-content-between mt-4">
-          <a href="create-tender.html" class="btn btn-pl-ghost">رجوع</a>
-          <button type="submit" class="btn btn-pl" id="publishCriteriaBtn">نشر المناقصة</button>
+          <a href="create-tender.html" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+          <button type="submit" class="btn btn-pl" id="publishCriteriaBtn" data-i18n-text="criteria.publish">نشر المناقصة</button>
         </div>
       </form>
 
@@ -77,18 +77,18 @@
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="dashboard.html">لوحة التحكم</a>
-      <a href="create-tender.html">إنشاء مناقصة</a>
-      <a href="tender-criteria.html" class="active">تحديد شروط ترسية المناقصة</a>
-      <a href="review-publish.html">مراجعة ونشر المناقصة</a>
-      <a href="offers-received.html">استلام العروض</a>
-      <a href="open-envelopes.html">فتح المظاريف</a>
-      <a href="award-tender.html">ترسية المناقصة</a>
-      <a href="tender-report.html">تقرير المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="dashboard.html" data-i18n-text="nav.dashboard">لوحة التحكم</a>
+      <a href="create-tender.html" data-i18n-text="nav.createTender">إنشاء مناقصة</a>
+      <a href="tender-criteria.html" class="active" data-i18n-text="sidebar.tenderCriteria">تحديد شروط ترسية المناقصة</a>
+      <a href="review-publish.html" data-i18n-text="nav.reviewPublish">مراجعة ونشر المناقصة</a>
+      <a href="offers-received.html" data-i18n-text="nav.offersReceived">استلام العروض</a>
+      <a href="open-envelopes.html" data-i18n-text="nav.openEnvelopes">فتح المظاريف</a>
+      <a href="award-tender.html" data-i18n-text="nav.awardTender">ترسية المناقصة</a>
+      <a href="tender-report.html" data-i18n-text="nav.tenderReport">تقرير المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 

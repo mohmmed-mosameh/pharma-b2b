@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تفاصيل المناقصة | PharmaLink</title>
+<title data-i18n-text="tenderDetail.title">تفاصيل المناقصة | PharmaLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -19,39 +19,39 @@
 
   <section class="pl-content">
     <div class="pl-card">
-      <p class="pl-eyebrow">تفاصيل المناقصة</p>
-      <h1 class="pl-page-title" id="v-title">جارٍ التحميل...</h1>
-      <p class="pl-page-sub">راجع الأصناف المطلوبة وموعد الإغلاق قبل تقديم عرضك</p>
+      <p class="pl-eyebrow" data-i18n-text="tenderDetail.eyebrow">تفاصيل المناقصة</p>
+      <h1 class="pl-page-title" id="v-title" data-i18n-text="tenderDetail.loading">جارٍ التحميل...</h1>
+      <p class="pl-page-sub" data-i18n-text="tenderDetail.subtitle">راجع الأصناف المطلوبة وموعد الإغلاق قبل تقديم عرضك</p>
 
-      <div class="kv-row"><span class="k">تاريخ إغلاق المناقصة:</span><span class="v" id="v-deadline">—</span></div>
-      <div class="kv-row"><span class="k">موعد فتح المظاريف:</span><span class="v" id="v-opening">—</span></div>
-      <div class="kv-row"><span class="k">أهم معايير الترسية:</span><span class="v" id="v-weights">—</span></div>
+      <div class="kv-row"><span class="k" data-i18n-text="tenderDetail.closeDate">تاريخ إغلاق المناقصة:</span><span class="v" id="v-deadline">—</span></div>
+      <div class="kv-row"><span class="k" data-i18n-text="tenderDetail.openDate">موعد فتح المظاريف:</span><span class="v" id="v-opening">—</span></div>
+      <div class="kv-row"><span class="k" data-i18n-text="tenderDetail.mainCriteria">أهم معايير الترسية:</span><span class="v" id="v-weights">—</span></div>
 
-      <h2 class="h6 fw-bold mt-4 mb-2">الأصناف المطلوبة:</h2>
+      <h2 class="h6 fw-bold mt-4 mb-2" data-i18n-text="tenderDetail.requiredItems">الأصناف المطلوبة:</h2>
       <div class="table-responsive">
         <table class="pl-table">
-          <thead><tr><th>الصنف</th><th>الكمية</th><th>ملاحظات</th></tr></thead>
+          <thead><tr><th data-i18n-text="tenderDetail.col.item">الصنف</th><th data-i18n-text="tenderDetail.col.qty">الكمية</th><th data-i18n-text="tenderDetail.col.notes">ملاحظات</th></tr></thead>
           <tbody id="items-tbody"></tbody>
         </table>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-2 mt-4">
-        <a href="tenders.html" class="btn btn-pl-ghost">رجوع</a>
-        <a href="submit-offer.html" id="submit-offer-link" class="btn btn-pl">تقديم العرض</a>
+        <a href="tenders.html" class="btn btn-pl-ghost" data-i18n-text="common.back">رجوع</a>
+        <a href="submit-offer.html" id="submit-offer-link" class="btn btn-pl" data-i18n-text="tenderDetail.submitOffer">تقديم العرض</a>
       </div>
     </div>
   </section>
 
   <aside class="pl-sidebar">
-    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink"></div>
+    <div class="sb-logo"><img src="img/logo.png" alt="شعار PharmaLink" data-i18n-alt="index.logoAlt"></div>
     <nav>
-      <a href="index.html">الرئيسية</a>
-      <a href="tenders.html">المناقصات المتاحة</a>
-      <a href="tender-detail.html" class="active">تفاصيل المناقصة</a>
-      <a href="submit-offer.html">تقديم العرض</a>
-      <a href="track-status.html">متابعة حالة المناقصات</a>
-      <a href="tender-result.html">نتيجة المناقصة</a>
-      <a href="#" class="logout-link">تسجيل الخروج</a>
+      <a href="index.html" data-i18n-text="nav.home">الرئيسية</a>
+      <a href="tenders.html" data-i18n-text="nav.availableTenders">المناقصات المتاحة</a>
+      <a href="tender-detail.html" class="active" data-i18n-text="tenderDetail.eyebrow">تفاصيل المناقصة</a>
+      <a href="submit-offer.html" data-i18n-text="nav.submitOffer">تقديم العرض</a>
+      <a href="track-status.html" data-i18n-text="nav.trackStatus">متابعة حالة المناقصات</a>
+      <a href="tender-result.html" data-i18n-text="nav.tenderResult">نتيجة المناقصة</a>
+      <a href="#" class="logout-link" data-i18n-text="common.logout">تسجيل الخروج</a>
     </nav>
   </aside>
 
@@ -59,8 +59,8 @@
 
 <footer class="pl-footer">
   <div class="pl-footer-inner">
-    <div class="pl-brand"><img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;"></div>
-    <small>© 2026 PharmaLink — جميع الحقوق محفوظة</small>
+    <div class="pl-brand"><img src="img/logo.png" alt="شعار PharmaLink" style="height:28px;" data-i18n-alt="index.logoAlt"></div>
+    <small data-i18n-text="index.footer">© 2026 PharmaLink — جميع الحقوق محفوظة</small>
   </div>
 </footer>
 
@@ -81,14 +81,18 @@
 
       localStorage.setItem('current_rfq_id', rfq.id);
       document.getElementById('v-title').textContent = rfq.title;
-      document.getElementById('v-deadline').textContent = new Date(rfq.quotes_deadline_at).toLocaleDateString('ar-EG');
-      document.getElementById('v-opening').textContent = new Date(rfq.opening_at).toLocaleDateString('ar-EG');
-      document.getElementById('v-weights').textContent =
-        `أقل سعر (${rfq.score_weight_price}%) — أسرع توريد (${rfq.score_weight_delivery}%) — تقييم سابق (${rfq.score_weight_rating}%) — شركة معتمدة (${rfq.score_weight_verified}%)`;
+      document.getElementById('v-deadline').textContent = fmtDate(rfq.quotes_deadline_at);
+      document.getElementById('v-opening').textContent = fmtDate(rfq.opening_at);
+      document.getElementById('v-weights').textContent = t('tenderDetail.weightsSummary', {
+        price: rfq.score_weight_price,
+        delivery: rfq.score_weight_delivery,
+        rating: rfq.score_weight_rating,
+        verified: rfq.score_weight_verified
+      });
 
       document.getElementById('items-tbody').innerHTML = (rfq.rfq_items || []).map(item => `
         <tr>
-          <td>${escapeHtml(item.product ? item.product.name : ('صنف #' + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
+          <td>${escapeHtml(item.product ? item.product.name : (t('tenderDetail.unknownItem') + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
           <td>${item.quantity}</td>
           <td>${item.notes ? escapeHtml(item.notes) : '—'}</td>
         </tr>
@@ -98,10 +102,10 @@
 
       if (rfq.status !== 'open') {
         document.getElementById('submit-offer-link').classList.add('disabled');
-        document.getElementById('submit-offer-link').textContent = 'انتهى وقت تقديم العروض';
+        document.getElementById('submit-offer-link').textContent = t('tenderDetail.submissionClosed');
       }
     } catch (err) {
-      showApiError(err.message || 'تعذّر تحميل تفاصيل المناقصة');
+      showApiError(err.message || t('tenderDetail.err.loadFailed'));
     }
   })();
 </script>
