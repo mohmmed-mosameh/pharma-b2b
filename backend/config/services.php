@@ -22,6 +22,12 @@ return [
         'key' => env('RESEND_API_KEY'),
     ],
 
+    'brevo' => [
+        'key'        => env('BREVO_API_KEY'),
+        'from_email' => env('BREVO_FROM_EMAIL'),
+        'from_name'  => env('BREVO_FROM_NAME', 'PharmaLink'),
+    ],
+
     'twilio' => [
         'sid'   => env('TWILIO_SID'),
         'token' => env('TWILIO_AUTH_TOKEN'),

@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Organization;
 use App\Models\PasswordResetOtp; // تأكد أن الموديل موجود لديك
-use App\Mail\PasswordResetOtpMail;
+use App\Services\BrevoMailService;
 use App\Services\SmsService;
 use App\Support\PhoneNumber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -164,7 +163,14 @@ class AuthController extends Controller
         ]);
 
         if ($field === 'email') {
-            Mail::to($identifier)->send(new PasswordResetOtpMail($otp));
+            try {
+                $html = view('emails.password-reset-otp', ['otp' => $otp])->render();
+                (new BrevoMailService())->send($identifier, 'رمز إعادة تعيين كلمة المرور - PharmaLink', $html);
+            } catch (\Throwable $e) {
+                Log::error('Failed to send password-reset email', ['identifier' => $identifier, 'error' => $e->getMessage()]);
+
+                return response()->json(['message' => 'تعذّر إرسال رمز التحقق إلى بريدك الإلكتروني، حاول لاحقاً.'], 500);
+            }
 
             return response()->json([
                 'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني.',
