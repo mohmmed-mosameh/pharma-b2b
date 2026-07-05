@@ -15,7 +15,9 @@ use Illuminate\Http\Request;
 Route::prefix('auth')->group(function () {
     
     // مسارات لا تحتاج تسجيل دخول (للزوار)
-    Route::post('register',        [AuthController::class, 'register']);
+    Route::post('register',                [AuthController::class, 'register']);
+    Route::post('verify-registration',     [AuthController::class, 'verifyRegistration']);
+    Route::post('resend-registration-otp', [AuthController::class, 'resendRegistrationOtp']);
     Route::post('login',           [AuthController::class, 'login']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('verify-otp',      [AuthController::class, 'verifyOtp']);

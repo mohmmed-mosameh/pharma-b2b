@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Organization;
 use App\Models\PasswordResetOtp; // تأكد أن الموديل موجود لديك
+use App\Models\PendingRegistration;
 use App\Services\BrevoMailService;
 use App\Services\SmsService;
 use App\Support\PhoneNumber;
@@ -53,41 +54,126 @@ class AuthController extends Controller
             'phone'                => 'nullable|string|max:20|unique:users',
             'password'             => 'required|string|min:8',
             'role'                 => 'required|in:admin,pharmacy,supplier',
-            'device_name'          => 'nullable|string'
         ]);
 
-        // حماية العملية بقاعدة البيانات (لكي لا ينشئ مستخدم بدون مؤسسة إذا حدث خطأ)
-        $result = DB::transaction(function () use ($validated) {
-            
-            // إنشاء المؤسسة (الصيدلية أو المورد)
+        // لا يُنشأ الحساب فعليًا الآن — نخزّن بياناته مؤقتًا وننشئه فقط بعد
+        // تأكيد رمز التحقق المُرسَل للإيميل (انظر verifyRegistration)
+        $otp = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+
+        PendingRegistration::where('email', $validated['email'])->delete();
+
+        PendingRegistration::create([
+            'email' => $validated['email'],
+            'payload' => [
+                'organization_name'    => $validated['organization_name'],
+                'organization_address' => $validated['organization_address'] ?? null,
+                'organization_phone'   => $validated['organization_phone'] ?? null,
+                'name'                 => $validated['name'],
+                'email'                => $validated['email'],
+                'phone'                => $validated['phone'] ?? null,
+                'password'             => Hash::make($validated['password']),
+                'role'                 => $validated['role'],
+            ],
+            'otp'        => $otp,
+            'expires_at' => now()->addMinutes(10),
+        ]);
+
+        if (! $this->sendRegistrationOtpEmail($validated['email'], $otp)) {
+            return response()->json(['message' => 'تعذّر إرسال رمز التحقق إلى بريدك الإلكتروني، حاول لاحقاً.'], 500);
+        }
+
+        return response()->json([
+            'message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني، أدخله لإكمال إنشاء الحساب.',
+            'email'   => $validated['email'],
+        ]);
+    }
+
+    /** * 1ب. تأكيد رمز التسجيل وإنشاء الحساب فعليًا
+     */
+    public function verifyRegistration(Request $request)
+    {
+        $v = $request->validate([
+            'email' => 'required|string|email',
+            'otp'   => 'required|string|size:4',
+        ]);
+
+        $pending = PendingRegistration::where('email', $v['email'])->latest()->first();
+
+        if (! $pending || $pending->otp !== $v['otp'] || ! $pending->isValid()) {
+            return response()->json(['message' => 'رمز التحقق غير صحيح أو منتهي الصلاحية.'], 400);
+        }
+
+        $payload = $pending->payload;
+
+        $result = DB::transaction(function () use ($payload) {
             $org = Organization::create([
-                'name'        => $validated['organization_name'],
-                'type'        => $validated['role'] === 'pharmacy' ? 'pharmacy' : 'supplier',
-                'address'     => $validated['organization_address'] ?? null,
-                'phone'       => $validated['organization_phone'] ?? null,
+                'name'        => $payload['organization_name'],
+                'type'        => $payload['role'] === 'pharmacy' ? 'pharmacy' : 'supplier',
+                'address'     => $payload['organization_address'] ?? null,
+                'phone'       => $payload['organization_phone'] ?? null,
                 'is_verified' => false,
             ]);
 
-            // إنشاء المستخدم وربطه بالمؤسسة وتشفير الباسورد
             $user = User::create([
                 'organization_id' => $org->id,
-                'name'            => $validated['name'],
-                'email'           => $validated['email'],
-                'phone'           => $validated['phone'] ?? null,
-                'password'        => Hash::make($validated['password']),
-                'role'            => $validated['role'],
+                'name'            => $payload['name'],
+                'email'           => $payload['email'],
+                'phone'           => $payload['phone'] ?? null,
+                'password'        => $payload['password'], // مُشفّرة مسبقًا وقت التسجيل
+                'role'            => $payload['role'],
             ]);
 
-            $token = $user->createToken($validated['device_name'] ?? 'web')->plainTextToken;
+            $token = $user->createToken('web')->plainTextToken;
+
             return compact('user', 'token');
         });
 
+        $pending->delete();
+
         return response()->json([
-            'message'    => 'تم إنشاء الحساب بنجاح. حسابك قيد المراجعة.',
+            'message'    => 'تم إنشاء الحساب بنجاح.',
             'token'      => $result['token'],
             'token_type' => 'Bearer',
             'user'       => $result['user']->load('organization'),
         ], 201);
+    }
+
+    /** * 1ج. إعادة إرسال رمز تأكيد التسجيل
+     */
+    public function resendRegistrationOtp(Request $request)
+    {
+        $v = $request->validate([
+            'email' => 'required|string|email',
+        ]);
+
+        $pending = PendingRegistration::where('email', $v['email'])->latest()->first();
+
+        if (! $pending) {
+            return response()->json(['message' => 'إذا كان طلب التسجيل هذا موجودًا، تم إعادة إرسال الرمز.']);
+        }
+
+        $otp = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+        $pending->update(['otp' => $otp, 'expires_at' => now()->addMinutes(10)]);
+
+        if (! $this->sendRegistrationOtpEmail($v['email'], $otp)) {
+            return response()->json(['message' => 'تعذّر إرسال رمز التحقق، حاول لاحقاً.'], 500);
+        }
+
+        return response()->json(['message' => 'تم إعادة إرسال رمز التحقق.']);
+    }
+
+    private function sendRegistrationOtpEmail(string $email, string $otp): bool
+    {
+        try {
+            $html = view('emails.registration-otp', ['otp' => $otp])->render();
+            (new BrevoMailService())->send($email, 'رمز تأكيد إنشاء الحساب - PharmaLink', $html);
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('Failed to send registration OTP email', ['email' => $email, 'error' => $e->getMessage()]);
+
+            return false;
+        }
     }
 
     /** * 2. دالة تسجيل الدخول (تقبل الإيميل أو رقم الهاتف)

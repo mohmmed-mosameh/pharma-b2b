@@ -195,11 +195,9 @@
         password_confirmation,
         role
       });
-      localStorage.setItem('pharma_token', res.token);
-      localStorage.setItem('pharma_user',  JSON.stringify(res.user));
-      showApiSuccess('تم إنشاء الحساب بنجاح!');
-      const nextPage = res.user.role === 'supplier' ? 'tenders.html' : 'dashboard.html';
-      setTimeout(() => { window.location.href = nextPage; }, 1500);
+      localStorage.setItem('pending_registration_email', email);
+      showApiSuccess(res.message || 'تم إرسال رمز التحقق إلى بريدك الإلكتروني');
+      setTimeout(() => { window.location.href = 'verify-registration.html'; }, 1200);
     } catch(err) {
       showApiError(err.message || 'فشل إنشاء الحساب، تحقق من البيانات');
       btn.disabled = false;
