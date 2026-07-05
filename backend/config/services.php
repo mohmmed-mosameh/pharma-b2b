@@ -28,12 +28,6 @@ return [
         'from_name'  => env('BREVO_FROM_NAME', 'PharmaLink'),
     ],
 
-    'twilio' => [
-        'sid'   => env('TWILIO_SID'),
-        'token' => env('TWILIO_AUTH_TOKEN'),
-        'from'  => env('TWILIO_FROM_NUMBER'),
-    ],
-
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
