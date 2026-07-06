@@ -733,13 +733,21 @@ html[data-theme="dark"] .form-select{
 }
 html[data-theme="dark"] .form-control::placeholder{ color:var(--muted); }
 /* Bootstrap يرسم رقعة خلف تسمية form-floating العائمة (لقصّها فوق حد الحقل)
-   بخلفية ثابتة var(--bs-body-bg) — بيضاء دومًا لأننا لا نلمس متغيرات
-   Bootstrap نفسها؛ نعيد تلوينها هون لتطابق خلفية الحقل الداكنة */
+   بخلفية ثابتة var(--bs-body-bg) ونص بلون var(--bs-body-color) — كلاهما
+   ثابت أبيض/غامق دومًا لأننا لا نلمس متغيرات Bootstrap نفسها. نجعلها
+   رقعة غامقة (شبه سوداء) بنص أبيض واضح بدل الصندوق الأبيض الأصلي */
 html[data-theme="dark"] .form-floating > .form-control:focus ~ label::after,
 html[data-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
 html[data-theme="dark"] .form-floating > .form-control-plaintext ~ label::after,
 html[data-theme="dark"] .form-floating > .form-select ~ label::after{
-  background-color:var(--white);
+  background-color:var(--bg-soft);
+}
+html[data-theme="dark"] .form-floating > .form-control:focus ~ label,
+html[data-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label,
+html[data-theme="dark"] .form-floating > .form-control-plaintext ~ label,
+html[data-theme="dark"] .form-floating > .form-control:-webkit-autofill ~ label,
+html[data-theme="dark"] .form-floating > .form-select ~ label{
+  color:var(--text);
 }
 html[data-theme="dark"] .form-select{
   background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23EDEDF0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
