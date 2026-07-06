@@ -14,6 +14,7 @@ function setTheme(theme) {
   localStorage.setItem('pharma_theme', theme);
   applyTheme();
   updateThemeToggles();
+  syncLogos();
 }
 
 function toggleTheme() {
@@ -52,7 +53,20 @@ function wireThemeToggles() {
   updateThemeToggles();
 }
 
+/* استبدال شعار PharmaLink (نصّه غامق ثابت) بنسخة الوضع الداكن عند اللزوم.
+   تُستدعى عند التحميل، عند كل تبديل، وأيضًا من initMobileNav() في
+   script.js بعد حقن الشعار ديناميكيًا بصفحات الشريط الجانبي. */
+function syncLogos() {
+  var dark = getTheme() === 'dark';
+  document.querySelectorAll('img[src$="img/logo.png"], img[src$="img/logo_darkmode.png"]').forEach(function (img) {
+    img.src = dark ? 'img/logo_darkmode.png' : 'img/logo.png';
+  });
+}
+
 /* تطبيق فوري ومتزامن أثناء تحليل <head> — قبل أي رسم للصفحة */
 applyTheme();
 
-document.addEventListener('DOMContentLoaded', wireThemeToggles);
+document.addEventListener('DOMContentLoaded', function () {
+  wireThemeToggles();
+  syncLogos();
+});

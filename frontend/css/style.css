@@ -725,12 +725,6 @@ html[data-theme="dark"] .hero-media .shadow-ellipse{
   background:rgba(0,0,0,.5);
 }
 
-/* شعار PharmaLink نصّه غامق ثابت — يحتاج خلفية فاتحة صغيرة خلفه ليبقى مقروءًا */
-html[data-theme="dark"] .pl-brand img,
-html[data-theme="dark"] .sb-logo img{
-  background:#fff; border-radius:8px; padding:3px 8px;
-}
-
 html[data-theme="dark"] .form-control,
 html[data-theme="dark"] .form-select{
   background-color:var(--white);

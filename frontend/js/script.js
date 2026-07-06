@@ -276,6 +276,8 @@ function initMobileNav() {
       '</div>' +
     '</nav>';
 
+  if (typeof syncLogos === 'function') syncLogos();
+
   var menuItemsHtml = menuLinks.map(function (link) {
     return '<li class="nav-item"><a class="nav-link js-nav-link" href="' + link[0] + '">' + escapeHtml(t(link[1])) + '</a></li>';
   }).join('');
