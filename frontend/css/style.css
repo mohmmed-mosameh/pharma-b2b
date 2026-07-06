@@ -734,13 +734,14 @@ html[data-theme="dark"] .form-select{
 html[data-theme="dark"] .form-control::placeholder{ color:var(--muted); }
 /* Bootstrap يرسم رقعة خلف تسمية form-floating العائمة (لقصّها فوق حد الحقل)
    بخلفية ثابتة var(--bs-body-bg) ونص بلون var(--bs-body-color) — كلاهما
-   ثابت أبيض/غامق دومًا لأننا لا نلمس متغيرات Bootstrap نفسها. نجعلها
-   رقعة غامقة (شبه سوداء) بنص أبيض واضح بدل الصندوق الأبيض الأصلي */
+   ثابت أبيض/غامق دومًا لأننا لا نلمس متغيرات Bootstrap نفسها. نجعل خلفية
+   الرقعة نفس خلفية الحقل/البطاقة (var(--white) بالدارك) عشان تندمج معه
+   بدل ما تبيّن كصندوق منفصل، مع نص واضح بلون var(--text) */
 html[data-theme="dark"] .form-floating > .form-control:focus ~ label::after,
 html[data-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
 html[data-theme="dark"] .form-floating > .form-control-plaintext ~ label::after,
 html[data-theme="dark"] .form-floating > .form-select ~ label::after{
-  background-color:var(--bg-soft);
+  background-color:var(--white);
 }
 html[data-theme="dark"] .form-floating > .form-control:focus ~ label,
 html[data-theme="dark"] .form-floating > .form-control:not(:placeholder-shown) ~ label,
