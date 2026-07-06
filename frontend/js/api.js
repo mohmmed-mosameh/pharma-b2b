@@ -36,7 +36,7 @@ async function apiCall(method, endpoint, data = null) {
             if (isAuthEndpoint) {
                 throw new Error(json.message || 'بيانات الدخول غير صحيحة');
             }
-            localStorage.clear();
+            clearSession();
             window.location.href = 'login.html';
             return null;
         }
@@ -60,6 +60,15 @@ async function apiCall(method, endpoint, data = null) {
 function getUser()  { return JSON.parse(localStorage.getItem('pharma_user') || 'null'); }
 function getToken() { return localStorage.getItem('pharma_token'); }
 
+/* يمسح بيانات الجلسة فقط (التوكن، المستخدم، آخر مناقصة) — لا يلمس
+   تفضيلات الواجهة (pharma_theme، pharma_lang) كي تبقى كما اختارها
+   المستخدم بعد تسجيل الخروج أو انتهاء الجلسة */
+function clearSession() {
+    localStorage.removeItem('pharma_token');
+    localStorage.removeItem('pharma_user');
+    localStorage.removeItem('current_rfq_id');
+}
+
 function requireAuth() {
     if (!getToken()) {
         window.location.href = 'login.html';
@@ -81,7 +90,7 @@ function requireRole(role) {
 
 function logout() {
     apiCall('POST', '/auth/logout').catch(() => {}).finally(() => {
-        localStorage.clear();
+        clearSession();
         window.location.href = 'login.html';
     });
 }
