@@ -27,5 +27,12 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('auth', function ($request) {
             return Limit::perMinute(5)->by($request->ip());
         });
+
+        // اسم المحدّد العام "api" الذي يفعّله throttleApi() بـ bootstrap/app.php
+        // على كل مسارات routes/api.php — يجب تعريفه صراحة وإلا ترمي كل
+        // الطلبات استثناء "Rate limiter [api] is not defined" (خطأ 500).
+        RateLimiter::for('api', function ($request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
     }
 }
