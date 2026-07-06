@@ -140,16 +140,10 @@ class OrderController extends Controller
      * Only the supplier fulfilling this order may update its status.
      * Allowed transitions are enforced inside UpdateOrderStatusRequest.
      */
-    public function updateStatus(Request $request, $orderId) // نستخدم $orderId بدلاً من Order $order لتجنب المشاكل
+    public function updateStatus(UpdateOrderStatusRequest $request, Order $order): JsonResponse
     {
-        $order = \App\Models\Order::find($orderId);
-
-        if (!$order) {
-            return response()->json(['message' => 'الطلب غير موجود'], 404);
-        }
-
         $order->update([
-            'status' => $request->status,
+            'status' => $request->validated()['status'],
         ]);
 
         return response()->json(['message' => 'تم تحديث الحالة بنجاح', 'order' => $order]);

@@ -241,19 +241,34 @@ class RfqController extends Controller
      */
     public function award(AwardRfqRequest $request, Rfq $rfq): JsonResponse
     {
-        $winningQuote = Quote::query()
-            ->where('id', $request->validated()['quote_id'])
-            ->with('quoteItems')
-            ->lockForUpdate()
-            ->firstOrFail();
+        // القفل والتحقق النهائي من الحالة يجب أن يصيرا داخل نفس الـ
+        // transaction اللي بتصير فيها الكتابة، وإلا فقفل lockForUpdate()
+        // بيُطلَق فورًا (autocommit) قبل ما توصل الكتابة الفعلية، وطلبين
+        // ترسية متزامنين (بعرضين مختلفين) بيقدروا الاثنين يعدّوا الفحص
+        // ويرسّيا نفس المناقصة بنفس اللحظة (سباق حقيقي وليس نظريًا).
+        $purchaseOrder = DB::transaction(function () use ($request, $rfq) {
+            /** @var Rfq $lockedRfq */
+            $lockedRfq = Rfq::query()->whereKey($rfq->id)->lockForUpdate()->firstOrFail();
 
-        abort_unless(
-            $winningQuote->opened_at !== null,
-            422,
-            'لا يمكن الترسية على عرض لم يُفتح مظروفه بعد.'
-        );
+            abort_unless(
+                in_array($lockedRfq->status, ['open', 'opened', 'pending_opening'], true),
+                422,
+                'هذه المناقصة تمت ترسيتها بالفعل أو لم تعد قابلة للترسية.'
+            );
 
-        $purchaseOrder = DB::transaction(function () use ($rfq, $winningQuote) {
+            $winningQuote = Quote::query()
+                ->where('id', $request->validated()['quote_id'])
+                ->where('rfq_id', $lockedRfq->id)
+                ->with('quoteItems')
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            abort_unless(
+                $winningQuote->opened_at !== null,
+                422,
+                'لا يمكن الترسية على عرض لم يُفتح مظروفه بعد.'
+            );
+
             // يُحسب الإجمالي من السعر الصافي بعد الخصم (net_unit_price)
             // وليس unit_price الخام، حتى يتطابق المبلغ النهائي في أمر
             // الشراء مع السعر الفعلي الذي رأته الصيدلية في شاشة فتح
@@ -268,7 +283,7 @@ class RfqController extends Controller
             );
 
             $purchaseOrder = PurchaseOrder::create([
-                'rfq_id' => $rfq->id,
+                'rfq_id' => $lockedRfq->id,
                 'quote_id' => $winningQuote->id,
                 'supplier_id' => $winningQuote->supplier_id,
                 'total_amount' => $totalAmount,
@@ -278,12 +293,12 @@ class RfqController extends Controller
             $winningQuote->update(['status' => 'awarded']);
 
             Quote::query()
-                ->where('rfq_id', $rfq->id)
+                ->where('rfq_id', $lockedRfq->id)
                 ->where('id', '!=', $winningQuote->id)
                 ->where('status', 'submitted')
                 ->update(['status' => 'rejected']);
 
-            $rfq->update(['status' => 'awarded']);
+            $lockedRfq->update(['status' => 'awarded']);
 
             return $purchaseOrder;
         });

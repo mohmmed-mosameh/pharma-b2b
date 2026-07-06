@@ -19,7 +19,14 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],   // في production: ضع domain الفرونت فقط
+    // مقصورة على دومين الفرونت الفعلي (نفس متغيّر FRONTEND_URL المستخدم
+    // أصلًا لروابط تحويل OAuth) + عناوين التطوير المحلي فقط — لا فتح عام
+    'allowed_origins' => array_filter([
+        env('FRONTEND_URL', 'https://pharma-b2b-two.vercel.app'),
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'http://localhost:3000',
+    ]),
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +36,8 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => true,
+    // المصادقة تتم عبر Bearer token (Sanctum) وليس عبر كوكيز، فلا داعي
+    // لكوكيز عابرة للنطاقات هنا
+    'supports_credentials' => false,
 
 ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\Quote;
 use App\Models\Rfq;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +26,10 @@ class StoreQuoteRequest extends FormRequest
         /** @var Rfq $rfq */
         $rfq = $this->route('rfq');
 
-        return $rfq->status === 'open';
+        // فحص الحالة وحده غير كافٍ: تحويل "open" إلى "closed" يعتمد على
+        // مهمة مجدولة كل دقيقة (CloseExpiredRfqs)، فيبقى هامش حتى دقيقة
+        // (أو أكثر لو توقّفت المهمة) يقدر المورد يقدّم عرضًا بعده فعليًا
+        return $rfq->status === 'open' && now()->lt($rfq->quotes_deadline_at);
     }
 
     /**
@@ -59,6 +63,20 @@ class StoreQuoteRequest extends FormRequest
         $validator->after(function (ValidatorContract $validator) {
             /** @var Rfq $rfq */
             $rfq = $this->route('rfq');
+
+            $alreadyQuoted = Quote::query()
+                ->where('rfq_id', $rfq->id)
+                ->where('supplier_id', $this->user()->organization_id)
+                ->exists();
+
+            if ($alreadyQuoted) {
+                $validator->errors()->add(
+                    'items',
+                    'لقد قدّمت عرضًا على هذه المناقصة مسبقًا، لا يمكن تقديم أكثر من عرض واحد.'
+                );
+
+                return;
+            }
 
             $requiredItemIds = $rfq->rfqItems()->pluck('id')->sort()->values();
 

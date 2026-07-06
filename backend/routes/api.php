@@ -14,14 +14,17 @@ use Illuminate\Http\Request;
 // وضعناها داخل مجموعة 'auth' للترتيب، الرابط سيكون مثلاً: /api/auth/login
 Route::prefix('auth')->group(function () {
     
-    // مسارات لا تحتاج تسجيل دخول (للزوار)
-    Route::post('register',                [AuthController::class, 'register']);
-    Route::post('verify-registration',     [AuthController::class, 'verifyRegistration']);
-    Route::post('resend-registration-otp', [AuthController::class, 'resendRegistrationOtp']);
-    Route::post('login',           [AuthController::class, 'login']);
-    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('verify-otp',      [AuthController::class, 'verifyOtp']);
-    Route::post('reset-password',  [AuthController::class, 'resetPassword']);
+    // مسارات لا تحتاج تسجيل دخول (للزوار) — محدودة بمعدل صارم (5/دقيقة لكل IP)
+    // لأنها الهدف المعتاد لهجمات تخمين OTP/كلمة المرور أو إغراق الإيميل
+    Route::middleware('throttle:auth')->group(function () {
+        Route::post('register',                [AuthController::class, 'register']);
+        Route::post('verify-registration',     [AuthController::class, 'verifyRegistration']);
+        Route::post('resend-registration-otp', [AuthController::class, 'resendRegistrationOtp']);
+        Route::post('login',           [AuthController::class, 'login']);
+        Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+        Route::post('verify-otp',      [AuthController::class, 'verifyOtp']);
+        Route::post('reset-password',  [AuthController::class, 'resetPassword']);
+    });
 
     // تسجيل الدخول عبر جوجل/فيسبوك (تحويل المتصفح كاملاً، وليس عبر fetch)
     Route::get('google/redirect',   [AuthController::class, 'googleRedirect']);

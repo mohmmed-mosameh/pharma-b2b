@@ -186,7 +186,7 @@ const RFQ_STATUS_CLASSES = {
 
 function rfqStatusBadge(status) {
     const cls = RFQ_STATUS_CLASSES[status] || 'badge-new';
-    const label = RFQ_STATUS_CLASSES[status] ? t('status.rfq.' + status) : status;
+    const label = RFQ_STATUS_CLASSES[status] ? t('status.rfq.' + status) : escapeHtml(status);
     return `<span class="badge-status ${cls}">${label}</span>`;
 }
 
@@ -211,7 +211,7 @@ const QUOTE_STATUS_CLASSES = {
 
 function quoteStatusBadge(status) {
     const cls = QUOTE_STATUS_CLASSES[status] || 'badge-new';
-    const label = QUOTE_STATUS_CLASSES[status] ? t('status.quote.' + status) : status;
+    const label = QUOTE_STATUS_CLASSES[status] ? t('status.quote.' + status) : escapeHtml(status);
     return `<span class="badge-status ${cls}">${label}</span>`;
 }
 

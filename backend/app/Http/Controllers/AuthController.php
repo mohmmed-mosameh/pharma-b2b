@@ -60,7 +60,9 @@ class AuthController extends Controller
             'email'                => 'required|string|email|max:255|unique:users',
             'phone'                => 'nullable|string|max:20|unique:users',
             'password'             => 'required|string|min:8',
-            'role'                 => 'required|in:admin,pharmacy,supplier',
+            // "admin" مستثنى عمدًا: هذا مسار تسجيل ذاتي عام غير موثّق،
+            // لا يجوز أن يسمح لأي زائر بإنشاء حساب مدير من نفسه
+            'role'                 => 'required|in:pharmacy,supplier',
         ]);
 
         // لا يُنشأ الحساب فعليًا الآن — نخزّن بياناته مؤقتًا وننشئه فقط بعد
