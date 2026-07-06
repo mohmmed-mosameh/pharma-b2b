@@ -30,7 +30,7 @@
 
       <h2 class="h6 fw-bold mt-4 mb-2" data-i18n-text="tenderDetail.requiredItems">الأصناف المطلوبة:</h2>
       <div class="table-responsive">
-        <table class="pl-table">
+        <table class="pl-table pl-table--cards">
           <thead><tr><th data-i18n-text="tenderDetail.col.item">الصنف</th><th data-i18n-text="tenderDetail.col.qty">الكمية</th><th data-i18n-text="tenderDetail.col.notes">ملاحظات</th></tr></thead>
           <tbody id="items-tbody"></tbody>
         </table>
@@ -93,9 +93,9 @@
 
       document.getElementById('items-tbody').innerHTML = (rfq.rfq_items || []).map(item => `
         <tr>
-          <td>${escapeHtml(item.product ? item.product.name : (t('tenderDetail.unknownItem') + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
-          <td>${item.quantity}</td>
-          <td>${item.notes ? escapeHtml(item.notes) : '—'}</td>
+          <td data-label="${t('tenderDetail.col.item')}">${escapeHtml(item.product ? item.product.name : (t('tenderDetail.unknownItem') + item.product_id))}${item.product && item.product.category ? ' <span class="text-muted small">(' + escapeHtml(item.product.category) + ')</span>' : ''}</td>
+          <td data-label="${t('tenderDetail.col.qty')}">${item.quantity}</td>
+          <td data-label="${t('tenderDetail.col.notes')}">${item.notes ? escapeHtml(item.notes) : '—'}</td>
         </tr>
       `).join('');
 

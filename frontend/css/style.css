@@ -412,6 +412,25 @@ button{ font-family:inherit; }
   .hero{ flex-direction:column; text-align:center; padding-top:32px; }
   .hero-media{ flex:0 0 auto; width:80%; max-width:360px; }
   .hero-copy p{ text-align:start; }
+
+  /* زر الهامبرغر أصغر ليتناسب مع حجم أيقونات الشريط الأخرى (40px) */
+  .pl-navbar .navbar-toggler{
+    padding:.3rem .55rem;
+    font-size:1rem;
+    border-radius:8px;
+  }
+  .pl-navbar .navbar-toggler-icon{ width:1.2em; height:1.2em; }
+
+  /* صف أيقونات اللغة/الدارك/البحث/الحساب: سطر مستقل ثابت دائمًا (لا يعتمد
+     على التفاف عرضي عرضي) بخط فاصل خفيف وتوزيع مركزي، بدل ما يبين ملتصق
+     بشكل عشوائي تحت الشعار وزر القائمة */
+  .pl-navbar-actions{
+    flex-basis:100%;
+    justify-content:center;
+    padding-top:.7rem;
+    margin-top:.5rem;
+    border-top:1px solid var(--line);
+  }
 }
 
 /* قائمة نتائج البحث المنسدلة: على الموبايل تنمو نحو داخل الشاشة كي لا تُقصّ عند حافة العرض */
@@ -438,6 +457,10 @@ button{ font-family:inherit; }
   .pl-page-sub{ font-size:.9rem; }
   .welcome-banner{ padding:1.4rem 1.2rem; }
   .welcome-banner h1{ font-size:1.25rem; }
+
+  /* عنوان وقيمة صف المعلومات (تاريخ الإغلاق، موعد الفتح...) على سطر
+     منفصل بدل جنب بعض، لأن الاثنين معًا ما بينضبطوا بعرض ضيّق */
+  .kv-row{ flex-direction:column; align-items:flex-start; gap:.25rem; }
 
   /* أزرار صفوف الإجراءات أسفل البطاقات تصير بعرض كامل */
   .pl-card > .d-flex.justify-content-between > .btn,
