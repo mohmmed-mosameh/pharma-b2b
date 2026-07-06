@@ -17,6 +17,8 @@ var I18N = {
     'common.menu': 'القائمة',
     'common.openNav': 'فتح قائمة التنقل',
     'common.langToggle': 'English',
+    'common.themeToggleDark': 'الوضع الداكن',
+    'common.themeToggleLight': 'الوضع الفاتح',
 
     'nav.home': 'الرئيسية',
     'nav.dashboard': 'لوحة التحكم',
@@ -409,6 +411,8 @@ var I18N = {
     'common.menu': 'Menu',
     'common.openNav': 'Open navigation menu',
     'common.langToggle': 'العربية',
+    'common.themeToggleDark': 'Dark mode',
+    'common.themeToggleLight': 'Light mode',
 
     'nav.home': 'Home',
     'nav.dashboard': 'Dashboard',

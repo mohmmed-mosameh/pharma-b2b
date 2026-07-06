@@ -13,10 +13,35 @@
   --line:         #E4E4E9;
   --text:         #0C0B0B;
   --muted:        #706E6E;
+  --danger:       #dc3545;
+  --danger-soft:  rgba(220,53,69,.1);
   --radius:       14px;
   --radius-lg:    24px;
   --shadow-card:  0 4px 18px rgba(0,0,0,.06);
   --shadow-pop:   0 10px 30px rgba(0,0,0,.10);
+}
+
+/* =========================================================
+   الوضع الداكن — إعادة تعريف نفس المتغيرات أعلاه فقط.
+   أي سطح/نص يستخدم var(--white|--text|--muted|...) يتحول تلقائيًا؛
+   الأزرار الملوّنة الصلبة (بخلفية علامة تجارية ثابتة + نص أبيض) لا
+   تحتاج تغييرًا لأنها أصلًا لا تعتمد على --white/--text.
+   ========================================================= */
+html[data-theme="dark"]{
+  --bg-soft:      #14161A;
+  --white:        #1E2127;
+  --line:         #2C303A;
+  --text:         #EDEDF0;
+  --muted:        #A8A7AD;
+  --green:        #7FB87B;
+  --green-dark:   #9CCF98;
+  --green-soft:   rgba(127,184,123,.16);
+  --purple:       #9E86FF;
+  --purple-soft:  rgba(158,134,255,.18);
+  --danger:       #ff6b6b;
+  --danger-soft:  rgba(255,107,107,.16);
+  --shadow-card:  0 4px 18px rgba(0,0,0,.45);
+  --shadow-pop:   0 10px 30px rgba(0,0,0,.55);
 }
 
 *{ box-sizing:border-box; }
@@ -54,7 +79,7 @@ button{ font-family:inherit; }
    NAVBAR
    ========================================================= */
 .pl-navbar{
-  background:#fff;
+  background:var(--white);
   border-radius:var(--radius-lg);
   box-shadow:0 0 7px rgba(0,0,0,.10);
   margin:22px auto 0;
@@ -141,7 +166,7 @@ button{ font-family:inherit; }
 }
 .hero-copy p{
   font-size:1.05rem;
-  color:#171616;
+  color:var(--text);
   line-height:2;
   margin-bottom:0;
 }
@@ -160,7 +185,7 @@ button{ font-family:inherit; }
 .btn-pl:hover{ background:var(--green-dark); color:#fff; transform:translateY(-1px); }
 .btn-pl:active{ transform:translateY(0); }
 .btn-pl-outline{
-  background:#fff; color:var(--green);
+  background:var(--white); color:var(--green);
   border:2px solid var(--green);
   border-radius:999px; padding:.75rem 2.2rem; font-weight:700;
   transition:.2s;
@@ -183,7 +208,7 @@ button{ font-family:inherit; }
 .pl-content{ flex:1; min-width:0; }
 .pl-sidebar{
   flex:0 0 300px;
-  background:#fff;
+  background:var(--white);
   border-radius:var(--radius-lg);
   box-shadow:var(--shadow-card);
   padding:2.2rem 1.4rem;
@@ -209,7 +234,7 @@ button{ font-family:inherit; }
    Cards / tables (shared)
    ========================================================= */
 .pl-card{
-  background:#fff; border-radius:var(--radius-lg);
+  background:var(--white); border-radius:var(--radius-lg);
   box-shadow:var(--shadow-card);
   padding:2rem;
 }
@@ -286,7 +311,7 @@ button{ font-family:inherit; }
 }
 .auth-card{
   position:relative;
-  background:#fff; border-radius:var(--radius-lg);
+  background:var(--white); border-radius:var(--radius-lg);
   box-shadow:var(--shadow-pop);
   padding:3rem 2.6rem;
   width:100%; max-width:460px;
@@ -332,7 +357,7 @@ button{ font-family:inherit; }
 [dir="ltr"] .position-relative > .form-control{ padding-right:2.8rem; }
 .toggle-password{
   position:absolute; top:50%; transform:translateY(-50%);
-  cursor:pointer; color:#706E6E; font-size:1.05rem; line-height:1; z-index:5;
+  cursor:pointer; color:var(--muted); font-size:1.05rem; line-height:1; z-index:5;
 }
 [dir="rtl"] .toggle-password{ left:1rem; }
 [dir="ltr"] .toggle-password{ right:1rem; }
@@ -346,7 +371,7 @@ button{ font-family:inherit; }
 }
 .social-btn{
   display:flex; align-items:center; justify-content:center; gap:.6rem;
-  width:100%; border:1px solid var(--line); background:#fff;
+  width:100%; border:1px solid var(--line); background:var(--white);
   border-radius:12px; padding:.7rem; font-weight:700; margin-bottom:.8rem;
   transition:.2s;
 }
@@ -362,7 +387,7 @@ button{ font-family:inherit; }
   flex:1; border:none; background:none; padding:.6rem 0; border-radius:999px;
   font-weight:700; color:var(--muted); transition:.2s;
 }
-.auth-tabs button.active{ background:#fff; color:var(--green); box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.auth-tabs button.active{ background:var(--white); color:var(--green); box-shadow:0 2px 6px rgba(0,0,0,.08); }
 
 /* =========================================================
    Footer
@@ -441,7 +466,7 @@ button{ font-family:inherit; }
    Dashboard stat cards
    ========================================================= */
 .stat-card{
-  background:#fff; border-radius:var(--radius);
+  background:var(--white); border-radius:var(--radius);
   box-shadow:var(--shadow-card); padding:1.4rem 1.2rem;
   text-align:center; height:100%;
 }
@@ -495,7 +520,7 @@ button{ font-family:inherit; }
 }
 .result-success{ background:rgba(100,152,97,.12); color:var(--green-dark); }
 .result-pending{ background:rgba(62,17,212,.08); color:var(--purple); }
-.result-danger{ background:rgba(220,53,69,.1); color:#dc3545; }
+.result-danger{ background:var(--danger-soft); color:var(--danger); }
 .result-banner i{ font-size:1.4rem; }
 
 .section-block{ margin-bottom:2rem; }
@@ -524,12 +549,12 @@ button{ font-family:inherit; }
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
 }
 .welcome-banner h1{ font-weight:800; font-size:1.4rem; margin:0; }
-.welcome-banner .btn-pl{ background:#fff; color:var(--green-dark); box-shadow:none; }
-.welcome-banner .btn-pl:hover{ background:#eef4ee; }
+.welcome-banner .btn-pl{ background:var(--white); color:var(--green-dark); box-shadow:none; }
+.welcome-banner .btn-pl:hover{ background:var(--green-soft); }
 
 .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.6rem; }
 .stat-card{
-  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow-card);
+  background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow-card);
   padding:1.3rem 1.2rem; text-align:center;
 }
 .stat-card .num{ font-size:1.9rem; font-weight:800; color:var(--green); }
@@ -539,7 +564,7 @@ button{ font-family:inherit; }
 .quick-actions{ display:flex; gap:1rem; margin-bottom:1.8rem; flex-wrap:wrap; }
 .quick-actions a:not(.btn){
   flex:1; min-width:200px;
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
   padding:1.1rem 1.3rem; font-weight:700; display:flex; align-items:center; justify-content:space-between;
   transition:.2s;
 }
@@ -547,7 +572,7 @@ button{ font-family:inherit; }
 .quick-actions a:not(.btn) i{ color:var(--green); font-size:1.2rem; }
 
 .badge-open{ background:rgba(100,152,97,.15); color:var(--green-dark); }
-.badge-closed{ background:rgba(112,112,112,.15); color:#575555; }
+.badge-closed{ background:rgba(112,112,112,.15); color:var(--muted); }
 
 /* =========================================================
    Steps indicator (create tender / offer flows)
@@ -677,3 +702,66 @@ button{ font-family:inherit; }
 @media (prefers-reduced-motion:reduce){
   *{ transition:none !important; scroll-behavior:auto !important; }
 }
+
+/* =========================================================
+   زر تبديل الوضع الداكن/الفاتح (theme.js) — يشبه .lang-toggle
+   ========================================================= */
+.theme-toggle{
+  background:var(--bg-soft); border:none; color:var(--text);
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.05rem; transition:.2s;
+}
+.theme-toggle:hover{ background:var(--green-soft); color:var(--green-dark); }
+
+/* =========================================================
+   الوضع الداكن — عناصر Bootstrap الجاهزة التي لا تعتمد على
+   متغيراتنا الخاصة أصلًا (فورم كنترول، قوائم منسدلة، مودال...)
+   ========================================================= */
+html[data-theme="dark"] .hero-media .blob{
+  background: radial-gradient(circle at 30% 30%, #1c231d, #14181530 70%);
+}
+html[data-theme="dark"] .hero-media .shadow-ellipse{
+  background:rgba(0,0,0,.5);
+}
+
+/* شعار PharmaLink نصّه غامق ثابت — يحتاج خلفية فاتحة صغيرة خلفه ليبقى مقروءًا */
+html[data-theme="dark"] .pl-brand img,
+html[data-theme="dark"] .sb-logo img{
+  background:#fff; border-radius:8px; padding:3px 8px;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select{
+  background-color:var(--white);
+  color:var(--text);
+  border-color:var(--line);
+}
+html[data-theme="dark"] .form-control::placeholder{ color:var(--muted); }
+html[data-theme="dark"] .form-select{
+  background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23EDEDF0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+html[data-theme="dark"] .dropdown-menu{
+  background-color:var(--white);
+  color:var(--text);
+  border-color:var(--line);
+}
+html[data-theme="dark"] .dropdown-item{ color:var(--text); }
+html[data-theme="dark"] .dropdown-item:hover,
+html[data-theme="dark"] .dropdown-item:focus{
+  background-color:var(--green-soft); color:var(--green-dark);
+}
+
+html[data-theme="dark"] .modal-content{
+  background-color:var(--white);
+  color:var(--text);
+}
+html[data-theme="dark"] .modal-header,
+html[data-theme="dark"] .modal-footer{ border-color:var(--line); }
+html[data-theme="dark"] .btn-close{ filter:invert(1) grayscale(1) brightness(1.7); }
+
+html[data-theme="dark"] .navbar-toggler-icon{
+  background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(237, 237, 240, 0.85)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+html[data-theme="dark"] .navbar-toggler{ border-color:var(--line); }
