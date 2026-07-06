@@ -119,6 +119,13 @@
 <script src="js/api.js"></script>
 <script src="js/script.js"></script>
 <script>
+  /* ── التحقق من طول رقم الهاتف: محلي (0 ثم رقم غير صفر) حتى 10 أرقام،
+     أو دولي (00 أو +) حتى 12 رقمًا بعد البادئة ── */
+  function isValidPhone(raw) {
+    var cleaned = raw.replace(/[\s\-()]+/g, '');
+    return /^(0[1-9]\d{0,8}|(00|\+)\d{1,12}|[1-9]\d{0,8})$/.test(cleaned);
+  }
+
   /* ── تبديل اللغة عربي/إنجليزي ── */
   document.getElementById('langToggle').addEventListener('click', function () {
     setLang(getLang() === 'ar' ? 'en' : 'ar');
@@ -185,6 +192,11 @@
     const phone    = document.getElementById('regPhone').value.trim();
     const password = document.getElementById('regPassword').value;
     const password_confirmation = document.getElementById('regPasswordConfirm').value;
+
+    if (!isValidPhone(phone)) {
+      showApiError(t('login.err.invalidPhone'));
+      return;
+    }
 
     if (password !== password_confirmation) {
       showApiError(t('login.err.passwordMismatch'));

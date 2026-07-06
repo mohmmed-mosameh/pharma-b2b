@@ -37,6 +37,14 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+        // فحص طول الرقم يجب أن يتم على القيمة الخام قبل التطبيع، لأن normalize()
+        // توحّد كل الصيغ إلى +970... فتُفقِد التمييز بين محلي/دولي المطلوب للفحص
+        if ($request->filled('phone') && ! PhoneNumber::isValid($request->input('phone'))) {
+            throw ValidationException::withMessages([
+                'phone' => ['رقم الهاتف غير صالح.'],
+            ]);
+        }
+
         // نطبّع رقم الهاتف قبل التحقق كي يُفحص التكرار (unique) على نفس الصيغة
         // المخزّنة فعليًا، بصرف النظر عن شكل الرقم الذي كتبه المستخدم
         if ($request->filled('phone')) {

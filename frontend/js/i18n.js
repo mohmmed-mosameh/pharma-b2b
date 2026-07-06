@@ -72,6 +72,7 @@ var I18N = {
     'login.err.roleMismatch': 'هذا الحساب مسجَّل كـ "{role}". ارجع واختر نوع الحساب الصحيح.',
     'login.err.invalidCredentials': 'بيانات الدخول غير صحيحة',
     'login.err.passwordMismatch': 'كلمتا المرور غير متطابقتين',
+    'login.err.invalidPhone': 'رقم الهاتف غير صالح',
     'login.err.registerFailed': 'فشل إنشاء الحساب، تحقق من البيانات',
     'login.err.socialFailed': 'تعذّر تسجيل الدخول عبر الحساب الاجتماعي، حاول مرة أخرى.',
 
@@ -466,6 +467,7 @@ var I18N = {
     'login.err.roleMismatch': 'This account is registered as "{role}". Go back and choose the correct account type.',
     'login.err.invalidCredentials': 'Invalid login credentials',
     'login.err.passwordMismatch': "Passwords don't match",
+    'login.err.invalidPhone': 'Invalid phone number',
     'login.err.registerFailed': 'Failed to create account, please check your details',
     'login.err.socialFailed': 'Could not log in with the social account, please try again.',
 
