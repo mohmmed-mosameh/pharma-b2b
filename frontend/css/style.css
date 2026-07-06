@@ -732,6 +732,10 @@ html[data-theme="dark"] .form-select{
   border-color:var(--line);
 }
 html[data-theme="dark"] .form-control::placeholder{ color:var(--muted); }
+/* الاستثناء أعلاه بيكسر خدعة Bootstrap بإخفاء placeholder داخل form-floating
+   (عشان ما يتراكب مع التسمية وهي بوضعها الطبيعي) — نعيد إخفاءه هون بخصوصية
+   أعلى بما إنه محدّد أكثر (.form-floating > .form-control) */
+html[data-theme="dark"] .form-floating > .form-control::placeholder{ color:transparent; }
 /* Bootstrap يرسم رقعة خلف تسمية form-floating العائمة (لقصّها فوق حد الحقل)
    بخلفية ثابتة var(--bs-body-bg) ونص بلون var(--bs-body-color) — كلاهما
    ثابت أبيض/غامق دومًا لأننا لا نلمس متغيرات Bootstrap نفسها. نجعل خلفية
